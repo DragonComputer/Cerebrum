@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 import datetime
 
-AVI_OUTPUT_FILENAME = "visual/" + str(datetime.date.today()) + ".avi"
+AVI_OUTPUT_FILENAME = "visual-memory/" + str(datetime.date.today()) + ".avi"
 
 cap = cv2.VideoCapture(0)
 

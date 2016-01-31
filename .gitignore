@@ -1,0 +1,7 @@
+# Auditory Recordings #
+###################
+*.wav
+
+# Visual Recordings #
+###################
+*.avi
