@@ -2,17 +2,14 @@
 
 import pyaudio
 import wave
-import matplotlib.pyplot as plt
-import numpy as np
-import sys
-
+import datetime
 
 CHUNK = 1024
 FORMAT = pyaudio.paInt16
-CHANNELS = 1
+CHANNELS = 2
 RATE = 44100
 RECORD_SECONDS = 5
-WAVE_OUTPUT_FILENAME = "output.wav"
+WAVE_OUTPUT_FILENAME = "auditory/" +  str(datetime.date.today()) + ".wav"
 
 p = pyaudio.PyAudio()
 
@@ -42,21 +39,3 @@ wf.setsampwidth(p.get_sample_size(FORMAT))
 wf.setframerate(RATE)
 wf.writeframes(b''.join(frames))
 wf.close()
-
-spf = wave.open('output.wav','r')
-
-#Extract Raw Audio from Wav File
-signal = spf.readframes(-1)
-signal = np.fromstring(signal, 'Int16')
-
-
-#If Stereo
-if spf.getnchannels() == 2:
-    print 'Just mono files'
-    sys.exit(0)
-
-print signal
-
-plt.figure(1)
-plt.title('Signal Wave...')
-plt.plot(signal)
