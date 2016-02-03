@@ -54,7 +54,7 @@ print("* recording")
 
 frames = []
 
-save_counter = 0
+#save_counter = 0
 data = stream.read(CHUNK)
 while True:
     previous_data = data
@@ -72,8 +72,11 @@ while True:
             #print rms
             if rms < THRESHOLD:
                 silence_counter += 1
+            else:
+                silence_counter = 0
             sys.stdout.write("/")
             sys.stdout.flush()
+        del frames[-(SILENCE_DETECTION-2):]
         save_file()
         frames = []
     sys.stdout.write(".")
