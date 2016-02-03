@@ -11,6 +11,14 @@ import cv2
 import numpy
 
 STABILIZATION_DETECTION = 20
+AVI_OUTPUT_FILENAME_ORIGINAL = "visual-memory/" + str(datetime.date.today()) + ".avi"
+AVI_OUTPUT_FILENAME_THRESH = "visual-memory/" + str(datetime.date.today()) + "-thresh.avi"
+AVI_OUTPUT_FILENAME_DELTA = "visual-memory/" + str(datetime.date.today()) + "-delta.avi"
+CODEC = cv2.cv.CV_FOURCC('X','V','I','D')
+
+original_out = cv2.VideoWriter(AVI_OUTPUT_FILENAME_ORIGINAL, CODEC, 20.0, (640,480))
+thresh_out = cv2.VideoWriter(AVI_OUTPUT_FILENAME_THRESH, CODEC, 20.0, (640,480))
+delta_out = cv2.VideoWriter(AVI_OUTPUT_FILENAME_DELTA, CODEC, 20.0, (640,480))
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -85,6 +93,11 @@ while True:
 
 	if on_delta_situation:
 		delta_value_stack.append(delta_value)
+
+		original_out.write(frame)
+		thresh_out.write(cv2.cvtColor(thresh, cv2.COLOR_GRAY2BGR))
+		delta_out.write(cv2.cvtColor(frameDelta, cv2.COLOR_GRAY2BGR))
+
 		if len(delta_value_stack) >= STABILIZATION_DETECTION:
 			delta_value_stack.pop(0)
 			if min(delta_value_stack) > (numpy.mean(delta_value_stack) - args["min_area"] / 2) and max(delta_value_stack) < (numpy.mean(delta_value_stack) + args["min_area"] / 2):

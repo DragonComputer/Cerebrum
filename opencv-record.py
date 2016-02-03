@@ -15,8 +15,11 @@ while(cap.isOpened()):
     if ret==True:
         #frame = cv2.flip(frame,0)
 
+        #gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    	gray = cv2.GaussianBlur(frame, (21, 21), 0)
+
         # write the flipped frame
-        out.write(frame)
+        out.write(gray)
 
         cv2.imshow('frame',frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
