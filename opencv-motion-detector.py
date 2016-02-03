@@ -9,11 +9,21 @@ import imutils
 import time
 import cv2
 import numpy
+import os
 
 STABILIZATION_DETECTION = 20
-AVI_OUTPUT_FILENAME_ORIGINAL = "visual-memory/" + str(datetime.date.today()) + ".avi"
-AVI_OUTPUT_FILENAME_THRESH = "visual-memory/" + str(datetime.date.today()) + "-thresh.avi"
-AVI_OUTPUT_FILENAME_DELTA = "visual-memory/" + str(datetime.date.today()) + "-delta.avi"
+
+if not os.path.isfile("visual-memory/" + str(datetime.date.today()) + ".avi"):
+	AVI_OUTPUT_FILENAME_ORIGINAL = "visual-memory/" + str(datetime.date.today()) + ".avi"
+	AVI_OUTPUT_FILENAME_THRESH = "visual-memory/" + str(datetime.date.today()) + "-thresh.avi"
+	AVI_OUTPUT_FILENAME_DELTA = "visual-memory/" + str(datetime.date.today()) + "-delta.avi"
+	MULTIPLE_RECORDS = 0
+else:
+	AVI_OUTPUT_FILENAME_ORIGINAL = "visual-memory/." + str(datetime.date.today()) + "-TEMP.avi"
+	AVI_OUTPUT_FILENAME_THRESH = "visual-memory/." + str(datetime.date.today()) + "-thresh-TEMP.avi"
+	AVI_OUTPUT_FILENAME_DELTA = "visual-memory/." + str(datetime.date.today()) + "-delta-TEMP.avi"
+	MULTIPLE_RECORDS = 1
+
 CODEC = cv2.cv.CV_FOURCC('X','V','I','D')
 
 original_out = cv2.VideoWriter(AVI_OUTPUT_FILENAME_ORIGINAL, CODEC, 20.0, (640,480))
@@ -105,6 +115,26 @@ while True:
 				delta_value_stack = []
 				referenceFrame = None
 
+				if MULTIPLE_RECORDS:
+
+					ffmpeg_concat_original = "ffmpeg -y -i \"concat:visual-memory/" + str(datetime.date.today()) + ".avi|visual-memory/." + str(datetime.date.today()) + "-TEMP.avi\" -c copy visual-memory/.original-TEMP.avi"
+					ffmpeg_concat_thresh = "ffmpeg -y -i \"concat:visual-memory/" + str(datetime.date.today()) + "-thresh.avi|visual-memory/." + str(datetime.date.today()) + "-thresh-TEMP.avi\" -c copy visual-memory/.thresh-TEMP.avi"
+					ffmpeg_concat_delta = "ffmpeg -y -i \"concat:visual-memory/" + str(datetime.date.today()) + "-delta.avi|visual-memory/." + str(datetime.date.today()) + "-delta-TEMP.avi\" -c copy visual-memory/.delta-TEMP.avi"
+
+					os.system(ffmpeg_concat_original)
+					os.system(ffmpeg_concat_thresh)
+					os.system(ffmpeg_concat_delta)
+
+					os.system("rm visual-memory/" + str(datetime.date.today()) + "*.avi")
+
+					original_out = cv2.VideoWriter(AVI_OUTPUT_FILENAME_ORIGINAL, CODEC, 20.0, (640,480))
+					thresh_out = cv2.VideoWriter(AVI_OUTPUT_FILENAME_THRESH, CODEC, 20.0, (640,480))
+					delta_out = cv2.VideoWriter(AVI_OUTPUT_FILENAME_DELTA, CODEC, 20.0, (640,480))
+
+					os.system("mv visual-memory/.original-TEMP.avi visual-memory/" + str(datetime.date.today()) + ".avi")
+					os.system("mv visual-memory/.thresh-TEMP.avi visual-memory/" + str(datetime.date.today()) + "-thresh.avi")
+					os.system("mv visual-memory/.delta-TEMP.avi visual-memory/" + str(datetime.date.today()) + "-delta.avi")
+
 	# draw the text and timestamp on the frame
 	cv2.putText(frame, "Diff    : {}".format(delta_value), (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
 	cv2.putText(frame, "Thresh : {}".format(args["min_area"]), (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
@@ -119,7 +149,7 @@ while True:
 	key = cv2.waitKey(1) & 0xFF
 
 	# if the `q` key is pressed, break from the lop
-	if key == ord("q"):
+	if key == ord("q") or key == ord("\x1b"):
 		break
 
 # cleanup the camera and close any open windows
