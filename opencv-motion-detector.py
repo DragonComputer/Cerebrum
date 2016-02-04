@@ -17,11 +17,13 @@ if not os.path.isfile("visual-memory/" + str(datetime.date.today()) + ".avi"):
 	AVI_OUTPUT_FILENAME_ORIGINAL = "visual-memory/" + str(datetime.date.today()) + ".avi"
 	AVI_OUTPUT_FILENAME_THRESH = "visual-memory/" + str(datetime.date.today()) + "-thresh.avi"
 	AVI_OUTPUT_FILENAME_DELTA = "visual-memory/" + str(datetime.date.today()) + "-delta.avi"
+	AVI_OUTPUT_FILENAME_DELTA_COLORED = "visual-memory/" + str(datetime.date.today()) + "-delta-colored.avi"
 	MULTIPLE_RECORDS = 0
 else:
 	AVI_OUTPUT_FILENAME_ORIGINAL = "visual-memory/." + str(datetime.date.today()) + "-TEMP.avi"
 	AVI_OUTPUT_FILENAME_THRESH = "visual-memory/." + str(datetime.date.today()) + "-thresh-TEMP.avi"
 	AVI_OUTPUT_FILENAME_DELTA = "visual-memory/." + str(datetime.date.today()) + "-delta-TEMP.avi"
+	AVI_OUTPUT_FILENAME_DELTA_COLORED = "visual-memory/." + str(datetime.date.today()) + "-delta-colored-TEMP.avi"
 	MULTIPLE_RECORDS = 1
 
 CODEC = cv2.cv.CV_FOURCC('X','V','I','D')
@@ -29,6 +31,7 @@ CODEC = cv2.cv.CV_FOURCC('X','V','I','D')
 original_out = cv2.VideoWriter(AVI_OUTPUT_FILENAME_ORIGINAL, CODEC, 20.0, (640,480))
 thresh_out = cv2.VideoWriter(AVI_OUTPUT_FILENAME_THRESH, CODEC, 20.0, (640,480))
 delta_out = cv2.VideoWriter(AVI_OUTPUT_FILENAME_DELTA, CODEC, 20.0, (640,480))
+delta_colored_out = cv2.VideoWriter(AVI_OUTPUT_FILENAME_DELTA_COLORED, CODEC, 20.0, (640,480))
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -67,7 +70,10 @@ while True:
 	# resize the frame, convert it to grayscale, and blur it
 	#frame = imutils.resize(frame, width=500)
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-	gray = cv2.GaussianBlur(gray, (21, 21), 0)
+
+	gray = cv2.blur(gray,(12,12))
+	#gray = cv2.GaussianBlur(gray, (5, 5), 0)
+	gray = cv2.bilateralFilter(gray,9,75,75)
 
 	# if the first frame is None, initialize it
 	if referenceFrame is None:
@@ -77,11 +83,15 @@ while True:
 	# compute the absolute difference between the current frame and
 	# first frame
 	frameDelta = cv2.absdiff(referenceFrame, gray)
-	thresh = cv2.threshold(frameDelta, 25, 255, cv2.THRESH_BINARY)[1]
+	thresh = cv2.threshold(frameDelta, 12, 255, cv2.THRESH_BINARY)[1]
+	#Below line adaptive threshold is not good for this project
+	#thresh = cv2.adaptiveThreshold(frameDelta,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,11,2)
+	# dilate the thresholded image to fill in holes
+	thresh = cv2.dilate(thresh, None, iterations=2)
+	frameDeltaColored = cv2.bitwise_and(frame,frame, mask= thresh)
 
 	# dilate the thresholded image to fill in holes, then find contours
 	# on thresholded image
-	#thresh = cv2.dilate(thresh, None, iterations=2)
 	(cnts, _) = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
 		cv2.CHAIN_APPROX_SIMPLE)
 
@@ -107,6 +117,7 @@ while True:
 		original_out.write(frame)
 		thresh_out.write(cv2.cvtColor(thresh, cv2.COLOR_GRAY2BGR))
 		delta_out.write(cv2.cvtColor(frameDelta, cv2.COLOR_GRAY2BGR))
+		delta_colored_out.write(frameDeltaColored)
 
 		if len(delta_value_stack) >= STABILIZATION_DETECTION:
 			delta_value_stack.pop(0)
@@ -128,6 +139,7 @@ while True:
 	cv2.imshow("Original Frame", frame)
 	cv2.imshow("Frame Threshhold", thresh)
 	cv2.imshow("Frame Delta", frameDelta)
+	cv2.imshow("Frame Delta Colored", frameDeltaColored)
 	key = cv2.waitKey(1) & 0xFF
 
 	# if the `q` key is pressed, break from the lop
@@ -136,10 +148,12 @@ while True:
 			ffmpeg_concat_original = "ffmpeg -y -i \"concat:visual-memory/" + str(datetime.date.today()) + ".avi|visual-memory/." + str(datetime.date.today()) + "-TEMP.avi\" -c copy visual-memory/.original-TEMP.avi"
 			ffmpeg_concat_thresh = "ffmpeg -y -i \"concat:visual-memory/" + str(datetime.date.today()) + "-thresh.avi|visual-memory/." + str(datetime.date.today()) + "-thresh-TEMP.avi\" -c copy visual-memory/.thresh-TEMP.avi"
 			ffmpeg_concat_delta = "ffmpeg -y -i \"concat:visual-memory/" + str(datetime.date.today()) + "-delta.avi|visual-memory/." + str(datetime.date.today()) + "-delta-TEMP.avi\" -c copy visual-memory/.delta-TEMP.avi"
+			ffmpeg_concat_delta_colored = "ffmpeg -y -i \"concat:visual-memory/" + str(datetime.date.today()) + "-delta-colored.avi|visual-memory/." + str(datetime.date.today()) + "-delta-colored-TEMP.avi\" -c copy visual-memory/.delta-colored-TEMP.avi"
 
 			os.system(ffmpeg_concat_original)
 			os.system(ffmpeg_concat_thresh)
 			os.system(ffmpeg_concat_delta)
+			os.system(ffmpeg_concat_delta_colored)
 
 			os.system("rm visual-memory/" + str(datetime.date.today()) + "*.avi")
 			os.system("rm visual-memory/." + str(datetime.date.today()) + "*.avi")
@@ -147,6 +161,7 @@ while True:
 			os.system("mv visual-memory/.original-TEMP.avi visual-memory/" + str(datetime.date.today()) + ".avi")
 			os.system("mv visual-memory/.thresh-TEMP.avi visual-memory/" + str(datetime.date.today()) + "-thresh.avi")
 			os.system("mv visual-memory/.delta-TEMP.avi visual-memory/" + str(datetime.date.today()) + "-delta.avi")
+			os.system("mv visual-memory/.delta-colored-TEMP.avi visual-memory/" + str(datetime.date.today()) + "-delta-colored.avi")
 
 		break
 
