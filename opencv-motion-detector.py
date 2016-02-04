@@ -115,25 +115,7 @@ while True:
 				delta_value_stack = []
 				referenceFrame = None
 
-				if MULTIPLE_RECORDS:
-
-					ffmpeg_concat_original = "ffmpeg -y -i \"concat:visual-memory/" + str(datetime.date.today()) + ".avi|visual-memory/." + str(datetime.date.today()) + "-TEMP.avi\" -c copy visual-memory/.original-TEMP.avi"
-					ffmpeg_concat_thresh = "ffmpeg -y -i \"concat:visual-memory/" + str(datetime.date.today()) + "-thresh.avi|visual-memory/." + str(datetime.date.today()) + "-thresh-TEMP.avi\" -c copy visual-memory/.thresh-TEMP.avi"
-					ffmpeg_concat_delta = "ffmpeg -y -i \"concat:visual-memory/" + str(datetime.date.today()) + "-delta.avi|visual-memory/." + str(datetime.date.today()) + "-delta-TEMP.avi\" -c copy visual-memory/.delta-TEMP.avi"
-
-					os.system(ffmpeg_concat_original)
-					os.system(ffmpeg_concat_thresh)
-					os.system(ffmpeg_concat_delta)
-
-					os.system("rm visual-memory/" + str(datetime.date.today()) + "*.avi")
-
-					original_out = cv2.VideoWriter(AVI_OUTPUT_FILENAME_ORIGINAL, CODEC, 20.0, (640,480))
-					thresh_out = cv2.VideoWriter(AVI_OUTPUT_FILENAME_THRESH, CODEC, 20.0, (640,480))
-					delta_out = cv2.VideoWriter(AVI_OUTPUT_FILENAME_DELTA, CODEC, 20.0, (640,480))
-
-					os.system("mv visual-memory/.original-TEMP.avi visual-memory/" + str(datetime.date.today()) + ".avi")
-					os.system("mv visual-memory/.thresh-TEMP.avi visual-memory/" + str(datetime.date.today()) + "-thresh.avi")
-					os.system("mv visual-memory/.delta-TEMP.avi visual-memory/" + str(datetime.date.today()) + "-delta.avi")
+				#if MULTIPLE_RECORDS:
 
 	# draw the text and timestamp on the frame
 	cv2.putText(frame, "Diff    : {}".format(delta_value), (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
@@ -150,6 +132,22 @@ while True:
 
 	# if the `q` key is pressed, break from the lop
 	if key == ord("q") or key == ord("\x1b"):
+		if MULTIPLE_RECORDS:
+			ffmpeg_concat_original = "ffmpeg -y -i \"concat:visual-memory/" + str(datetime.date.today()) + ".avi|visual-memory/." + str(datetime.date.today()) + "-TEMP.avi\" -c copy visual-memory/.original-TEMP.avi"
+			ffmpeg_concat_thresh = "ffmpeg -y -i \"concat:visual-memory/" + str(datetime.date.today()) + "-thresh.avi|visual-memory/." + str(datetime.date.today()) + "-thresh-TEMP.avi\" -c copy visual-memory/.thresh-TEMP.avi"
+			ffmpeg_concat_delta = "ffmpeg -y -i \"concat:visual-memory/" + str(datetime.date.today()) + "-delta.avi|visual-memory/." + str(datetime.date.today()) + "-delta-TEMP.avi\" -c copy visual-memory/.delta-TEMP.avi"
+
+			os.system(ffmpeg_concat_original)
+			os.system(ffmpeg_concat_thresh)
+			os.system(ffmpeg_concat_delta)
+
+			os.system("rm visual-memory/" + str(datetime.date.today()) + "*.avi")
+			os.system("rm visual-memory/." + str(datetime.date.today()) + "*.avi")
+
+			os.system("mv visual-memory/.original-TEMP.avi visual-memory/" + str(datetime.date.today()) + ".avi")
+			os.system("mv visual-memory/.thresh-TEMP.avi visual-memory/" + str(datetime.date.today()) + "-thresh.avi")
+			os.system("mv visual-memory/.delta-TEMP.avi visual-memory/" + str(datetime.date.today()) + "-delta.avi")
+
 		break
 
 # cleanup the camera and close any open windows

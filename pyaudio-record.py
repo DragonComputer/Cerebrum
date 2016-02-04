@@ -87,9 +87,6 @@ while True:
     #    save_file()
     #    frames = []
 
-    #if key == ord("q") or key == ord("\x1b"):
-    #	break
-
 print("* done recording")
 
 stream.stop_stream()
