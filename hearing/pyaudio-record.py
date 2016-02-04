@@ -14,7 +14,7 @@ RATE = 44100
 SAVE_PERIOD = 10
 THRESHOLD = 1000
 SILENCE_DETECTION = 20
-WAVE_OUTPUT_FILENAME = "auditory-memory/" +  str(datetime.date.today()) + ".wav"
+WAVE_OUTPUT_FILENAME = "memory/" +  str(datetime.date.today()) + ".wav"
 
 def save_file():
     if not os.path.isfile(WAVE_OUTPUT_FILENAME):

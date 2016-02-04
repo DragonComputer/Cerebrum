@@ -13,17 +13,17 @@ import os
 
 STABILIZATION_DETECTION = 20
 
-if not os.path.isfile("visual-memory/" + str(datetime.date.today()) + ".avi"):
-	AVI_OUTPUT_FILENAME_ORIGINAL = "visual-memory/" + str(datetime.date.today()) + ".avi"
-	AVI_OUTPUT_FILENAME_THRESH = "visual-memory/" + str(datetime.date.today()) + "-thresh.avi"
-	AVI_OUTPUT_FILENAME_DELTA = "visual-memory/" + str(datetime.date.today()) + "-delta.avi"
-	AVI_OUTPUT_FILENAME_DELTA_COLORED = "visual-memory/" + str(datetime.date.today()) + "-delta-colored.avi"
+if not os.path.isfile("memory/" + str(datetime.date.today()) + ".avi"):
+	AVI_OUTPUT_FILENAME_ORIGINAL = "memory/" + str(datetime.date.today()) + ".avi"
+	AVI_OUTPUT_FILENAME_THRESH = "memory/" + str(datetime.date.today()) + "-thresh.avi"
+	AVI_OUTPUT_FILENAME_DELTA = "memory/" + str(datetime.date.today()) + "-delta.avi"
+	AVI_OUTPUT_FILENAME_DELTA_COLORED = "memory/" + str(datetime.date.today()) + "-delta-colored.avi"
 	MULTIPLE_RECORDS = 0
 else:
-	AVI_OUTPUT_FILENAME_ORIGINAL = "visual-memory/." + str(datetime.date.today()) + "-TEMP.avi"
-	AVI_OUTPUT_FILENAME_THRESH = "visual-memory/." + str(datetime.date.today()) + "-thresh-TEMP.avi"
-	AVI_OUTPUT_FILENAME_DELTA = "visual-memory/." + str(datetime.date.today()) + "-delta-TEMP.avi"
-	AVI_OUTPUT_FILENAME_DELTA_COLORED = "visual-memory/." + str(datetime.date.today()) + "-delta-colored-TEMP.avi"
+	AVI_OUTPUT_FILENAME_ORIGINAL = "memory/." + str(datetime.date.today()) + "-TEMP.avi"
+	AVI_OUTPUT_FILENAME_THRESH = "memory/." + str(datetime.date.today()) + "-thresh-TEMP.avi"
+	AVI_OUTPUT_FILENAME_DELTA = "memory/." + str(datetime.date.today()) + "-delta-TEMP.avi"
+	AVI_OUTPUT_FILENAME_DELTA_COLORED = "memory/." + str(datetime.date.today()) + "-delta-colored-TEMP.avi"
 	MULTIPLE_RECORDS = 1
 
 CODEC = cv2.cv.CV_FOURCC('X','V','I','D')
@@ -145,23 +145,23 @@ while True:
 	# if the `q` key is pressed, break from the lop
 	if key == ord("q") or key == ord("\x1b"):
 		if MULTIPLE_RECORDS:
-			ffmpeg_concat_original = "ffmpeg -y -i \"concat:visual-memory/" + str(datetime.date.today()) + ".avi|visual-memory/." + str(datetime.date.today()) + "-TEMP.avi\" -c copy visual-memory/.original-TEMP.avi"
-			ffmpeg_concat_thresh = "ffmpeg -y -i \"concat:visual-memory/" + str(datetime.date.today()) + "-thresh.avi|visual-memory/." + str(datetime.date.today()) + "-thresh-TEMP.avi\" -c copy visual-memory/.thresh-TEMP.avi"
-			ffmpeg_concat_delta = "ffmpeg -y -i \"concat:visual-memory/" + str(datetime.date.today()) + "-delta.avi|visual-memory/." + str(datetime.date.today()) + "-delta-TEMP.avi\" -c copy visual-memory/.delta-TEMP.avi"
-			ffmpeg_concat_delta_colored = "ffmpeg -y -i \"concat:visual-memory/" + str(datetime.date.today()) + "-delta-colored.avi|visual-memory/." + str(datetime.date.today()) + "-delta-colored-TEMP.avi\" -c copy visual-memory/.delta-colored-TEMP.avi"
+			ffmpeg_concat_original = "ffmpeg -y -i \"concat:memory/" + str(datetime.date.today()) + ".avi|memory/." + str(datetime.date.today()) + "-TEMP.avi\" -c copy memory/.original-TEMP.avi"
+			ffmpeg_concat_thresh = "ffmpeg -y -i \"concat:memory/" + str(datetime.date.today()) + "-thresh.avi|memory/." + str(datetime.date.today()) + "-thresh-TEMP.avi\" -c copy memory/.thresh-TEMP.avi"
+			ffmpeg_concat_delta = "ffmpeg -y -i \"concat:memory/" + str(datetime.date.today()) + "-delta.avi|memory/." + str(datetime.date.today()) + "-delta-TEMP.avi\" -c copy memory/.delta-TEMP.avi"
+			ffmpeg_concat_delta_colored = "ffmpeg -y -i \"concat:memory/" + str(datetime.date.today()) + "-delta-colored.avi|memory/." + str(datetime.date.today()) + "-delta-colored-TEMP.avi\" -c copy memory/.delta-colored-TEMP.avi"
 
 			os.system(ffmpeg_concat_original)
 			os.system(ffmpeg_concat_thresh)
 			os.system(ffmpeg_concat_delta)
 			os.system(ffmpeg_concat_delta_colored)
 
-			os.system("rm visual-memory/" + str(datetime.date.today()) + "*.avi")
-			os.system("rm visual-memory/." + str(datetime.date.today()) + "*.avi")
+			os.system("rm memory/" + str(datetime.date.today()) + "*.avi")
+			os.system("rm memory/." + str(datetime.date.today()) + "*.avi")
 
-			os.system("mv visual-memory/.original-TEMP.avi visual-memory/" + str(datetime.date.today()) + ".avi")
-			os.system("mv visual-memory/.thresh-TEMP.avi visual-memory/" + str(datetime.date.today()) + "-thresh.avi")
-			os.system("mv visual-memory/.delta-TEMP.avi visual-memory/" + str(datetime.date.today()) + "-delta.avi")
-			os.system("mv visual-memory/.delta-colored-TEMP.avi visual-memory/" + str(datetime.date.today()) + "-delta-colored.avi")
+			os.system("mv memory/.original-TEMP.avi memory/" + str(datetime.date.today()) + ".avi")
+			os.system("mv memory/.thresh-TEMP.avi memory/" + str(datetime.date.today()) + "-thresh.avi")
+			os.system("mv memory/.delta-TEMP.avi memory/" + str(datetime.date.today()) + "-delta.avi")
+			os.system("mv memory/.delta-colored-TEMP.avi memory/" + str(datetime.date.today()) + "-delta-colored.avi")
 
 		break
 
