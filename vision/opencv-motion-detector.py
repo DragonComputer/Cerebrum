@@ -11,7 +11,7 @@ import cv2
 import numpy
 import os
 
-STABILIZATION_DETECTION = 20
+STABILIZATION_DETECTION = 5
 
 if not os.path.isfile("memory/" + str(datetime.date.today()) + ".avi"):
 	AVI_OUTPUT_FILENAME_ORIGINAL = "memory/" + str(datetime.date.today()) + ".avi"
@@ -28,10 +28,10 @@ else:
 
 CODEC = cv2.cv.CV_FOURCC('X','V','I','D')
 
-original_out = cv2.VideoWriter(AVI_OUTPUT_FILENAME_ORIGINAL, CODEC, 20.0, (640,480))
-thresh_out = cv2.VideoWriter(AVI_OUTPUT_FILENAME_THRESH, CODEC, 20.0, (640,480))
-delta_out = cv2.VideoWriter(AVI_OUTPUT_FILENAME_DELTA, CODEC, 20.0, (640,480))
-delta_colored_out = cv2.VideoWriter(AVI_OUTPUT_FILENAME_DELTA_COLORED, CODEC, 20.0, (640,480))
+original_out = cv2.VideoWriter(AVI_OUTPUT_FILENAME_ORIGINAL, CODEC, 25.0, (640,360))
+thresh_out = cv2.VideoWriter(AVI_OUTPUT_FILENAME_THRESH, CODEC, 25.0, (640,360))
+delta_out = cv2.VideoWriter(AVI_OUTPUT_FILENAME_DELTA, CODEC, 25.0, (640,360))
+delta_colored_out = cv2.VideoWriter(AVI_OUTPUT_FILENAME_DELTA_COLORED, CODEC, 25.0, (640,360))
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -60,18 +60,27 @@ while True:
 	# grab the current frame and initialize the occupied/unoccupied
 	# text
 	(grabbed, frame) = camera.read()
-	delta_value = 0
 
 	# if the frame could not be grabbed, then we have reached the end
 	# of the video
 	if not grabbed:
 		break
 
+	delta_value = 0
+
+	height, width = frame.shape[:2]
+	if not height == 720 or not width == 1280:
+		raise ValueError('Aspect ratio of input stream must be [16:9]')
+
+	#frame = cv2.resize(frame,None,fx=0.5, fy=0.5, interpolation = cv2.INTER_CUBIC)
+	frame = imutils.resize(frame, height=360)
+
+
 	# resize the frame, convert it to grayscale, and blur it
 	#frame = imutils.resize(frame, width=500)
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-	gray = cv2.blur(gray,(12,12))
+	#gray = cv2.blur(gray,(12,12))
 	#gray = cv2.GaussianBlur(gray, (5, 5), 0)
 	gray = cv2.bilateralFilter(gray,9,75,75)
 
@@ -87,7 +96,7 @@ while True:
 	#Below line adaptive threshold is not good for this project
 	#thresh = cv2.adaptiveThreshold(frameDelta,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,11,2)
 	# dilate the thresholded image to fill in holes
-	thresh = cv2.dilate(thresh, None, iterations=2)
+	thresh = cv2.dilate(thresh, None, iterations=1)
 	frameDeltaColored = cv2.bitwise_and(frame,frame, mask= thresh)
 
 	# dilate the thresholded image to fill in holes, then find contours

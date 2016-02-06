@@ -1,7 +1,8 @@
-# Auditory Recordings #
+# Hearing Data #
 ###################
 *.wav
 
-# Visual Recordings #
+# Vision Data #
 ###################
 *.avi
+*.mp4

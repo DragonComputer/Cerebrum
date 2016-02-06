@@ -1,6 +1,6 @@
 # SpectrumEngine
 
-An implementation of "Sense oriented Supervised General Learning Algorithm with Time Series Data Collection & Analysis"
+An implementation of "Sense oriented General Reinforcement Learning Algorithm with Time Series Data Collection & Analysis"
 
 Supported senses:
 
@@ -12,11 +12,11 @@ Supported senses:
 > between these events in memory. Lastly creating outputs triggered by stimulant listeners.
 
 ### Version
-0.0.14
+0.0.15
 
 ### Tech
 
-SpectrumEngine uses a number of open source technologies analysis & synthesis:
+SpectrumEngine uses a number of open source technologies to analysis & synthesis:
 
 * [Python] - a widely used general-purpose, high-level programming language.
 * [PyAudio] - provides Python bindings for PortAudio, the cross platform audio API.
