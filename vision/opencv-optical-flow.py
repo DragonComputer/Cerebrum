@@ -2,6 +2,9 @@ import numpy as np
 import cv2
 import argparse
 import time
+import random
+
+TRACKER_POINTS = 1000
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video", help="path to the video file")
@@ -29,7 +32,7 @@ lk_params = dict( winSize  = (15,15),
 
 while True:
     # Create some random colors
-    color = np.random.randint(0,255,(100,3))
+    color = np.random.randint(0,255,(TRACKER_POINTS,3))
 
     # Take first frame and find corners in it
     ret, old_frame = cap.read()
@@ -38,10 +41,15 @@ while True:
     #print p0
     #print type(p0[0][0][0])
 
-    p0 = np.random.randint(720, size=(100, 1, 2))
+    p0 = np.random.randint(1280, size=(TRACKER_POINTS, 1, 2))
+    for y in p0:
+         if y[0][1] > 960:
+             y[0][1] = np.random.random_integers(960)
+
+    #print type(p0[0][0][0])
     p0 = p0.astype(np.float32)
-    print p0
-    print type(p0[0][0][0])
+    #print p0
+    #print type(p0[0][0][0])
 
     # Create a mask image for drawing purposes
     mask = np.zeros_like(old_frame)
