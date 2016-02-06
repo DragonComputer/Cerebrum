@@ -6,13 +6,13 @@ Supported senses:
 
   -  Vision
   -  Hearing
- 
-> SpectrumEngine's purpose is getting continous data inputs from different types of sensors as 
+
+> SpectrumEngine's purpose is getting continous data inputs from different types of sensors as
 > an event, depending on the threshold values and creating a complex time based relations
 > between these events in memory. Lastly creating outputs triggered by stimulant listeners.
 
 ### Version
-0.0.15
+0.0.16
 
 ### Tech
 
