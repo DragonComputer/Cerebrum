@@ -3,8 +3,11 @@ import cv2
 import argparse
 import time
 import random
+import math
 
 TRACKER_POINTS = 1000
+CRAZY_LINE_DISTANCE =  50
+CRAZY_LINE_LIMIT = 100
 
 def PolygonArea(corners):
     n = len(corners) # of corners
@@ -72,6 +75,10 @@ while True:
 
     # Create a mask image for drawing purposes
     mask = np.zeros_like(old_frame)
+    mask_delta = np.zeros_like(old_frame)
+    white_color = np.array([255,255,255])
+
+    total_crazy_lines = 0
 
     while True:
         ret,frame = cap.read()
@@ -84,9 +91,6 @@ while True:
         if p2 is None:
             break
 
-        total_nonlinear_area = 0
-
-
         # Select good points
         good_points2 = p2[st==1]
         good_points1 = p1[st==1]
@@ -96,24 +100,24 @@ while True:
             x2,y2 = good_point2.ravel()
             x1,y1 = good_point1.ravel()
 
-            if frame_counter >= 10:
-                frame_counter = 0
-                tup2 = (x2,y2)
-                tup1 = (x1,y1)
+            tup2 = (x2,y2)
+            tup1 = (x1,y1)
 
-                lines[i].append(tup1)
-                lines[i].append(tup2)
-
-                total_nonlinear_area += PolygonArea(lines[i])
-                print total_nonlinear_area
+            distance = math.hypot(x2 - x1, y2 - y1)
+            if distance >= CRAZY_LINE_DISTANCE:
+                total_crazy_lines += 1
+                cv2.line(mask_delta, (x2,y2),(x1,y1), white_color, 2)
 
             cv2.line(mask, (x2,y2),(x1,y1), color[i].tolist(), 2)
-            cv2.circle(frame,(x2,y2),5,color[i].tolist(),-1)
+            #cv2.circle(frame,(x2,y2),5,color[i].tolist(),-1)
+
         img = cv2.add(frame,mask)
 
         cv2.imshow('frame',img)
+        #cv2.imshow('mask delta',mask_delta)
 
-        if total_nonlinear_area >= (1280 * 720 / 4000):
+        print total_crazy_lines
+        if total_crazy_lines >= CRAZY_LINE_LIMIT:
             break
 
         k = cv2.waitKey(30) & 0xff
