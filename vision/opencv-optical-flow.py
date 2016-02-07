@@ -4,10 +4,11 @@ import argparse
 import time
 import random
 import math
+from collections import Counter
 
-TRACKER_POINTS = 1000
+TRACKER_POINTS = 2000
 CRAZY_LINE_DISTANCE =  50
-CRAZY_LINE_LIMIT = 100
+CRAZY_LINE_LIMIT = 100 * TRACKER_POINTS / 1000
 
 def PolygonArea(corners):
     n = len(corners) # of corners
@@ -80,6 +81,8 @@ while True:
 
     total_crazy_lines = 0
 
+    most_common_angle = None
+
     while True:
         ret,frame = cap.read()
         frame_counter += 1
@@ -95,6 +98,8 @@ while True:
         good_points2 = p2[st==1]
         good_points1 = p1[st==1]
 
+        angles_array = []
+
        # draw the tracks
         for i,(good_point2,good_point1) in enumerate(zip(good_points2,good_points1)):
             x2,y2 = good_point2.ravel()
@@ -106,17 +111,35 @@ while True:
             distance = math.hypot(x2 - x1, y2 - y1)
             if distance >= CRAZY_LINE_DISTANCE:
                 total_crazy_lines += 1
-                cv2.line(mask_delta, (x2,y2),(x1,y1), white_color, 2)
 
-            cv2.line(mask, (x2,y2),(x1,y1), color[i].tolist(), 2)
+            angle = math.atan2(y2-y1, x2-x1)
+            angle = math.degrees(angle)
+            angle = round(angle)
+            #print angle
+            angles_array.append(angle)
+
+            if most_common_angle != None:
+                if abs(most_common_angle - angle) > 20:
+                    cv2.line(mask_delta, (x2,y2),(x1,y1), white_color, 3)
+
+            cv2.line(mask, (x2,y2),(x1,y1), color[i].tolist(), 1)
             #cv2.circle(frame,(x2,y2),5,color[i].tolist(),-1)
+
+        if angles_array:
+            print Counter(angles_array).most_common()[0]
+            most_common_angle = Counter(angles_array).most_common()[0][0]
 
         img = cv2.add(frame,mask)
 
-        cv2.imshow('frame',img)
-        #cv2.imshow('mask delta',mask_delta)
+        mask_delta_gray = cv2.cvtColor(mask_delta, cv2.COLOR_BGR2GRAY)
+        thresh = cv2.threshold(mask_delta_gray, 12, 255, cv2.THRESH_BINARY)[1]
+        frameDelta = cv2.bitwise_and(frame,frame, mask= thresh)
 
-        print total_crazy_lines
+        cv2.imshow('frame',img)
+        cv2.imshow('mask delta',mask_delta)
+        cv2.imshow('frame delta',frameDelta)
+
+        #print total_crazy_lines
         if total_crazy_lines >= CRAZY_LINE_LIMIT:
             break
 
