@@ -8,9 +8,10 @@ import argparse
 import time
 import random
 import math
+import imutils
 from collections import Counter
 
-TRACKER_POINTS = 2000 # How many points will be used to track the optical flow
+TRACKER_POINTS = 500 # How many points will be used to track the optical flow
 CRAZY_LINE_DISTANCE =  50 # Distance value to detect crazy lines
 CRAZY_LINE_LIMIT = 100 * TRACKER_POINTS / 1000 # Amount of crazy lines are indication of different shots
 ABSDIFF_ANGLE = 20 # To determine the inconsistency between tangent values in degrees
@@ -19,6 +20,7 @@ LINE_THICKNESS = 3 # Lines thickness that we will use for mask delta
 # Construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video", help="path to the video file")
+ap.add_argument("-a", "--min-area", type=int, default=500, help="minimum area size")
 args = vars(ap.parse_args())
 
 if args.get("video", None) is None: # If the video argument is None, then we are reading from webcam
@@ -37,6 +39,7 @@ while True: # On this level it gets only one frame
     color = numpy.random.randint(0,255,(TRACKER_POINTS,3)) # Create some random colors
 
     ret, old_frame = cap.read() # Take first frame
+    old_frame = imutils.resize(old_frame, height=360) # Resize frame to 360p. Alternative resizing method:
     old_gray = cv2.cvtColor(old_frame, cv2.COLOR_BGR2GRAY) # Convert previous frame to grayscale
 
     height, width = old_frame.shape[:2] # Get video height and width (size)
@@ -59,7 +62,10 @@ while True: # On this level it gets only one frame
     while True: # Loop over the frames of the video
 
         ret,frame = cap.read() # Take a new frame
+        frame = imutils.resize(frame, height=360) # Resize frame to 360p. Alternative resizing method:
         frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) # Convert it to grayscale
+
+        delta_value = 0 # Delta Value for storing max continuous contour area for current frame
 
         p2, st, err = cv2.calcOpticalFlowPyrLK(old_gray, frame_gray, p1, None, **lk_params) # Calculate optical flow (Lucas Kanade Optical Flow function of OpenCV)
 
@@ -97,14 +103,30 @@ while True: # On this level it gets only one frame
         if angles_array: # If angles_array is not empty
             most_common_angle = Counter(angles_array).most_common()[0][0] # Find most common angle value in Angle List
 
-        img = cv2.add(frame,mask) # Add mask layer over frame
-
         mask_delta_gray = cv2.cvtColor(mask_delta, cv2.COLOR_BGR2GRAY) # Conver mask_delta to grayscale
         thresh = cv2.threshold(mask_delta_gray, 12, 255, cv2.THRESH_BINARY)[1] # Apply OpenCV's threshold function to get binary frame
         thresh = cv2.dilate(thresh, None, iterations=1) # Dlation to increase white region for surrounding pixels
         frameDelta = cv2.bitwise_and(frame,frame, mask= thresh) # Bitwise and - to get delta frame
 
-        cv2.imshow('Original Frame',img) # Show Original Frame
+        # Find contours on thresholded image
+        (cnts, _) = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        contour_area_stack = [] # List of contour areas's values
+
+        # Loop over the contours
+        if cnts:
+            for c in cnts: # Contour in Contours
+				contour_area_stack.append(cv2.contourArea(c)) # Calculate contour area and append to contour stack
+				if cv2.contourArea(c) > args["min_area"]: # If contour area greater than min area
+					(x, y, w, h) = cv2.boundingRect(c) # Compute the bounding box for this contour
+					cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2) # Draw it on the frame
+            delta_value = max(contour_area_stack) # Assign max contour area to delta value
+
+        if delta_value > (height * width / 3):
+			break
+
+        frame_with_mask = cv2.add(frame,mask) # Add mask layer over frame
+        cv2.imshow('Original Frame',frame_with_mask) # Show Original Frame
         cv2.imshow('Mask Delta',mask_delta) # Show Mask Delta Frame
         cv2.imshow('Frame Delta',frameDelta) # Show Frame Delta
 

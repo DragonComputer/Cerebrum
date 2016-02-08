@@ -58,7 +58,7 @@ if float(width) / float(height) != float(16) / float(9):
 
 frame_counter = 0 # Define frame counter variable
 on_delta_situation = 0 # Delta situation checking variable
-delta_value_stack = []
+delta_value_stack = [] # List of delta values
 
 while True: # Loop over the frames of the video
 
@@ -98,16 +98,16 @@ while True: # Loop over the frames of the video
 	(cnts, _) = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
 		cv2.CHAIN_APPROX_SIMPLE)
 
-	contour_stack = [] # List of contour areas's values
+	contour_area_stack = [] # List of contour areas's values
 
 	# Loop over the contours
 	if cnts:
 		for c in cnts: # Contour in Contours
-			contour_stack.append(cv2.contourArea(c)) # Calculate contour area and append to contour stack
+			contour_area_stack.append(cv2.contourArea(c)) # Calculate contour area and append to contour stack
 			if cv2.contourArea(c) > args["min_area"]: # If contour area greater than min area
 				(x, y, w, h) = cv2.boundingRect(c) # Compute the bounding box for this contour
 				cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2) # Draw it on the frame
-		delta_value = max(contour_stack) # Assign max contour area to delta value
+		delta_value = max(contour_area_stack) # Assign max contour area to delta value
 
 		if delta_value > args["min_area"]: # If max contour area (delta value) greater than min area
 			on_delta_situation = 1 # Initialize delta situation
