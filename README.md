@@ -4,15 +4,15 @@ An implementation of "Sense oriented General Reinforcement Learning Algorithm wi
 
 Supported senses:
 
-  -  Vision
-  -  Hearing
+	-  Vision
+	-  Hearing
 
 > SpectrumEngine's purpose is getting continous data inputs from different types of sensors as
 > an event, depending on the threshold values and creating a complex time based relations
 > between these events in memory. Lastly creating outputs triggered by stimulant listeners.
 
 ### Version
-0.0.23
+0.0.24
 
 ### Tech
 
