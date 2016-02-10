@@ -56,9 +56,11 @@ delta_value_stack = [] # List of delta values
 
 while True: # Loop over the frames of the video
 
+	(grabbed, frame) = camera.read() # Grab the current frame and initialize the occupied/unoccupied
 	frame_counter += 1 # Increase frame counter's value
 
-	(grabbed, frame) = camera.read() # Grab the current frame and initialize the occupied/unoccupied
+	print "--------------------------------"
+	print frame_counter
 
 	if not grabbed: # If the frame could not be grabbed, then we have reached the end of the video
 		break
@@ -70,8 +72,6 @@ while True: # Loop over the frames of the video
 
 	# -------------------- ASSIGNMENTS FOR NON-STATIONARY CAMERA SITUATION --------------------
 	mask_white = numpy.ones_like(frame) # Create a white mask image for cloning original frame
-	white_color = numpy.array([255,255,255]) # Define color white
-
 	old_frame = cv2.add(frame,mask_white) # Take the current frame as previous frame
 	# -------------------- ASSIGNMENTS FOR NON-STATIONARY CAMERA SITUATION --------------------
 
@@ -111,12 +111,11 @@ while True: # Loop over the frames of the video
 		# ------------------------------ NON-STATIONARY CAMERA SITUATION ------------------------------
 		# ------------------------------ NON-STATIONARY CAMERA SITUATION ------------------------------
 
-		print "--------------------------------"
-		print delta_value
-		print (height * width * float(NON_STATIONARY_PERCENTAGE) / float(100))
 		if delta_value > (height * width * float(NON_STATIONARY_PERCENTAGE) / float(100)): # If delta value is too much
 
 			print "NON-STATIONARY" # PPROBABLY!!! There is a NON_STAIONARY CAMERA situation
+
+			white_color = numpy.array([255,255,255]) # Define color white
 
 			color = numpy.random.randint(0,255,(TRACKER_POINTS,3)) # Create some random colors
 
@@ -140,6 +139,8 @@ while True: # Loop over the frames of the video
 				mask_biggest_contour = numpy.zeros_like(old_frame) # Create a mask image for drawing purposes (biggest contour frame)
 
 				ret,frame = camera.read() # Take a new frame
+				frame_counter += 1
+				print frame_counter
 				frame = imutils.resize(frame, height=TARGET_HEIGHT) # Resize frame to 360p. Alternative resizing method:
 				frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) # Convert it to grayscale
 
@@ -148,6 +149,7 @@ while True: # Loop over the frames of the video
 				p2, st, err = cv2.calcOpticalFlowPyrLK(old_gray, frame_gray, p1, None, **lk_params) # Calculate optical flow (Lucas Kanade Optical Flow function of OpenCV)
 
 				if p2 is None: # If there are not any points that coming from Lucas Kanade Optical Flow function of OpenCV
+					print "NO GOOD LINES"
 					break      # Break the loop to reconstruct the optical flow
 
 				# Select good points
@@ -216,6 +218,7 @@ while True: # Loop over the frames of the video
 						cv2.rectangle(mask_biggest_contour, (x, y), (x + w, y + h), (255, 255, 255), -1) # Draw only one white rectange
 
 				if delta_value > (height * width / DELTA_LIMIT_DIVISOR): # If delta value is too much
+					print "TOO MUCH DELTA"
 					break # Then break
 
 				if len(contour_dictionary) > CONTOUR_LIMIT: # PROBABLY!!! There is a ZOOM, ZOOM + PAN, ZOOM + TILT, ZOOM + ROLL situation (Not just PAN, TILT, ROLL)
@@ -315,6 +318,7 @@ while True: # Loop over the frames of the video
 							cv2.rectangle(mask_biggest_contour, (x, y), (x + w, y + h), (255, 255, 255), -1) # Draw only one white rectange
 
 					if delta_value > (height * width / DELTA_LIMIT_DIVISOR): # If delta value is too much
+						print "TOO MUCH DELTA 2"
 						break # Then break
 
 				else: # There is just a PAN, TILT, ROLL situation. Don't touch anything.
@@ -328,7 +332,15 @@ while True: # Loop over the frames of the video
 
 				frameDelta = cv2.bitwise_and(frame_final_form,frame_final_form, mask= thresh_final_form) # Bitwise and - to get delta frame
 
+				frame_with_mask = cv2.add(frame,mask) # Add mask layer over frame
+				cv2.imshow('Original Frame',old_frame) # Show Original Frame
+				cv2.imshow('Frame Threshold',mask_biggest_contour) # Show Mask Delta Frame
+				cv2.imshow('Frame Delta',mask_delta) # Show Mask Delta Frame
+				cv2.imshow('Frame Delta Colored',frameDelta) # Show Frame Delta
+				print "NON-STATIONARY IMSHOW"
+
 				if total_crazy_lines >= CRAZY_LINE_LIMIT: # If amout of total crazy lines is greater than CRAZY_LINE_LIMIT
+					print "Crazy Line limit exceeded"
 					break # Break the loop to reconstruct the optical flow
 
 				old_gray = frame_gray.copy() # Update the previous frame
@@ -338,32 +350,28 @@ while True: # Loop over the frames of the video
 		# ------------------------------ NON-STATIONARY CAMERA SITUATION ------------------------------
 		# ------------------------------ NON-STATIONARY CAMERA SITUATION ------------------------------
 		# ------------------------------ NON-STATIONARY CAMERA SITUATION ------------------------------
+		else:
 
-	if motion_detected: # If we are on delta situation
+			if motion_detected: # If we are on delta situation
 
-		delta_value_stack.append(delta_value) # Append max contour area (delta value) to delta value stack
+				delta_value_stack.append(delta_value) # Append max contour area (delta value) to delta value stack
 
-		if len(delta_value_stack) >= STABILIZATION_DETECTION: # If length of delta value stack is greater than or equal to STABILIZATION_DETECTION constant
-			delta_value_stack.pop(0) # Pop first element of delta value stack
-			# If minimum delta value is greater than (mean of last 5 frame - minimum area / 2) and maximum delta value is less than (mean of last 5 frame + minimum area / 2)
-			if min(delta_value_stack) > (numpy.mean(delta_value_stack) - args["min_area"] / 2) and max(delta_value_stack) < (numpy.mean(delta_value_stack) + args["min_area"] / 2):
-				motion_detected = 0 # Then video STABILIZED
-				delta_value_stack = [] # Empty delta value stack
-				referenceFrame = None  # Clear reference frame
+				if len(delta_value_stack) >= STABILIZATION_DETECTION: # If length of delta value stack is greater than or equal to STABILIZATION_DETECTION constant
+					delta_value_stack.pop(0) # Pop first element of delta value stack
+					# If minimum delta value is greater than (mean of last 5 frame - minimum area / 2) and maximum delta value is less than (mean of last 5 frame + minimum area / 2)
+					if min(delta_value_stack) > (numpy.mean(delta_value_stack) - args["min_area"] / 2) and max(delta_value_stack) < (numpy.mean(delta_value_stack) + args["min_area"] / 2):
+						motion_detected = 0 # Then video STABILIZED
+						delta_value_stack = [] # Empty delta value stack
+						referenceFrame = None  # Clear reference frame
 
-	# Draw the text and timestamp on the frame
-	cv2.putText(frame, "Diff    : {}".format(delta_value), (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
-	cv2.putText(frame, "Thresh : {}".format(args["min_area"]), (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
-	cv2.putText(frame, "Frame : {}".format(frame_counter), (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
-	cv2.putText(frame, "Delta  : {}".format(motion_detected), (10, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
-	cv2.putText(frame, datetime.datetime.now().strftime("%A %d %B %Y %I:%M:%S%p"), (10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
 
-	# Show the frames and record if the user presses ESC or q
-	cv2.imshow("Original Frame", frame)
-	cv2.imshow("Frame Threshhold", thresh)
-	cv2.imshow("Frame Delta", frameDelta)
-	cv2.imshow("Frame Delta Colored", frameDeltaColored)
-	key = cv2.waitKey(1) & 0xFF
+			print "STATIONARY"
+			# Show the frames and record if the user presses ESC or q
+			cv2.imshow("Original Frame", frame)
+			cv2.imshow("Frame Threshold", thresh)
+			cv2.imshow("Frame Delta", frameDelta)
+			cv2.imshow("Frame Delta Colored", frameDeltaColored)
+			key = cv2.waitKey(1) & 0xFF
 
 	# if the `ESC` or `q` key is pressed, break the loop
 	if key == ord("q") or key == ord("\x1b"):
