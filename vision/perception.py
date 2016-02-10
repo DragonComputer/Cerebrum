@@ -100,6 +100,10 @@ while True: # Loop over the frames of the video
 		if delta_value > args["min_area"]: # If max contour area (delta value) greater than min area
 			motion_detected = 1 # Initialize delta situation
 
+		# ----------------------------------------(START) NON-STATIONARY CAMERA SITUATION (START)----------------------------------------
+		# ----------------------------------------(START) NON-STATIONARY CAMERA SITUATION (START)----------------------------------------
+		# ----------------------------------------(START) NON-STATIONARY CAMERA SITUATION (START)----------------------------------------
+
 		if delta_value > (height * width * float(NON_STATIONARY_PERCENTAGE) / float(100)): # If delta value is too much
 			print "NON-STATIONARY" # PPROBABLY!!! There is a NON_STAIONARY CAMERA situation
 
@@ -112,6 +116,46 @@ while True: # Loop over the frames of the video
 				old_gray = cv2.cvtColor(old_frame, cv2.COLOR_BGR2GRAY) # Convert previous frame to grayscale
 
 				height, width = old_frame.shape[:2] # Get video height and width (size)
+
+
+
+				# --------------------(START) CHECK STATIONARY CAMERA AT THE SAME TIME (START)--------------------
+
+				gray = cv2.bilateralFilter(old_gray,9,75,75) # Blur current frame with Bilateral Filter for noise reduction
+
+				if referenceFrame is None: # If Reference Frame is None, initialize it
+					referenceFrame = gray
+					continue
+
+				frameDelta = cv2.absdiff(referenceFrame, gray) # Compute the absolute difference between the current frame and reference frame
+				thresh = cv2.threshold(frameDelta, 12, 255, cv2.THRESH_BINARY)[1] # Apply OpenCV's threshold function to get binary frame
+
+				thresh = cv2.dilate(thresh, None, iterations=1) # Dilate the thresholded image to fill in holes
+				frameDeltaColored = cv2.bitwise_and(frame,frame, mask= thresh) # Bitwise and - to get delta frame
+
+				# Find contours on thresholded image
+				(cnts, _) = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
+					cv2.CHAIN_APPROX_SIMPLE)
+
+				contour_area_stack = [] # List of contour areas's values
+
+				# Loop over the contours
+				if cnts:
+					for c in cnts: # Contour in Contours
+						contour_area_stack.append(cv2.contourArea(c)) # Calculate contour area and append to contour stack
+						if cv2.contourArea(c) > args["min_area"]: # If contour area greater than min area
+							(x, y, w, h) = cv2.boundingRect(c) # Compute the bounding box for this contour
+							#cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2) # Draw it on the frame
+					delta_value = max(contour_area_stack) # Assign max contour area to delta value
+
+					if delta_value <= (height * width * float(NON_STATIONARY_PERCENTAGE) / float(100)):
+						print "BREAK 1"
+						break
+
+				# --------------------(END) CHECK STATIONARY CAMERA AT THE SAME TIME (END)--------------------
+
+
+
 
 				# Create random points on frame
 				p1 = numpy.random.randint(width, size=(TRACKER_POINTS, 1, 2))
@@ -136,6 +180,49 @@ while True: # Loop over the frames of the video
 					ret,frame = camera.read() # Take a new frame
 					frame = imutils.resize(frame, height=TARGET_HEIGHT) # Resize frame to 360p. Alternative resizing method:
 					frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) # Convert it to grayscale
+
+
+
+
+					# --------------------(START) CHECK STATIONARY CAMERA AT THE SAME TIME (START)--------------------
+
+					gray = cv2.bilateralFilter(old_gray,9,75,75) # Blur current frame with Bilateral Filter for noise reduction
+
+					if referenceFrame is None: # If Reference Frame is None, initialize it
+						referenceFrame = gray
+						continue
+
+					frameDelta = cv2.absdiff(referenceFrame, gray) # Compute the absolute difference between the current frame and reference frame
+					thresh = cv2.threshold(frameDelta, 12, 255, cv2.THRESH_BINARY)[1] # Apply OpenCV's threshold function to get binary frame
+
+					thresh = cv2.dilate(thresh, None, iterations=1) # Dilate the thresholded image to fill in holes
+					frameDeltaColored = cv2.bitwise_and(frame,frame, mask= thresh) # Bitwise and - to get delta frame
+
+					# Find contours on thresholded image
+					(cnts, _) = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
+						cv2.CHAIN_APPROX_SIMPLE)
+
+					contour_area_stack = [] # List of contour areas's values
+
+					# Loop over the contours
+					if cnts:
+						for c in cnts: # Contour in Contours
+							contour_area_stack.append(cv2.contourArea(c)) # Calculate contour area and append to contour stack
+							if cv2.contourArea(c) > args["min_area"]: # If contour area greater than min area
+								(x, y, w, h) = cv2.boundingRect(c) # Compute the bounding box for this contour
+								#cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2) # Draw it on the frame
+						delta_value = max(contour_area_stack) # Assign max contour area to delta value
+
+						if delta_value <= (height * width * float(NON_STATIONARY_PERCENTAGE) / float(100)):
+							print "BREAK 2"
+							break
+
+					# --------------------(END) CHECK STATIONARY CAMERA AT THE SAME TIME (END)--------------------
+
+
+
+
+
 
 					delta_value = 0 # Delta Value for storing max continuous contour area for current frame
 
@@ -327,8 +414,7 @@ while True: # Loop over the frames of the video
 
 					frame_with_mask = cv2.add(frame,mask) # Add mask layer over frame
 					cv2.imshow('Original Frame',frame_with_mask) # Show Original Frame
-					cv2.imshow('Frame Threshhold',mask_delta) # Show Mask Delta Frame
-					cv2.imshow('Mask Biggest Contour',mask_biggest_contour) # Show Mask Delta Frame
+					cv2.imshow('Frame Threshhold',thresh_final_form) # Show Mask Delta Frame
 					cv2.imshow('Frame Delta Colored',frameDelta) # Show Frame Delta
 
 					k = cv2.waitKey(30) & 0xff # DEVELOPMENT
@@ -338,6 +424,10 @@ while True: # Loop over the frames of the video
 					old_gray = frame_gray.copy() # Update the previous frame
 					p1 = good_points2.reshape(-1,1,2) # Update previous points
 
+
+		# ----------------------------------------(END) NON-STATIONARY CAMERA SITUATION (END)----------------------------------------
+		# ----------------------------------------(END) NON-STATIONARY CAMERA SITUATION (END)----------------------------------------
+		# ----------------------------------------(END) NON-STATIONARY CAMERA SITUATION (END)----------------------------------------
 
 
 	if motion_detected: # If we are on delta situation
