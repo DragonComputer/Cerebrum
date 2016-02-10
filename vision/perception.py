@@ -26,6 +26,11 @@ if args.get("video", None) is None: # If the video argument is None, then we are
 else:								# Otherwise, we are reading from a video file
 	camera = cv2.VideoCapture(args["video"])
 
+# Parameters for Lucas Kanade Optical Flow
+lk_params = dict( winSize  = (15,15),
+				  maxLevel = 2,
+				  criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
+
 referenceFrame = None # Initialize the reference frame in the video stream
 
 (grabbed, first_frame) = camera.read() # Grab the first frame
