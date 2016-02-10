@@ -12,6 +12,7 @@ import os
 
 STABILIZATION_DETECTION = 5 # Number of frames to detect stabilization
 NON_STATIONARY_PERCENTAGE = 70 # Percentage of frame for detecting NON-STATIONARY CAMERA. Like: ( height * width * float(X) / float(100) )
+NON_ZERO_PERCENTAGE = 5 #  Percentage of frame(threshold) for detecting unnecessary movement
 TARGET_HEIGHT = 360 # Number of horizontal lines for target video and processing. Like 720p, 360p etc.
 
 # Construct the argument parser and parse the arguments
@@ -39,6 +40,7 @@ frame_counter = 1 # Define frame counter variable
 motion_detected = 0 # Delta situation checking variable
 delta_value_stack = [] # List of delta values
 non_stationary_camera = 0
+motion_counter = 0
 
 while True: # Loop over the frames of the video
 
@@ -86,17 +88,19 @@ while True: # Loop over the frames of the video
 		if delta_value > args["min_area"]: # If max contour area (delta value) greater than min area
 			motion_detected = 1 # Initialize delta situation
 
-		print "--------------------------------"
-		print delta_value
-		print (height * width * float(NON_STATIONARY_PERCENTAGE) / float(100))
-
 		if delta_value > (height * width * float(NON_STATIONARY_PERCENTAGE) / float(100)): # If delta value is too much
-			print "WARNING: NON-STATIONARY CAMERA" # PPROBABLY!!! There is a NON_STAIONARY CAMERA situation
 			non_stationary_camera = 1
 			status_text = "WARNING: NON-STATIONARY CAMERA"
 			frameDeltaColored = numpy.zeros_like(frame)
 		else:
 			non_stationary_camera = 0
+
+		if cv2.countNonZero(thresh) < (height * width * float(NON_ZERO_PERCENTAGE) / float(100)): # If Non Zero count is too low
+			nonzero_toolow = 1
+			status_text = "WARNING: NON-ZERO TOO LOW"
+			frameDeltaColored = numpy.zeros_like(frame)
+		else:
+			nonzero_toolow = 0
 
 	if motion_detected: # If we are on delta situation
 
@@ -111,9 +115,12 @@ while True: # Loop over the frames of the video
 				motion_detected = 0 # Then video STABILIZED
 				delta_value_stack = [] # Empty delta value stack
 				referenceFrame = None  # Clear reference frame
+				if not non_stationary_camera and not nonzero_toolow:
+					motion_counter += 1
 	else:
-		if not non_stationary_camera:
+		if not non_stationary_camera and not nonzero_toolow:
 			status_text = "MOTION UNDETECTED"
+			frameDeltaColored = numpy.zeros_like(frame)
 
 	# Draw the text and timestamp on the frame
 	cv2.putText(frame, "Diff    : {}".format(delta_value), (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 155), 1)
