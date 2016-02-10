@@ -1,6 +1,6 @@
 # SpectrumEngine
 
-An implementation of "Sense oriented General Reinforcement Learning Algorithm with Time Series Data Collection & Analysis"
+An implementation of "Sense oriented General Supervised / Reinforcement Learning Algorithm with Time Series Data Collection & Analysis"
 
 Supported senses:
 
@@ -12,7 +12,7 @@ Supported senses:
 > between these events in memory. Lastly creating outputs triggered by stimulant listeners.
 
 ### Version
-0.0.28
+0.0.29
 
 ### Tech
 

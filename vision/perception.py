@@ -10,7 +10,9 @@ import cv2
 import numpy
 import os
 
-STABILIZATION_DETECTION = 5
+STABILIZATION_DETECTION = 5 # Number of frames to detect stabilization
+NON_STATIONARY_PERCENTAGE = 75 # Percentage of frame for detecting NON-STATIONARY CAMERA. Like: ( height * width * float(X) / float(100) )
+TARGET_HEIGHT = 360 # Number of horizontal lines for target video and processing. Like 720p, 360p etc.
 
 # Construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -34,7 +36,7 @@ if float(width) / float(height) != float(16) / float(9):
 	raise ValueError('Aspect ratio of input stream must be [16:9]')
 
 frame_counter = 1 # Define frame counter variable
-on_delta_situation = 0 # Delta situation checking variable
+motion_detected = 0 # Delta situation checking variable
 delta_value_stack = [] # List of delta values
 
 while True: # Loop over the frames of the video
@@ -48,7 +50,8 @@ while True: # Loop over the frames of the video
 
 	delta_value = 0 # Delta Value for storing max continuous contour area for current frame
 
-	frame = imutils.resize(frame, height=360) # Resize frame to 360p. Alternative resizing method:
+	frame = imutils.resize(frame, height=TARGET_HEIGHT) # Resize frame to 360p. Alternative resizing method:
+	height, width = frame.shape[:2] # Get video height and width  from first frame(size)
 
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) # Convert frame to grayscale
 
@@ -80,9 +83,15 @@ while True: # Loop over the frames of the video
 		delta_value = max(contour_area_stack) # Assign max contour area to delta value
 
 		if delta_value > args["min_area"]: # If max contour area (delta value) greater than min area
-			on_delta_situation = 1 # Initialize delta situation
+			motion_detected = 1 # Initialize delta situation
 
-	if on_delta_situation: # If we are on delta situation
+		print "--------------------------------"
+		print delta_value
+		print (height * width * float(NON_STATIONARY_PERCENTAGE) / float(100))
+		if delta_value > (height * width * float(NON_STATIONARY_PERCENTAGE) / float(100)): # If delta value is too much
+			print "NON-STATIONARY" # PPROBABLY!!! There is a NON_STAIONARY CAMERA situation
+
+	if motion_detected: # If we are on delta situation
 
 		delta_value_stack.append(delta_value) # Append max contour area (delta value) to delta value stack
 
@@ -90,7 +99,7 @@ while True: # Loop over the frames of the video
 			delta_value_stack.pop(0) # Pop first element of delta value stack
 			# If minimum delta value is greater than (mean of last 5 frame - minimum area / 2) and maximum delta value is less than (mean of last 5 frame + minimum area / 2)
 			if min(delta_value_stack) > (numpy.mean(delta_value_stack) - args["min_area"] / 2) and max(delta_value_stack) < (numpy.mean(delta_value_stack) + args["min_area"] / 2):
-				on_delta_situation = 0 # Then video STABILIZED
+				motion_detected = 0 # Then video STABILIZED
 				delta_value_stack = [] # Empty delta value stack
 				referenceFrame = None  # Clear reference frame
 
@@ -98,7 +107,7 @@ while True: # Loop over the frames of the video
 	cv2.putText(frame, "Diff    : {}".format(delta_value), (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
 	cv2.putText(frame, "Thresh : {}".format(args["min_area"]), (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
 	cv2.putText(frame, "Frame : {}".format(frame_counter), (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
-	cv2.putText(frame, "Delta  : {}".format(on_delta_situation), (10, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+	cv2.putText(frame, "Delta  : {}".format(motion_detected), (10, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
 	cv2.putText(frame, datetime.datetime.now().strftime("%A %d %B %Y %I:%M:%S%p"), (10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
 
 	# Show the frames and record if the user presses ESC or q
