@@ -11,3 +11,17 @@ Following YouTube videos are the suggested example training data currently:
 [BFvsGF - ARRESTED AT THE SUPER BOWL]: <https://youtu.be/8AbwqbnUgzk>
 [MØ - Waste of Time]: <https://youtu.be/wFrth4NFogc>
 [Grip Nedir?]: <https://youtu.be/VgCdbzY4eYU>
+
+#### Tips
+
+For downloading video:
+
+	-  youtube-dl https://youtu.be/7_w_EA4u6oQ
+
+For downloading Subtitles/CC(Closed Captions):
+
+	-  youtube-dl --all-subs --skip-download https://youtu.be/7_w_EA4u6oQ
+
+For generating .wav file:
+
+	-  ffmpeg -i video.mp4 audio.wav
