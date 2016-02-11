@@ -1,4 +1,5 @@
-"""PyAudio example: Record a few seconds of audio and save to a WAVE file."""
+# USAGE
+# python hearing/perception.py __trainingData/audio_name.wav
 
 import pyaudio
 import wave

@@ -1,6 +1,5 @@
 # USAGE
-# python perception.py
-# python perception.py --video PATH/example_01.mp4
+# python vision/perception.py --video __trainingData/video_name.mp4
 
 import argparse
 import datetime
