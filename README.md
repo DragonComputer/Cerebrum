@@ -12,7 +12,7 @@ Supported senses:
 > between these events in memory. Lastly creating outputs triggered by stimulant listeners.
 
 ### Version
-0.0.37
+0.0.38
 
 ### Tech
 
