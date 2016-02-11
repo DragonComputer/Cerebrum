@@ -14,7 +14,7 @@ CHANNELS = 2
 RATE = 44100
 SAVE_PERIOD = 10
 THRESHOLD = 1000
-SILENCE_DETECTION = 20
+SILENCE_DETECTION = 5
 WAVE_OUTPUT_FILENAME = "hearing/memory/" +  str(datetime.date.today()) + ".wav"
 
 def save_file():
@@ -61,6 +61,7 @@ frames = []
 data = wf.readframes(CHUNK)
 while data != '':
 	previous_data = data
+	stream.write(data)
 	data = wf.readframes(CHUNK)
 	rms = audioop.rms(data, 2)
 	#print rms
@@ -69,6 +70,7 @@ while data != '':
 		frames.append(data)
 		silence_counter = 0
 		while silence_counter < SILENCE_DETECTION:
+			stream.write(data)
 			data = wf.readframes(CHUNK)
 			frames.append(data)
 			rms = audioop.rms(data, 2)
@@ -80,7 +82,7 @@ while data != '':
 			sys.stdout.write("/")
 			sys.stdout.flush()
 		del frames[-(SILENCE_DETECTION-2):]
-		save_file()
+		#save_file()
 		frames = []
 	sys.stdout.write(".")
 	sys.stdout.flush()

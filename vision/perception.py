@@ -46,6 +46,7 @@ while True: # Loop over the frames of the video
 	frame_counter += 1 # Increase frame counter's value
 
 	(grabbed, frame) = camera.read() # Grab the current frame and initialize the occupied/unoccupied
+	time.sleep(0.012)
 
 	if not grabbed: # If the frame could not be grabbed, then we have reached the end of the video
 		break
@@ -130,9 +131,13 @@ while True: # Loop over the frames of the video
 
 	# Show the frames and record if the user presses ESC or q
 	cv2.imshow("Original Frame", frame)
+	cv2.moveWindow("Original Frame",150,550)
 	cv2.imshow("Frame Threshhold", thresh)
+	cv2.moveWindow("Frame Threshhold",150,100)
 	cv2.imshow("Frame Delta", frameDelta)
+	cv2.moveWindow("Frame Delta",1000,100)
 	cv2.imshow("Frame Delta Colored", frameDeltaColored)
+	cv2.moveWindow("Frame Delta Colored",1000,550)
 	key = cv2.waitKey(1) & 0xFF
 
 	# if the `ESC` or `q` key is pressed, break the loop
