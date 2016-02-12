@@ -11,6 +11,7 @@ import numpy
 import matplotlib.pyplot as plt
 import threading
 import cv2
+import imutils
 
 CHUNK = 1024
 FORMAT = pyaudio.paInt16
@@ -54,7 +55,7 @@ def draw_spectrogram():
 
 def draw_waveform():
 	global all_frames
-	plt.figure(figsize=(30,2))
+	fig = plt.figure(figsize=(20,2))
 	while True:
 		data = ''.join(all_frames[-50:])
 		data = numpy.fromstring(data, 'int16')
@@ -66,8 +67,17 @@ def draw_waveform():
 		ax.patch.set_facecolor('black')
 		ax.patch.set_alpha(0.7)
 		plt.ylim([-10000,10000])
-		plt.draw()
-		plt.pause(0.05)
+		#plt.draw()
+		plt.tight_layout()
+		fig.canvas.draw()
+		img = numpy.fromstring(fig.canvas.tostring_rgb(), dtype=numpy.uint8, sep='')
+		img = img.reshape(fig.canvas.get_width_height()[::-1] + (3,))
+		img = imutils.resize(img, height=160) # Resize frame to 160p.
+		crop_img = img[15:145, 50:1350]
+		cv2.imshow("Waveform",crop_img)
+		cv2.moveWindow("Waveform",300,850)
+		cv2.waitKey(1)
+		#plt.pause(0.1)
 
 
 
