@@ -41,14 +41,15 @@ def save_file():
 	wf.writeframes(previous_wav + b''.join(frames))
 	wf.close()
 
-def draw_spectogram():
-	global all_frames
+def draw_spectrogram():
+	global spectrogram_frames
+	plt.figure(figsize=(2,4))
 	while True:
-		data = ''.join(all_frames)
+		data = ''.join(spectrogram_frames[-50:])
 		data = numpy.fromstring(data, 'int16')
-		plt.specgram(data, NFFT=CHUNK, Fs=wf.getframerate(), noverlap=900, cmap=plt.cm.gist_heat)
+		plt.specgram(data, NFFT=CHUNK, Fs=wf.getframerate(), noverlap=900, cmap=plt.cm.gray)
 		plt.draw()
-		plt.pause(0.0001)
+		plt.pause(0.2)
 
 
 
@@ -68,22 +69,22 @@ stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
 print("PROCESSING STARTED")
 
 frames = []
-all_frames = []
+spectrogram_frames = []
 
 #save_counter = 0
 data = wf.readframes(CHUNK)
-all_frames.append(data)
+spectrogram_frames.append(data)
 
-thread = threading.Thread(target=draw_spectogram)
+thread = threading.Thread(target=draw_spectrogram)
 thread.daemon = True
 thread.start()
 
 while data != '':
 	previous_data = data
 	stream.write(data)
-	#draw_spectogram(all_frames)
+	#draw_spectrogram(spectrogram_frames)
 	data = wf.readframes(CHUNK)
-	all_frames.append(data)
+	spectrogram_frames.append(data)
 	rms = audioop.rms(data, 2)
 	#print rms
 	if rms >= THRESHOLD:
@@ -92,9 +93,9 @@ while data != '':
 		silence_counter = 0
 		while silence_counter < SILENCE_DETECTION:
 			stream.write(data)
-			#draw_spectogram(all_frames)
+			#draw_spectrogram(spectrogram_frames)
 			data = wf.readframes(CHUNK)
-			all_frames.append(data)
+			spectrogram_frames.append(data)
 			frames.append(data)
 			rms = audioop.rms(data, 2)
 			#print rms
