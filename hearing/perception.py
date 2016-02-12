@@ -10,6 +10,7 @@ import audioop
 import numpy
 import matplotlib.pyplot as plt
 import threading
+import cv2
 
 CHUNK = 1024
 FORMAT = pyaudio.paInt16
@@ -42,14 +43,29 @@ def save_file():
 	wf.close()
 
 def draw_spectrogram():
-	global spectrogram_frames
+	global all_frames
 	plt.figure(figsize=(2,4))
 	while True:
-		data = ''.join(spectrogram_frames[-50:])
+		data = ''.join(all_frames[-50:])
 		data = numpy.fromstring(data, 'int16')
 		plt.specgram(data, NFFT=CHUNK, Fs=wf.getframerate(), noverlap=900, cmap=plt.cm.gray)
 		plt.draw()
 		plt.pause(0.2)
+
+def draw_waveform():
+	global all_frames
+	plt.figure(figsize=(30,2))
+	while True:
+		data = ''.join(all_frames[-50:])
+		data = numpy.fromstring(data, 'int16')
+		plt.clf()
+		plt.plot(data, color='silver', alpha=0.7, linestyle='dotted')
+		ax = plt.gca()
+		ax.patch.set_facecolor('black')
+		ax.patch.set_alpha(0.5)
+		plt.ylim([-10000,10000])
+		plt.draw()
+		plt.pause(0.05)
 
 
 
@@ -69,22 +85,22 @@ stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
 print("PROCESSING STARTED")
 
 frames = []
-spectrogram_frames = []
+all_frames = []
 
 #save_counter = 0
 data = wf.readframes(CHUNK)
-spectrogram_frames.append(data)
+all_frames.append(data)
 
-thread = threading.Thread(target=draw_spectrogram)
+thread = threading.Thread(target=draw_waveform)
 thread.daemon = True
 thread.start()
 
 while data != '':
 	previous_data = data
 	stream.write(data)
-	#draw_spectrogram(spectrogram_frames)
+	#draw_spectrogram(all_frames)
 	data = wf.readframes(CHUNK)
-	spectrogram_frames.append(data)
+	all_frames.append(data)
 	rms = audioop.rms(data, 2)
 	#print rms
 	if rms >= THRESHOLD:
@@ -93,9 +109,9 @@ while data != '':
 		silence_counter = 0
 		while silence_counter < SILENCE_DETECTION:
 			stream.write(data)
-			#draw_spectrogram(spectrogram_frames)
+			#draw_spectrogram(all_frames)
 			data = wf.readframes(CHUNK)
-			spectrogram_frames.append(data)
+			all_frames.append(data)
 			frames.append(data)
 			rms = audioop.rms(data, 2)
 			#print rms
