@@ -9,6 +9,7 @@ import sys
 import audioop
 import numpy
 import matplotlib.pyplot as plt
+import threading
 
 CHUNK = 1024
 FORMAT = pyaudio.paInt16
@@ -40,12 +41,14 @@ def save_file():
 	wf.writeframes(previous_wav + b''.join(frames))
 	wf.close()
 
-def draw_spectogram(all_frames):
-	data = ''.join(all_frames)
-	data = numpy.fromstring(data, 'int16')
-	plt.specgram(data, NFFT=len(data), Fs=wf.getframerate(), noverlap=900, cmap=plt.cm.gist_heat)
-	plt.draw()
-	plt.pause(0.000000000001)
+def draw_spectogram():
+	global all_frames
+	while True:
+		data = ''.join(all_frames)
+		data = numpy.fromstring(data, 'int16')
+		plt.specgram(data, NFFT=CHUNK, Fs=wf.getframerate(), noverlap=900, cmap=plt.cm.gist_heat)
+		plt.draw()
+		plt.pause(0.0001)
 
 
 
@@ -69,12 +72,18 @@ all_frames = []
 
 #save_counter = 0
 data = wf.readframes(CHUNK)
+all_frames.append(data)
+
+thread = threading.Thread(target=draw_spectogram)
+thread.daemon = True
+thread.start()
+
 while data != '':
 	previous_data = data
 	stream.write(data)
-	#all_frames.append(data)
 	#draw_spectogram(all_frames)
 	data = wf.readframes(CHUNK)
+	all_frames.append(data)
 	rms = audioop.rms(data, 2)
 	#print rms
 	if rms >= THRESHOLD:
@@ -83,9 +92,9 @@ while data != '':
 		silence_counter = 0
 		while silence_counter < SILENCE_DETECTION:
 			stream.write(data)
-			#all_frames.append(data)
 			#draw_spectogram(all_frames)
 			data = wf.readframes(CHUNK)
+			all_frames.append(data)
 			frames.append(data)
 			rms = audioop.rms(data, 2)
 			#print rms
