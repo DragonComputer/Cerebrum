@@ -1,11 +1,18 @@
 # SpectrumEngine
 
-An implementation of "General Purpose Multisensorial Supervised (& Reinforcement) Learning Algorithm with Time Series Memory Recording & Neural Connection Organization"
+An implementation of "General Purpose Multisensorial Supervised (& Reinforcement) Learning Algorithm with Time Series Memory Recording & Neural Memory Networking"
 
-Supported senses:
+Supported types of perception:
 
 	-  Vision
+		- Amodal Perception
+		- Color Perception
+		- Depth Perception (in Future)
+		- Form Perception (in Future)
 	-  Hearing
+		- Speech Perception
+		- Rhythmic Perception
+		- Harmonic Perception (in Future)
 
 > SpectrumEngine's purpose is getting continuous data inputs from different types of sensors as
 > an event, depending on the threshold values and creating a complex time based relations
@@ -13,7 +20,7 @@ Supported senses:
 > coming from a single sense.
 
 ### Version
-0.0.51
+0.0.52
 
 ### Tech
 

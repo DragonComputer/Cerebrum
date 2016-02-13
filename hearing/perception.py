@@ -10,8 +10,9 @@ import audioop
 import numpy
 import matplotlib.pyplot as plt
 import threading
-import cv2
 import imutils
+import pyqtgraph as pg
+from PyQt4 import QtCore, QtGui
 
 CHUNK = 1024
 FORMAT = pyaudio.paInt16
@@ -57,34 +58,23 @@ def draw_spectrogram():
 def draw_waveform():
 	global all_frames
 	global thresh_frames
-	fig = plt.figure(figsize=(20,2))
+	pw = pg.plot(title="Waveform")
+	pg.setConfigOptions(antialias=True)
+	pw.win.resize(1300, 160)
+	pw.win.move(300,850)
+	pw.showAxis('bottom', False)
 	while True:
-		data = ''.join(all_frames[-20:])
+		data = ''.join(all_frames[-50:])
 		data = numpy.fromstring(data, 'int16')
-		data2 = ''.join(thresh_frames[-20:])
+		data2 = ''.join(thresh_frames[-50:])
 		data2 = numpy.fromstring(data2, 'int16')
-		plt.clf()
-		plt.plot(data, color='silver', alpha=0.7, linestyle='dotted', drawstyle='steps-pre', antialiased="False", linewidth="0.5", rasterized="True")
-		plt.plot(data2, color='#00FF00', alpha=0.7, linestyle='dotted', drawstyle='steps-pre', antialiased="False", linewidth="0.5", rasterized="True")
-		ax = plt.gca()
-		ax.axes.get_xaxis().set_visible(False)
-		ax.axes.get_yaxis().set_visible(False)
-		ax.patch.set_facecolor('#4d4d4d')
-		#ax.patch.set_alpha(1.0)
-		plt.ylim([-10000,10000])
-		#plt.draw()
-		plt.tight_layout()
-		fig.canvas.draw()
-		img = numpy.fromstring(fig.canvas.tostring_rgb(), dtype=numpy.uint8, sep='')
-		img = img.reshape(fig.canvas.get_width_height()[::-1] + (3,))
-		img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
-		img = imutils.resize(img, height=160) # Resize frame to 160p.
-		crop_img = img[15:145, 50:1350]
-		cv2.putText(img, "Seconds : {}".format(int(len(all_frames)/43.06640625)), (70, 35), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 155), 2)
-		cv2.imshow("Waveform",crop_img)
-		cv2.moveWindow("Waveform",300,850)
-		cv2.waitKey(1)
-		#plt.pause(0.1)
+		pw.setRange(yRange=[-10000,10000])
+		pw.plot(data, clear=True, pen=pg.mkPen('w', width=0.5, style=QtCore.Qt.DotLine))
+		pw.plot(data2, pen=pg.mkPen('g', width=0.5, style=QtCore.Qt.DotLine))
+		text = pg.TextItem("Seconds : " + str(int(len(all_frames)/(RATE/CHUNK))), color=(255, 255, 255))
+		pw.addItem(text)
+		text.setPos(500, 0)
+		pg.QtGui.QApplication.processEvents()
 
 
 
