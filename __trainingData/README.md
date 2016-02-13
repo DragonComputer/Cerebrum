@@ -2,9 +2,9 @@
 
 Following YouTube videos are the suggested example training data currently:
 
-* [Learn Colors! | Preschool Chant | ELF Learning] - a video which aims to teach colors to kids.
+* [Learning Simple Color Chant Song Learn 11 Colours ...] - a video which aims to teach colors to kids.
 
-[Learn Colors! | Preschool Chant | ELF Learning]: <https://youtu.be/qhOTU8_1Af4>
+[Learning Simple Color Chant Song Learn 11 Colours ...]: <https://youtu.be/a9zZCWleoQ4>
 
 Following YouTube videos are the suggested examples for observing stimulant detection capabilities currently:
 

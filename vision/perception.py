@@ -11,7 +11,7 @@ import os
 
 STABILIZATION_DETECTION = 5 # Number of frames to detect stabilization
 NON_STATIONARY_PERCENTAGE = 70 # Percentage of frame for detecting NON-STATIONARY CAMERA. Like: ( height * width * float(X) / float(100) )
-NON_ZERO_PERCENTAGE = 5 #  Percentage of frame(threshold) for detecting unnecessary movement
+NON_ZERO_PERCENTAGE = 0 #  Percentage of frame(threshold) for detecting unnecessary movement
 TARGET_HEIGHT = 360 # Number of horizontal lines for target video and processing. Like 720p, 360p etc.
 
 # Construct the argument parser and parse the arguments
@@ -40,13 +40,14 @@ motion_detected = 0 # Delta situation checking variable
 delta_value_stack = [] # List of delta values
 non_stationary_camera = 0
 motion_counter = 0
+nonzero_toolow = 0
 
 while True: # Loop over the frames of the video
 
 	frame_counter += 1 # Increase frame counter's value
 
 	(grabbed, frame) = camera.read() # Grab the current frame and initialize the occupied/unoccupied
-	time.sleep(0.012)
+	#time.sleep(0.012)
 
 	if not grabbed: # If the frame could not be grabbed, then we have reached the end of the video
 		break

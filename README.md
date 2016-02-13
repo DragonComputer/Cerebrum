@@ -1,18 +1,19 @@
 # SpectrumEngine
 
-An implementation of "Sense oriented General Supervised (& Reinforcement) Learning Algorithm with Time Series Data Collection & Analysis"
+An implementation of "General Purpose Multisensorial Supervised (& Reinforcement) Learning Algorithm with Time Series Memory Recording & Neural Connection Organization"
 
 Supported senses:
 
 	-  Vision
 	-  Hearing
 
-> SpectrumEngine's purpose is getting continous data inputs from different types of sensors as
+> SpectrumEngine's purpose is getting continuous data inputs from different types of sensors as
 > an event, depending on the threshold values and creating a complex time based relations
-> between these events in memory. Lastly creating outputs triggered by stimulant listeners.
+> between these events in memory. Lastly creating outputs triggered by a stimulant that
+> coming from a single sense.
 
 ### Version
-0.0.50
+0.0.51
 
 ### Tech
 
