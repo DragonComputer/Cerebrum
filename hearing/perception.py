@@ -19,7 +19,7 @@ CHANNELS = 2
 RATE = 44100
 SAVE_PERIOD = 10
 THRESHOLD = 1000
-SILENCE_DETECTION = 3
+SILENCE_DETECTION = 5
 EMPTY_CHUNK = chr(int('000000', 2)) * CHUNK * 4
 WAVE_OUTPUT_FILENAME = "hearing/memory/" +  str(datetime.date.today()) + ".wav"
 
@@ -59,13 +59,13 @@ def draw_waveform():
 	global thresh_frames
 	fig = plt.figure(figsize=(20,2))
 	while True:
-		data = ''.join(all_frames[-50:])
+		data = ''.join(all_frames[-20:])
 		data = numpy.fromstring(data, 'int16')
-		data2 = ''.join(thresh_frames[-50:])
+		data2 = ''.join(thresh_frames[-20:])
 		data2 = numpy.fromstring(data2, 'int16')
 		plt.clf()
 		plt.plot(data, color='silver', alpha=0.7, linestyle='dotted', drawstyle='steps-pre', antialiased="False", linewidth="0.5", rasterized="True")
-		plt.plot(data2, color='#33cc33', alpha=0.7, linestyle='dotted', drawstyle='steps-pre', antialiased="False", linewidth="0.5", rasterized="True")
+		plt.plot(data2, color='#00FF00', alpha=0.7, linestyle='dotted', drawstyle='steps-pre', antialiased="False", linewidth="0.5", rasterized="True")
 		ax = plt.gca()
 		ax.axes.get_xaxis().set_visible(False)
 		ax.axes.get_yaxis().set_visible(False)
@@ -150,6 +150,9 @@ while data != '':
 			sys.stdout.write("/")
 			sys.stdout.flush()
 		del frames[-(SILENCE_DETECTION-2):]
+		del thresh_frames[-(SILENCE_DETECTION-2):]
+		for i in range(SILENCE_DETECTION-2):
+			thresh_frames.append(EMPTY_CHUNK)
 		#save_file()
 		frames = []
 	sys.stdout.write(".")

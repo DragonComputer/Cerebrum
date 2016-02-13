@@ -2,6 +2,12 @@
 
 Following YouTube videos are the suggested example training data currently:
 
+* [Learn Colors! | Preschool Chant | ELF Learning] - a video which aims to teach colors to kids.
+
+[Learn Colors! | Preschool Chant | ELF Learning]: <https://youtu.be/qhOTU8_1Af4>
+
+Following YouTube videos are the suggested examples for observing stimulant detection capabilities currently:
+
 * [DNews - Can You Make Someone Fall In Love With You?] - a stationary camera example with closed captions.
 * [BFvsGF - ARRESTED AT THE SUPER BOWL] - a non-stationary camera example with a lot of shaky shots.
 * [MØ - Waste of Time] - a non-stationary camera example with steady shots.
