@@ -57,10 +57,10 @@ def draw_waveform():
 	global all_frames
 	fig = plt.figure(figsize=(20,2))
 	while True:
-		data = ''.join(all_frames[-50:])
+		data = ''.join(all_frames[-20:])
 		data = numpy.fromstring(data, 'int16')
 		plt.clf()
-		plt.plot(data, color='silver', alpha=0.7, linestyle='dotted')
+		plt.plot(data, color='silver', alpha=0.7, linestyle='dotted', drawstyle='steps-pre', antialiased="False", linewidth="0.5", rasterized="True")
 		ax = plt.gca()
 		ax.axes.get_xaxis().set_visible(False)
 		ax.axes.get_yaxis().set_visible(False)
