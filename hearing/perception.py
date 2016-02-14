@@ -66,12 +66,12 @@ def draw_spectrum_analyzer(all_frames, thresh_frames):
 		f = numpy.fft.fftshift(f)
 		f = f.tolist()
 		Pxx = (numpy.absolute(Pxx)).tolist()
-		if len(thresh_frames[-1:]) > 0:
+		try:
 			if thresh_frames[-1:][0] == EMPTY_CHUNK:
 				pw.plot(x=f,y=Pxx, clear=True, pen=pg.mkPen('w', width=1.0, style=QtCore.Qt.SolidLine))
 			else:
 				pw.plot(x=f,y=Pxx, clear=True, pen=pg.mkPen('y', width=1.0, style=QtCore.Qt.SolidLine))
-		else:
+		except IndexError:
 			pw.plot(x=f,y=Pxx, clear=True, pen=pg.mkPen('w', width=1.0, style=QtCore.Qt.SolidLine))
 		pg.QtGui.QApplication.processEvents()
 
@@ -82,9 +82,9 @@ def draw_waveform(all_frames, thresh_frames):
 	pw.win.move(300, 850)
 	pw.showAxis('bottom', False)
 	while True:
-		data = ''.join(all_frames[-50:])
+		data = ''.join(all_frames[-20:])
 		data = numpy.fromstring(data, 'int16')
-		data2 = ''.join(thresh_frames[-50:])
+		data2 = ''.join(thresh_frames[-20:])
 		data2 = numpy.fromstring(data2, 'int16')
 		pw.setMouseEnabled(x=False)
 		pw.setRange(yRange=[-10000,10000])
