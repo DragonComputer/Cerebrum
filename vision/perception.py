@@ -132,13 +132,13 @@ while True: # Loop over the frames of the video
 
 	# Show the frames and record if the user presses ESC or q
 	cv2.imshow("Original Frame", frame)
-	cv2.moveWindow("Original Frame",150,550)
+	cv2.moveWindow("Original Frame",50,100)
 	cv2.imshow("Frame Threshhold", thresh)
-	cv2.moveWindow("Frame Threshhold",150,100)
+	cv2.moveWindow("Frame Threshhold",50,550)
 	cv2.imshow("Frame Delta", frameDelta)
-	cv2.moveWindow("Frame Delta",1000,100)
+	cv2.moveWindow("Frame Delta",1200,550)
 	cv2.imshow("Frame Delta Colored", frameDeltaColored)
-	cv2.moveWindow("Frame Delta Colored",1000,550)
+	cv2.moveWindow("Frame Delta Colored",1200,100)
 	key = cv2.waitKey(1) & 0xFF
 
 	# if the `ESC` or `q` key is pressed, break the loop

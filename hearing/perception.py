@@ -49,7 +49,7 @@ def draw_spectrum_analyzer(all_frames, thresh_frames):
 	pw = pg.plot(title="Spectrum Analyzer")
 	pg.setConfigOptions(antialias=True)
 	pw.win.resize(800, 300)
-	pw.win.move(550, 500)
+	pw.win.move(540, 500)
 	while True:
 		data = ''.join(all_frames[-1:])
 		data = numpy.fromstring(data, 'int16')
