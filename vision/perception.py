@@ -35,6 +35,7 @@ non_stationary_camera = 0
 motion_counter = 0
 nonzero_toolow = 0
 beginning_of_frame = None
+delay_in_microseconds = 0
 
 while True: # Loop over the frames of the video
 
@@ -44,8 +45,18 @@ while True: # Loop over the frames of the video
 		time_delta = end_of_frame - beginning_of_frame
 		#print time_delta.microseconds
 		#print (1 / camera.get(cv2.cv.CV_CAP_PROP_FPS) * 1000000)
-		if time_delta.microseconds < (1 / camera.get(cv2.cv.CV_CAP_PROP_FPS) * 1000000):
-			time.sleep(((1 / camera.get(cv2.cv.CV_CAP_PROP_FPS) * 1000000) - time_delta.microseconds) / 1000000)
+		if time_delta.microseconds <= (1 / camera.get(cv2.cv.CV_CAP_PROP_FPS) * 1000000):
+			if delay_in_microseconds == 0:
+				time.sleep(abs(((1 / camera.get(cv2.cv.CV_CAP_PROP_FPS) * 1000000) - time_delta.microseconds - 3000) / 1000000))
+			if delay_in_microseconds > 0:
+				delay_in_microseconds -= ((1 / camera.get(cv2.cv.CV_CAP_PROP_FPS) * 1000000) - time_delta.microseconds)
+			if delay_in_microseconds < 0:
+				time.sleep(-delay_in_microseconds / 1000000)
+				delay_in_microseconds = 0
+				#print delay_in_microseconds
+		else:
+			delay_in_microseconds += (time_delta.microseconds - (1 / camera.get(cv2.cv.CV_CAP_PROP_FPS) * 1000000))
+			#print delay_in_microseconds
 	(grabbed, frame) = camera.read() # Grab the current frame and initialize the occupied/unoccupied
 	beginning_of_frame = datetime.datetime.now()
 	#time.sleep(0.012)
