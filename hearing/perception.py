@@ -9,7 +9,7 @@ import sys
 import audioop
 import numpy
 import matplotlib.pyplot as plt
-import threading
+import multiprocessing
 import imutils
 import pyqtgraph as pg
 from PyQt4 import QtCore, QtGui
@@ -45,19 +45,17 @@ def save_file():
 	wf.writeframes(previous_wav + b''.join(frames))
 	wf.close()
 
-def draw_spectrum_analyzer():
-	global all_frames
-	global thresh_frames
+def draw_spectrum_analyzer(all_frames, thresh_frames):
 	pw = pg.plot(title="Spectrum Analyzer")
 	pg.setConfigOptions(antialias=True)
 	pw.win.resize(800, 300)
-	pw.win.move(300, 850)
+	pw.win.move(550, 500)
 	while True:
 		data = ''.join(all_frames[-1:])
 		data = numpy.fromstring(data, 'int16')
 		pw.setMouseEnabled(y=False)
 		pw.setYRange(0,1000)
-		pw.setXRange(-(RATE/2), (RATE/2), padding=0)
+		pw.setXRange(-(RATE/16), (RATE/16), padding=0)
 		pwAxis = pw.getAxis("bottom")
 		pwAxis.setLabel("Frequency [Hz]")
 		T = 1.0/RATE
@@ -68,15 +66,16 @@ def draw_spectrum_analyzer():
 		f = numpy.fft.fftshift(f)
 		f = f.tolist()
 		Pxx = (numpy.absolute(Pxx)).tolist()
-		if thresh_frames[-1:] == EMPTY_CHUNK:
-			pw.plot(x=f,y=Pxx, clear=True, pen=pg.mkPen('w', width=0.3, style=QtCore.Qt.SolidLine))
+		if len(thresh_frames[-1:]) > 0:
+			if thresh_frames[-1:][0] == EMPTY_CHUNK:
+				pw.plot(x=f,y=Pxx, clear=True, pen=pg.mkPen('w', width=1.0, style=QtCore.Qt.SolidLine))
+			else:
+				pw.plot(x=f,y=Pxx, clear=True, pen=pg.mkPen('y', width=1.0, style=QtCore.Qt.SolidLine))
 		else:
-			pw.plot(x=f,y=Pxx, clear=True, pen=pg.mkPen('y', width=0.3, style=QtCore.Qt.SolidLine))
+			pw.plot(x=f,y=Pxx, clear=True, pen=pg.mkPen('w', width=1.0, style=QtCore.Qt.SolidLine))
 		pg.QtGui.QApplication.processEvents()
 
-def draw_waveform():
-	global all_frames
-	global thresh_frames
+def draw_waveform(all_frames, thresh_frames):
 	pw = pg.plot(title="Waveform")
 	pg.setConfigOptions(antialias=True)
 	pw.win.resize(1300, 160)
@@ -87,6 +86,7 @@ def draw_waveform():
 		data = numpy.fromstring(data, 'int16')
 		data2 = ''.join(thresh_frames[-50:])
 		data2 = numpy.fromstring(data2, 'int16')
+		pw.setMouseEnabled(x=False)
 		pw.setRange(yRange=[-10000,10000])
 		pw.plot(data, clear=True, pen=pg.mkPen('w', width=0.5, style=QtCore.Qt.DotLine))
 		pw.plot(data2, pen=pg.mkPen('y', width=0.5, style=QtCore.Qt.DotLine))
@@ -112,18 +112,21 @@ stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
 
 print("PROCESSING STARTED")
 
+manager = multiprocessing.Manager()
 frames = []
-all_frames = []
-thresh_frames = []
+all_frames = manager.list()
+thresh_frames = manager.list()
 
 #save_counter = 0
 data = wf.readframes(CHUNK)
 all_frames.append(data)
 thresh_frames.append(EMPTY_CHUNK)
 
-thread = threading.Thread(target=draw_waveform)
-thread.daemon = True
-thread.start()
+process1 = multiprocessing.Process(target=draw_waveform, args=(all_frames, thresh_frames))
+process1.start()
+
+process2 = multiprocessing.Process(target=draw_spectrum_analyzer, args=(all_frames, thresh_frames))
+process2.start()
 
 while data != '':
 	previous_data = data
@@ -154,16 +157,16 @@ while data != '':
 				silence_counter += 1
 			else:
 				silence_counter = 0
-			sys.stdout.write("/")
-			sys.stdout.flush()
+			#sys.stdout.write("/")
+			#sys.stdout.flush()
 		del frames[-(SILENCE_DETECTION-2):]
 		del thresh_frames[-(SILENCE_DETECTION-2):]
 		for i in range(SILENCE_DETECTION-2):
 			thresh_frames.append(EMPTY_CHUNK)
 		#save_file()
 		frames = []
-	sys.stdout.write(".")
-	sys.stdout.flush()
+	#sys.stdout.write(".")
+	#sys.stdout.flush()
 	#save_counter += 1
 	#if save_counter >= SAVE_PERIOD:
 	#    save_counter = 0
