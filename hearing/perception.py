@@ -13,6 +13,7 @@ import multiprocessing
 import imutils
 import pyqtgraph as pg
 from PyQt4 import QtCore, QtGui
+import time
 
 CHUNK = 1024
 FORMAT = pyaudio.paInt16
@@ -74,6 +75,7 @@ def draw_spectrum_analyzer(all_frames, thresh_frames):
 		except IndexError:
 			pw.plot(x=f,y=Pxx, clear=True, pen=pg.mkPen('w', width=1.0, style=QtCore.Qt.SolidLine))
 		pg.QtGui.QApplication.processEvents()
+		time.sleep(0.05)
 
 def draw_waveform(all_frames, thresh_frames):
 	pw = pg.plot(title="Waveform")
@@ -94,6 +96,7 @@ def draw_waveform(all_frames, thresh_frames):
 		pw.addItem(text)
 		text.setPos(500, 0)
 		pg.QtGui.QApplication.processEvents()
+		time.sleep(0.05)
 
 
 

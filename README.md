@@ -20,7 +20,7 @@ Supported types of perception:
 > coming from a single sense.
 
 ### Version
-0.0.55
+0.0.57
 
 ### Tech
 

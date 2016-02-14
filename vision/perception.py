@@ -28,29 +28,35 @@ else:								# Otherwise, we are reading from a video file
 
 referenceFrame = None # Initialize the reference frame in the video stream
 
-(grabbed, first_frame) = camera.read() # Grab the first frame
-
-height, width = first_frame.shape[:2] # Get video height and width  from first frame(size)
-#if not height == 720 or not width == 1280:
-if float(width) / float(height) != float(16) / float(9):
-	raise ValueError('Aspect ratio of input stream must be [16:9]')
-
 frame_counter = 1 # Define frame counter variable
 motion_detected = 0 # Delta situation checking variable
 delta_value_stack = [] # List of delta values
 non_stationary_camera = 0
 motion_counter = 0
 nonzero_toolow = 0
+beginning_of_frame = None
 
 while True: # Loop over the frames of the video
 
 	frame_counter += 1 # Increase frame counter's value
-
+	end_of_frame = datetime.datetime.now()
+	if beginning_of_frame is not None:
+		time_delta = end_of_frame - beginning_of_frame
+		#print time_delta.microseconds
+		#print (1 / camera.get(cv2.cv.CV_CAP_PROP_FPS) * 1000000)
+		if time_delta.microseconds < (1 / camera.get(cv2.cv.CV_CAP_PROP_FPS) * 1000000):
+			time.sleep(((1 / camera.get(cv2.cv.CV_CAP_PROP_FPS) * 1000000) - time_delta.microseconds) / 1000000)
 	(grabbed, frame) = camera.read() # Grab the current frame and initialize the occupied/unoccupied
+	beginning_of_frame = datetime.datetime.now()
 	#time.sleep(0.012)
 
 	if not grabbed: # If the frame could not be grabbed, then we have reached the end of the video
 		break
+
+	height, width = frame.shape[:2] # Get video height and width  from first frame(size)
+	#if not height == 720 or not width == 1280:
+	if float(width) / float(height) != float(16) / float(9):
+		raise ValueError('Aspect ratio of input stream must be [16:9]')
 
 	delta_value = 0 # Delta Value for storing max continuous contour area for current frame
 
