@@ -7,12 +7,22 @@ Supported types of perception:
 	-  Vision
 		- Amodal Perception
 		- Color Perception
-		- Depth Perception (in Future)
-		- Form Perception (in Future)
+		- Depth Perception (in Future) (needs Stereoscopic Vision)
+		- Form Perception (in Future) (needs Stereoscopic Vision)
+		- Relative Velocity Perception (in Future) (needs Stereoscopic Vision)
 	-  Hearing
 		- Speech Perception
 		- Rhythmic Perception
-		- Harmonic Perception (in Future)
+		- Harmonic Perception (in Future) (WARNING: High Complexity)
+		- Acceleration Perception (in Future) (needs 2 units of Triple Axis Accelerometer)
+	- Touching (Not Yet Available)
+		- Mechanic Perception (in Future) (needs lots of Pressure Sensors)
+		- Heat & Cooling Perception (in Future) (needs lots of Temperature Sensors)
+	- Tasting (Not Yet Available)
+		- Solid/Fluid State Chemical Perception (in Future) (WARNING: Sensor Technology Not Available)
+	- Smelling (Not Yet Available)
+		- Gas State Chemical Perception (in Future) (WARNING: Sensor Technology Not Available)
+	- *Abstract Reward & Punishment Mechanism*
 
 > SpectrumEngine's purpose is getting continuous data inputs from different types of sensors as
 > an event, depending on the threshold values and creating a complex time based relations
@@ -20,7 +30,7 @@ Supported types of perception:
 > coming from a single sense.
 
 ### Version
-0.0.60
+0.0.61
 
 ### Tech
 

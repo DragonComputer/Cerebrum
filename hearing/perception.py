@@ -47,6 +47,7 @@ def save_file():
 	wf.close()
 
 def draw_spectrum_analyzer(all_frames, thresh_frames):
+	time.sleep(1)
 	pw = pg.plot(title="Spectrum Analyzer")
 	pg.setConfigOptions(antialias=True)
 	pw.win.resize(800, 300)
@@ -78,6 +79,7 @@ def draw_spectrum_analyzer(all_frames, thresh_frames):
 		time.sleep(0.05)
 
 def draw_waveform(all_frames, thresh_frames):
+	time.sleep(1)
 	pw = pg.plot(title="Waveform")
 	pg.setConfigOptions(antialias=True)
 	pw.win.resize(1300, 160)

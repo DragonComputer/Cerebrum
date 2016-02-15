@@ -24,6 +24,7 @@ if args.get("video", None) is None: # If the video argument is None, then we are
 	camera = cv2.VideoCapture(0)
 	time.sleep(0.25)
 else:								# Otherwise, we are reading from a video file
+	time.sleep(0.25)
 	camera = cv2.VideoCapture(args["video"])
 
 referenceFrame = None # Initialize the reference frame in the video stream
