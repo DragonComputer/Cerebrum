@@ -1,13 +1,13 @@
 # USAGE
 # python vision/perception.py --video __trainingData/video_name.mp4
 
-import argparse
-import datetime
-import imutils
-import time
-import cv2
-import numpy
-import os
+import argparse # Makes it easy to write user-friendly command-line interfaces.
+import datetime # Supplies classes for manipulating dates and times in both simple and complex ways.
+import imutils # A series of convenience functions to make basic image processing functions such as translation, rotation, resizing, skeletonization etc.
+import time # Provides various time-related functions.
+import cv2 # (Open Source Computer Vision) is a library of programming functions mainly aimed at real-time computer vision.
+import numpy # The fundamental package for scientific computing with Python.
+import os # Provides a portable way of using operating system dependent functionality.
 
 STABILIZATION_DETECTION = 5 # Number of frames to detect stabilization
 NON_STATIONARY_PERCENTAGE = 70 # Percentage of frame for detecting NON-STATIONARY CAMERA. Like: ( height * width * float(X) / float(100) )
@@ -158,6 +158,7 @@ while True: # Loop over the frames of the video
 
 	# if the `ESC` or `q` key is pressed, break the loop
 	if key == ord("q") or key == ord("\x1b"):
+		os.system("killall python") # Temporary line for practicality in DEVELOPMENT
 		break
 
 cv2.destroyAllWindows() # Close any open windows
