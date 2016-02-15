@@ -20,16 +20,16 @@ Supported types of perception:
 > coming from a single sense.
 
 ### Version
-0.0.57
+0.0.59
 
 ### Tech
 
 SpectrumEngine uses a number of open source technologies to analysis & synthesis:
 
-* [Python] - a widely used general-purpose, high-level programming language.
+* [Python 2.7] - a widely used general-purpose, high-level programming language.
 * [PyAudio] - provides Python bindings for PortAudio, the cross platform audio API.
 * [OpenCV] - (Open Source Computer Vision) is a library of programming functions mainly aimed at real-time computer vision.
 
-[Python]: <https://www.python.org/r>
+[Python 2.7]: <https://www.python.org/r>
 [PyAudio]: <https://people.csail.mit.edu/hubert/pyaudio/r>
 [OpenCV]: <http://opencv.org/r>
