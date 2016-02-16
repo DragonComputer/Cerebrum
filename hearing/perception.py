@@ -172,8 +172,6 @@ if __name__ == "__main__":
 				thresh_frames.append(EMPTY_CHUNK) # Append an EMPTY_CHUNK
 
 			target_frames = [] # Empty target frames
-			sys.stdout.write("HEARING STIMULI")
-			sys.stdout.flush()
 
 	stream.stop_stream() # Stop the stream
 	stream.close() # Close the stream
