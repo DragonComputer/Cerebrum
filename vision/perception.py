@@ -8,158 +8,164 @@ import time # Provides various time-related functions.
 import cv2 # (Open Source Computer Vision) is a library of programming functions mainly aimed at real-time computer vision.
 import numpy # The fundamental package for scientific computing with Python.
 import os # Provides a portable way of using operating system dependent functionality.
+import sys # Provides access to some variables used or maintained by the interpreter and to functions that interact strongly with the interpreter. It is always available.
 
 STABILIZATION_DETECTION = 5 # Number of frames to detect stabilization
 NON_STATIONARY_PERCENTAGE = 70 # Percentage of frame for detecting NON-STATIONARY CAMERA. Like: ( height * width * float(X) / float(100) )
 NON_ZERO_PERCENTAGE = 0 #  Percentage of frame(threshold) for detecting unnecessary movement
 TARGET_HEIGHT = 360 # Number of horizontal lines for target video and processing. Like 720p, 360p etc.
 
-# Construct the argument parser and parse the arguments
-ap = argparse.ArgumentParser()
-ap.add_argument("-v", "--video", help="path to the video file")
-ap.add_argument("-a", "--min-area", type=int, default=500, help="minimum area size")
-args = vars(ap.parse_args())
+# MAIN CODE BLOCK
+if __name__ == "__main__":
 
-if args.get("video", None) is None: # If the video argument is None, then we are reading from webcam
-	camera = cv2.VideoCapture(0)
-	time.sleep(0.25)
-else:								# Otherwise, we are reading from a video file
-	time.sleep(0.25)
-	camera = cv2.VideoCapture(args["video"])
+	# Construct the argument parser and parse the arguments
+	ap = argparse.ArgumentParser()
+	ap.add_argument("-v", "--video", help="path to the video file")
+	ap.add_argument("-a", "--min-area", type=int, default=500, help="minimum area size")
+	args = vars(ap.parse_args())
 
-referenceFrame = None # Initialize the reference frame in the video stream
+	if args.get("video", None) is None: # If the video argument is None, then we are reading from webcam
+		camera = cv2.VideoCapture(0)
+		time.sleep(0.25)
+	else:								# Otherwise, we are reading from a video file
+		time.sleep(0.25)
+		camera = cv2.VideoCapture(args["video"])
 
-(grabbed, first_frame) = camera.read() # Grab the first frame
+	referenceFrame = None # Initialize the reference frame in the video stream
 
-height, width = first_frame.shape[:2] # Get video height and width  from first frame(size)
-#if not height == 720 or not width == 1280:
-if float(width) / float(height) != float(16) / float(9):
-	raise ValueError('Aspect ratio of input stream must be [16:9]')
+	(grabbed, first_frame) = camera.read() # Grab the first frame
 
-frame_counter = 1 # Define frame counter variable
-motion_detected = 0 # Delta situation checking variable
-delta_value_stack = [] # List of delta values
-non_stationary_camera = 0
-motion_counter = 0
-nonzero_toolow = 0
+	height, width = first_frame.shape[:2] # Get video height and width  from first frame(size)
+	#if not height == 720 or not width == 1280:
+	if float(width) / float(height) != float(16) / float(9):
+		raise ValueError('Aspect ratio of input stream must be [16:9]')
 
-beginning_of_stream = datetime.datetime.now()
-while True: # Loop over the frames of the video
+	frame_counter = 1 # Define frame counter variable
+	motion_detected = 0 # Delta situation checking variable
+	delta_value_stack = [] # List of delta values
+	non_stationary_camera = 0
+	motion_counter = 0
+	nonzero_toolow = 0
 
-	(grabbed, frame) = camera.read() # Grab the current frame and initialize the occupied/unoccupied
-	if not grabbed: # If the frame could not be grabbed, then we have reached the end of the video
-		break
-	frame_counter += 1 # Increase frame counter's value
+	beginning_of_stream = datetime.datetime.now()
+	while True: # Loop over the frames of the video
 
-	# -------------------- TIME CORRECTION --------------------
-	time_delta = datetime.datetime.now() - beginning_of_stream
-	current_time_of_realworld = time_delta.seconds + time_delta.microseconds / float(1000000)
-	current_time_of_stream = frame_counter / camera.get(cv2.cv.CV_CAP_PROP_FPS)
-	diff_of_time = current_time_of_stream - current_time_of_realworld
-	if abs(diff_of_time) > (1 / camera.get(cv2.cv.CV_CAP_PROP_FPS)):
-		if diff_of_time > 0:
-			time.sleep(1 / camera.get(cv2.cv.CV_CAP_PROP_FPS))
-		else:
-			(grabbed, frame) = camera.read() # Grab the current frame and initialize the occupied/unoccupied
-			if not grabbed: # If the frame could not be grabbed, then we have reached the end of the video
-				break
-			frame_counter += 1 # Increase frame counter's value
+		(grabbed, frame) = camera.read() # Grab the current frame and initialize the occupied/unoccupied
+		if not grabbed: # If the frame could not be grabbed, then we have reached the end of the video
+			break
+		frame_counter += 1 # Increase frame counter's value
+
+		# -------------------- TIME CORRECTION --------------------
+		time_delta = datetime.datetime.now() - beginning_of_stream
+		current_time_of_realworld = time_delta.seconds + time_delta.microseconds / float(1000000)
+		current_time_of_stream = frame_counter / camera.get(cv2.cv.CV_CAP_PROP_FPS)
+		diff_of_time = current_time_of_stream - current_time_of_realworld
+		if abs(diff_of_time) > (1 / camera.get(cv2.cv.CV_CAP_PROP_FPS)):
+			if diff_of_time > 0:
+				time.sleep(1 / camera.get(cv2.cv.CV_CAP_PROP_FPS))
+			else:
+				(grabbed, frame) = camera.read() # Grab the current frame and initialize the occupied/unoccupied
+				if not grabbed: # If the frame could not be grabbed, then we have reached the end of the video
+					break
+				frame_counter += 1 # Increase frame counter's value
+				continue
+		# -------------------- TIME CORRECTION --------------------
+
+		delta_value = 0 # Delta Value for storing max continuous contour area for current frame
+
+		frame = imutils.resize(frame, height=TARGET_HEIGHT) # Resize frame to 360p. Alternative resizing method:
+		height, width = frame.shape[:2] # Get video height and width  from first frame(size)
+
+		gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) # Convert frame to grayscale
+
+		gray = cv2.bilateralFilter(gray,9,75,75) # Blur current frame with Bilateral Filter for noise reduction
+
+		if referenceFrame is None: # If Reference Frame is None, initialize it
+			referenceFrame = gray
 			continue
-	# -------------------- TIME CORRECTION --------------------
 
-	delta_value = 0 # Delta Value for storing max continuous contour area for current frame
+		frameDelta = cv2.absdiff(referenceFrame, gray) # Compute the absolute difference between the current frame and reference frame
+		thresh = cv2.threshold(frameDelta, 12, 255, cv2.THRESH_BINARY)[1] # Apply OpenCV's threshold function to get binary frame
 
-	frame = imutils.resize(frame, height=TARGET_HEIGHT) # Resize frame to 360p. Alternative resizing method:
-	height, width = frame.shape[:2] # Get video height and width  from first frame(size)
+		thresh = cv2.dilate(thresh, None, iterations=1) # Dilate the thresholded image to fill in holes
+		frameDeltaColored = cv2.bitwise_and(frame,frame, mask= thresh) # Bitwise and - to get delta frame
 
-	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) # Convert frame to grayscale
+		# Find contours on thresholded image
+		(cnts, _) = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
+			cv2.CHAIN_APPROX_SIMPLE)
 
-	gray = cv2.bilateralFilter(gray,9,75,75) # Blur current frame with Bilateral Filter for noise reduction
+		contour_area_stack = [] # List of contour areas's values
 
-	if referenceFrame is None: # If Reference Frame is None, initialize it
-		referenceFrame = gray
-		continue
+		# Loop over the contours
+		if cnts:
+			for c in cnts: # Contour in Contours
+				contour_area_stack.append(cv2.contourArea(c)) # Calculate contour area and append to contour stack
+				if cv2.contourArea(c) > args["min_area"]: # If contour area greater than min area
+					(x, y, w, h) = cv2.boundingRect(c) # Compute the bounding box for this contour
+					cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2) # Draw it on the frame
+			delta_value = max(contour_area_stack) # Assign max contour area to delta value
 
-	frameDelta = cv2.absdiff(referenceFrame, gray) # Compute the absolute difference between the current frame and reference frame
-	thresh = cv2.threshold(frameDelta, 12, 255, cv2.THRESH_BINARY)[1] # Apply OpenCV's threshold function to get binary frame
+			if delta_value > args["min_area"]: # If max contour area (delta value) greater than min area
+				motion_detected = 1 # Initialize delta situation
 
-	thresh = cv2.dilate(thresh, None, iterations=1) # Dilate the thresholded image to fill in holes
-	frameDeltaColored = cv2.bitwise_and(frame,frame, mask= thresh) # Bitwise and - to get delta frame
+			if delta_value > (height * width * float(NON_STATIONARY_PERCENTAGE) / float(100)): # If delta value is too much
+				non_stationary_camera = 1
+				status_text = "WARNING: NON-STATIONARY CAMERA"
+				frameDeltaColored = numpy.zeros_like(frame)
+			else:
+				non_stationary_camera = 0
 
-	# Find contours on thresholded image
-	(cnts, _) = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
-		cv2.CHAIN_APPROX_SIMPLE)
+			if cv2.countNonZero(thresh) < (height * width * float(NON_ZERO_PERCENTAGE) / float(100)): # If Non Zero count is too low
+				nonzero_toolow = 1
+				status_text = "WARNING: NON-ZERO TOO LOW"
+				frameDeltaColored = numpy.zeros_like(frame)
+			else:
+				nonzero_toolow = 0
 
-	contour_area_stack = [] # List of contour areas's values
+		if motion_detected: # If we are on delta situation
 
-	# Loop over the contours
-	if cnts:
-		for c in cnts: # Contour in Contours
-			contour_area_stack.append(cv2.contourArea(c)) # Calculate contour area and append to contour stack
-			if cv2.contourArea(c) > args["min_area"]: # If contour area greater than min area
-				(x, y, w, h) = cv2.boundingRect(c) # Compute the bounding box for this contour
-				cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2) # Draw it on the frame
-		delta_value = max(contour_area_stack) # Assign max contour area to delta value
+			if not non_stationary_camera:
+				status_text = "MOTION DETECTED"
+			delta_value_stack.append(delta_value) # Append max contour area (delta value) to delta value stack
 
-		if delta_value > args["min_area"]: # If max contour area (delta value) greater than min area
-			motion_detected = 1 # Initialize delta situation
-
-		if delta_value > (height * width * float(NON_STATIONARY_PERCENTAGE) / float(100)): # If delta value is too much
-			non_stationary_camera = 1
-			status_text = "WARNING: NON-STATIONARY CAMERA"
-			frameDeltaColored = numpy.zeros_like(frame)
+			if len(delta_value_stack) >= STABILIZATION_DETECTION: # If length of delta value stack is greater than or equal to STABILIZATION_DETECTION constant
+				delta_value_stack.pop(0) # Pop first element of delta value stack
+				# If minimum delta value is greater than (mean of last 5 frame - minimum area / 2) and maximum delta value is less than (mean of last 5 frame + minimum area / 2)
+				if min(delta_value_stack) > (numpy.mean(delta_value_stack) - args["min_area"] / 2) and max(delta_value_stack) < (numpy.mean(delta_value_stack) + args["min_area"] / 2):
+					motion_detected = 0 # Then video STABILIZED
+					delta_value_stack = [] # Empty delta value stack
+					referenceFrame = None  # Clear reference frame
+					sys.stdout.write("VISION STIMULI")
+					sys.stdout.flush()
+					if not non_stationary_camera and not nonzero_toolow:
+						motion_counter += 1
 		else:
-			non_stationary_camera = 0
+			if not non_stationary_camera and not nonzero_toolow:
+				status_text = "MOTION UNDETECTED"
+				frameDeltaColored = numpy.zeros_like(frame)
 
-		if cv2.countNonZero(thresh) < (height * width * float(NON_ZERO_PERCENTAGE) / float(100)): # If Non Zero count is too low
-			nonzero_toolow = 1
-			status_text = "WARNING: NON-ZERO TOO LOW"
-			frameDeltaColored = numpy.zeros_like(frame)
-		else:
-			nonzero_toolow = 0
+		# Draw the text and timestamp on the frame
+		cv2.putText(frame, "Diff    : {}".format(delta_value), (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 155), 1)
+		cv2.putText(frame, "Thresh : {}".format(args["min_area"]), (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 155), 1)
+		cv2.putText(frame, "Frame : {}".format(frame_counter), (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 155), 1)
+		cv2.putText(frame, "Status  : {}".format(status_text), (10, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 155), 2)
+		cv2.putText(frame, datetime.datetime.now().strftime("%A %d %B %Y %I:%M:%S%p"), (10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 155), 1)
 
-	if motion_detected: # If we are on delta situation
+		# Show the frames and record if the user presses ESC or q
+		cv2.imshow("Original Frame", frame)
+		cv2.moveWindow("Original Frame",50,100)
+		cv2.imshow("Frame Threshhold", thresh)
+		cv2.moveWindow("Frame Threshhold",50,550)
+		cv2.imshow("Frame Delta", frameDelta)
+		cv2.moveWindow("Frame Delta",1200,550)
+		cv2.imshow("Frame Delta Colored", frameDeltaColored)
+		cv2.moveWindow("Frame Delta Colored",1200,100)
+		key = cv2.waitKey(1) & 0xFF
 
-		if not non_stationary_camera:
-			status_text = "MOTION DETECTED"
-		delta_value_stack.append(delta_value) # Append max contour area (delta value) to delta value stack
+		# if the `ESC` or `q` key is pressed, break the loop
+		if key == ord("q") or key == ord("\x1b"):
+			os.system("killall python") # Temporary line for practicality in DEVELOPMENT
+			break
 
-		if len(delta_value_stack) >= STABILIZATION_DETECTION: # If length of delta value stack is greater than or equal to STABILIZATION_DETECTION constant
-			delta_value_stack.pop(0) # Pop first element of delta value stack
-			# If minimum delta value is greater than (mean of last 5 frame - minimum area / 2) and maximum delta value is less than (mean of last 5 frame + minimum area / 2)
-			if min(delta_value_stack) > (numpy.mean(delta_value_stack) - args["min_area"] / 2) and max(delta_value_stack) < (numpy.mean(delta_value_stack) + args["min_area"] / 2):
-				motion_detected = 0 # Then video STABILIZED
-				delta_value_stack = [] # Empty delta value stack
-				referenceFrame = None  # Clear reference frame
-				if not non_stationary_camera and not nonzero_toolow:
-					motion_counter += 1
-	else:
-		if not non_stationary_camera and not nonzero_toolow:
-			status_text = "MOTION UNDETECTED"
-			frameDeltaColored = numpy.zeros_like(frame)
-
-	# Draw the text and timestamp on the frame
-	cv2.putText(frame, "Diff    : {}".format(delta_value), (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 155), 1)
-	cv2.putText(frame, "Thresh : {}".format(args["min_area"]), (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 155), 1)
-	cv2.putText(frame, "Frame : {}".format(frame_counter), (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 155), 1)
-	cv2.putText(frame, "Status  : {}".format(status_text), (10, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 155), 2)
-	cv2.putText(frame, datetime.datetime.now().strftime("%A %d %B %Y %I:%M:%S%p"), (10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 155), 1)
-
-	# Show the frames and record if the user presses ESC or q
-	cv2.imshow("Original Frame", frame)
-	cv2.moveWindow("Original Frame",50,100)
-	cv2.imshow("Frame Threshhold", thresh)
-	cv2.moveWindow("Frame Threshhold",50,550)
-	cv2.imshow("Frame Delta", frameDelta)
-	cv2.moveWindow("Frame Delta",1200,550)
-	cv2.imshow("Frame Delta Colored", frameDeltaColored)
-	cv2.moveWindow("Frame Delta Colored",1200,100)
-	key = cv2.waitKey(1) & 0xFF
-
-	# if the `ESC` or `q` key is pressed, break the loop
-	if key == ord("q") or key == ord("\x1b"):
-		os.system("killall python") # Temporary line for practicality in DEVELOPMENT
-		break
-
-cv2.destroyAllWindows() # Close any open windows
-camera.release() # Release the capture device
+	cv2.destroyAllWindows() # Close any open windows
+	camera.release() # Release the capture device
