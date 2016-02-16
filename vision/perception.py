@@ -1,7 +1,6 @@
 # USAGE
 # python vision/perception.py --video __trainingData/video_name.mp4
 
-import argparse # Makes it easy to write user-friendly command-line interfaces.
 import datetime # Supplies classes for manipulating dates and times in both simple and complex ways.
 import imutils # A series of convenience functions to make basic image processing functions such as translation, rotation, resizing, skeletonization etc.
 import time # Provides various time-related functions.
@@ -13,21 +12,17 @@ STABILIZATION_DETECTION = 5 # Number of frames to detect stabilization
 NON_STATIONARY_PERCENTAGE = 70 # Percentage of frame for detecting NON-STATIONARY CAMERA. Like: ( height * width * float(X) / float(100) )
 NON_ZERO_PERCENTAGE = 0 #  Percentage of frame(threshold) for detecting unnecessary movement
 TARGET_HEIGHT = 360 # Number of horizontal lines for target video and processing. Like 720p, 360p etc.
+MIN_AREA = 500 # Minimum area in square pixels to detect a motion
 
 # MAIN CODE BLOCK
-def start():
-	# Construct the argument parser and parse the arguments
-	ap = argparse.ArgumentParser()
-	ap.add_argument("-v", "--video", help="path to the video file")
-	ap.add_argument("-a", "--min-area", type=int, default=500, help="minimum area size")
-	args = vars(ap.parse_args())
+def start(video_input):
 
-	if args.get("video", None) is None: # If the video argument is None, then we are reading from webcam
+	if video_input == 0: # If the video_input is equal to zero, then we are reading from webcam
 		camera = cv2.VideoCapture(0)
 		time.sleep(0.25)
-	else:								# Otherwise, we are reading from a video file
+	else: # Otherwise, we are reading from a video file
 		time.sleep(0.25)
-		camera = cv2.VideoCapture(args["video"])
+		camera = cv2.VideoCapture(video_input)
 
 	referenceFrame = None # Initialize the reference frame in the video stream
 
@@ -98,12 +93,12 @@ def start():
 		if cnts:
 			for c in cnts: # Contour in Contours
 				contour_area_stack.append(cv2.contourArea(c)) # Calculate contour area and append to contour stack
-				if cv2.contourArea(c) > args["min_area"]: # If contour area greater than min area
+				if cv2.contourArea(c) > MIN_AREA: # If contour area greater than min area
 					(x, y, w, h) = cv2.boundingRect(c) # Compute the bounding box for this contour
 					cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2) # Draw it on the frame
 			delta_value = max(contour_area_stack) # Assign max contour area to delta value
 
-			if delta_value > args["min_area"]: # If max contour area (delta value) greater than min area
+			if delta_value > MIN_AREA: # If max contour area (delta value) greater than min area
 				motion_detected = 1 # Initialize delta situation
 
 			if delta_value > (height * width * float(NON_STATIONARY_PERCENTAGE) / float(100)): # If delta value is too much
@@ -129,7 +124,7 @@ def start():
 			if len(delta_value_stack) >= STABILIZATION_DETECTION: # If length of delta value stack is greater than or equal to STABILIZATION_DETECTION constant
 				delta_value_stack.pop(0) # Pop first element of delta value stack
 				# If minimum delta value is greater than (mean of last 5 frame - minimum area / 2) and maximum delta value is less than (mean of last 5 frame + minimum area / 2)
-				if min(delta_value_stack) > (numpy.mean(delta_value_stack) - args["min_area"] / 2) and max(delta_value_stack) < (numpy.mean(delta_value_stack) + args["min_area"] / 2):
+				if min(delta_value_stack) > (numpy.mean(delta_value_stack) - MIN_AREA / 2) and max(delta_value_stack) < (numpy.mean(delta_value_stack) + MIN_AREA / 2):
 					motion_detected = 0 # Then video STABILIZED
 					delta_value_stack = [] # Empty delta value stack
 					referenceFrame = None  # Clear reference frame
@@ -142,7 +137,7 @@ def start():
 
 		# Draw the text and timestamp on the frame
 		cv2.putText(frame, "Diff    : {}".format(delta_value), (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 155), 1)
-		cv2.putText(frame, "Thresh : {}".format(args["min_area"]), (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 155), 1)
+		cv2.putText(frame, "Thresh : {}".format(MIN_AREA), (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 155), 1)
 		cv2.putText(frame, "Frame : {}".format(frame_counter), (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 155), 1)
 		cv2.putText(frame, "Status  : {}".format(status_text), (10, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 155), 2)
 		cv2.putText(frame, datetime.datetime.now().strftime("%A %d %B %Y %I:%M:%S%p"), (10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 155), 1)

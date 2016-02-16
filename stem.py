@@ -1,5 +1,5 @@
 import argparse # Makes it easy to write user-friendly command-line interfaces.
-import subprocess # Allows you to spawn new processes, connect to their input/output/error pipes, and obtain their return codes.
+import multiprocessing # A package that supports spawning processes using an API similar to the threading module.
 import hearing.perception # Hearing Package
 import vision.perception # Vision Package
 
@@ -8,5 +8,8 @@ ap.add_argument("-v", "--video", help="path to the video file") # Add --video ar
 ap.add_argument("-a", "--audio", help="path to the audio file") # Add --audio argument
 args = vars(ap.parse_args()) # Parse the arguments
 
-subprocess.Popen(["python", "hearing/perception.py", args["audio"]]) # Start hearing perception subprocess
-subprocess.Popen(["python", "vision/perception.py", "--video", args["video"]]) # Start vision perception subprocess
+hearing_perception_process = multiprocessing.Process(target=hearing.perception.start, args=(args["audio"],)) # Define hearing perception process
+hearing_perception_process.start() # Start hearing perception process
+
+vision_perception_process = multiprocessing.Process(target=vision.perception.start, args=(args["video"],)) # Define vision perception process
+vision_perception_process.start() # Start vision perception process

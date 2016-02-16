@@ -5,7 +5,6 @@ import pyaudio # Provides Python bindings for PortAudio, the cross platform audi
 import wave # Provides a convenient interface to the WAV sound format
 import datetime # Supplies classes for manipulating dates and times in both simple and complex ways
 import os.path # The path module suitable for the operating system Python is running on, and therefore usable for local paths
-import sys # Provides access to some variables used or maintained by the interpreter and to functions that interact strongly with the interpreter. It is always available.
 import audioop # Operates on sound fragments consisting of signed integer samples 8, 16 or 32 bits wide, stored in Python strings.
 import numpy # The fundamental package for scientific computing with Python.
 import multiprocessing # A package that supports spawning processes using an API similar to the threading module.
@@ -105,13 +104,9 @@ def draw_waveform(all_frames, thresh_frames):
 		time.sleep(0.05) # Wait a few miliseconds
 
 # MAIN CODE BLOCK
-def start():
+def start(audio_input):
 
-	if len(sys.argv) < 2: # If system arguments less than 2
-		print("Plays a wave file.\n\nUsage: %s filename.wav" % sys.argv[0]) # Print a warning message
-		sys.exit(-1) # Exit the program
-
-	wf = wave.open(sys.argv[1], 'rb') # Open .wav file from given path in system arguments
+	wf = wave.open(audio_input, 'rb') # Open .wav file from given path as audio_input in arguments
 
 	p = pyaudio.PyAudio() # Create a PyAudio session
 
