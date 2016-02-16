@@ -1,12 +1,16 @@
-# Hearing Data #
+# Ignore Hearing Data #
 ###################
 *.wav
 
-# Vision Data #
+# Ignore Vision Data #
 ###################
 *.avi
 *.mp4
 
-# Closed Captions #
+# Ignore Closed Captions #
 ###################
 *.vtt
+
+# Ignore Python compiled code (byte code) #
+###################
+*.pyc

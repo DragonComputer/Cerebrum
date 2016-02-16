@@ -105,7 +105,7 @@ def draw_waveform(all_frames, thresh_frames):
 		time.sleep(0.05) # Wait a few miliseconds
 
 # MAIN CODE BLOCK
-if __name__ == "__main__":
+def start():
 
 	if len(sys.argv) < 2: # If system arguments less than 2
 		print("Plays a wave file.\n\nUsage: %s filename.wav" % sys.argv[0]) # Print a warning message
@@ -176,3 +176,7 @@ if __name__ == "__main__":
 	stream.stop_stream() # Stop the stream
 	stream.close() # Close the stream
 	p.terminate() # Terminate the session
+
+# Execute firstly the main program
+if __name__ == "__main__":
+	start() # Call start function. Actual MAIN CODE BLOCK

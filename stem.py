@@ -1,5 +1,6 @@
 import argparse # Makes it easy to write user-friendly command-line interfaces.
 import subprocess # Allows you to spawn new processes, connect to their input/output/error pipes, and obtain their return codes.
+import hearing.perception # Hearing Package
 
 ap = argparse.ArgumentParser() # Define an Argument Parser
 ap.add_argument("-v", "--video", help="path to the video file") # Add --video argument
