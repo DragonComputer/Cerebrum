@@ -45,6 +45,16 @@ def save_file():
 	wf.writeframes(previous_wav + b''.join(frames)) # Write the all frames including previous ones
 	wf.close() # Close the session
 
+# A function that will compute frequency of chunk with Fourier Transform
+def find_frequency(data):
+	T = 1.0/RATE # Reciprocal of Bit Rate
+	N = data.shape[0] # Number of rows in data(numpy array)
+	Pxx = (1./N)*numpy.fft.fft(data) # Compute the one-dimensional n-point discrete Fourier Transform (DFT) of data with the efficient Fast Fourier Transform (FFT) algorithm [CT]
+	f = numpy.fft.fftfreq(N,T) # Return the Discrete Fourier Transform sample frequencies
+	Pxx = numpy.fft.fftshift(Pxx) # Shift the zero-frequency component to the center of the spectrum
+	f = numpy.fft.fftshift(f) # Shift the zero-frequency component to the center of the spectrum
+	return f.tolist(), (numpy.absolute(Pxx)).tolist() # Return the results
+
 # A function that will draw a spectrum analyzer graphic to screen (PyQtGraph)
 def draw_spectrum_analyzer(all_frames, thresh_frames):
 	time.sleep(1) # Wait just one second
@@ -60,14 +70,7 @@ def draw_spectrum_analyzer(all_frames, thresh_frames):
 		pw.setXRange(-(RATE/16), (RATE/16), padding=0) # Set X range of graph relative to Bit Rate
 		pwAxis = pw.getAxis("bottom") # Get bottom axis
 		pwAxis.setLabel("Frequency [Hz]") # Set bottom axis label
-		T = 1.0/RATE # Reciprocal of Bit Rate
-		N = data.shape[0] # ???
-		Pxx = (1./N)*numpy.fft.fft(data) # ???
-		f = numpy.fft.fftfreq(N,T) # ???
-		Pxx = numpy.fft.fftshift(Pxx) # ???
-		f = numpy.fft.fftshift(f) # ???
-		f = f.tolist() # ???
-		Pxx = (numpy.absolute(Pxx)).tolist() # ???
+		f, Pxx = find_frequency(data) # Call find frequency function
 		try: # Try this block
 			if thresh_frames[-1:][0] == EMPTY_CHUNK: # If last thresh frame is equal to EMPTY CHUNK
 				pw.plot(x=f,y=Pxx, clear=True, pen=pg.mkPen('w', width=1.0, style=QtCore.Qt.SolidLine)) # Then plot with white pen
