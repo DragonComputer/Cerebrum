@@ -8,6 +8,11 @@ ap.add_argument("-v", "--video", help="path to the video file") # Add --video ar
 ap.add_argument("-a", "--audio", help="path to the audio file") # Add --audio argument
 args = vars(ap.parse_args()) # Parse the arguments
 
+if args["audio"] is None:
+	raise ValueError('Microphone input is not yet available. Please type: python stem.py --help')
+if args["video"] is None:
+	raise ValueError('Camera input is not yet available. Please type: python stem.py --help')
+
 hearing_perception_process = multiprocessing.Process(target=hearing.perception.start, args=(args["audio"],)) # Define hearing perception process
 hearing_perception_process.start() # Start hearing perception process
 

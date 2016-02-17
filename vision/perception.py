@@ -7,6 +7,7 @@ import time # Provides various time-related functions.
 import cv2 # (Open Source Computer Vision) is a library of programming functions mainly aimed at real-time computer vision.
 import numpy # The fundamental package for scientific computing with Python.
 import os # Provides a portable way of using operating system dependent functionality.
+import warnings
 
 STABILIZATION_DETECTION = 5 # Number of frames to detect stabilization
 NON_STATIONARY_PERCENTAGE = 70 # Percentage of frame for detecting NON-STATIONARY CAMERA. Like: ( height * width * float(X) / float(100) )
@@ -17,7 +18,7 @@ MIN_AREA = 500 # Minimum area in square pixels to detect a motion
 # MAIN CODE BLOCK
 def start(video_input):
 
-	if video_input == 0: # If the video_input is equal to zero, then we are reading from webcam
+	if video_input is None: # If the video_input is None, then we are reading from webcam
 		camera = cv2.VideoCapture(0)
 		time.sleep(0.25)
 	else: # Otherwise, we are reading from a video file
@@ -31,7 +32,8 @@ def start(video_input):
 	height, width = first_frame.shape[:2] # Get video height and width  from first frame(size)
 	#if not height == 720 or not width == 1280:
 	if float(width) / float(height) != float(16) / float(9):
-		raise ValueError('Aspect ratio of input stream must be [16:9]')
+		#raise ValueError('Aspect ratio of input stream must be [16:9]')
+		warnings.warn("Aspect ratio of input stream must be [16:9]")
 
 	frame_counter = 1 # Define frame counter variable
 	motion_detected = 0 # Delta situation checking variable

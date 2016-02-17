@@ -110,11 +110,19 @@ def start(audio_input):
 
 	p = pyaudio.PyAudio() # Create a PyAudio session
 
-	# Create a stream
-	stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
-					channels=wf.getnchannels(),
-					rate=wf.getframerate(),
-					output=True)
+	if audio_input is None:
+		stream = p.open(format=p.get_format_from_width(WIDTH),
+						channels=CHANNELS,
+						rate=RATE,
+						input=True,
+						output=True,
+						stream_callback=callback)
+	else:
+		# Create a stream
+		stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
+						channels=wf.getnchannels(),
+						rate=wf.getframerate(),
+						output=True)
 
 	manager = multiprocessing.Manager() # Shared memory space manager
 	target_frames = [] # Define target frames array
