@@ -150,6 +150,7 @@ def start(audio_input):
 
 		rms = audioop.rms(data, 2) # Calculate Root Mean Square of current chunk
 		if rms >= THRESHOLD: # If Root Mean Square value is greater than THRESHOLD constant
+			starting_time = datetime.datetime.now()
 			thresh_frames.pop() # Pop out last frame of thresh frames
 			thresh_frames.pop() # Pop out last frame of thresh frames
 			target_frames.append(previous_data) # Append previous chunk to target frames
@@ -174,8 +175,12 @@ def start(audio_input):
 			del thresh_frames[-(SILENCE_DETECTION-2):] # Delete last frames of thresh frames as much as SILENCE_DETECTION constant
 			for i in range(SILENCE_DETECTION-2): # SILENCE_DETECTION constant times
 				thresh_frames.append(EMPTY_CHUNK) # Append an EMPTY_CHUNK
+			ending_time = datetime.datetime.now()
 
-			memgen.save_memory(target_frames)
+			memory_data = ''.join(target_frames) # Join last 20 frames of all frames
+			#memory_data = numpy.fromstring(memory_data, 'int16') # Binary string to numpy int16 data format
+			#memory_data = memory_data.tolist()
+			memgen.save_memory(memory_data, starting_time, ending_time)
 			target_frames = [] # Empty target frames
 
 	stream.stop_stream() # Stop the stream
