@@ -179,9 +179,7 @@ def start(audio_input):
 				thresh_frames.append(EMPTY_CHUNK) # Append an EMPTY_CHUNK
 			ending_time = datetime.datetime.now()
 
-			memory_data = ''.join(target_frames) # Join last 20 frames of all frames
-			#memory_data = numpy.fromstring(memory_data, 'int16') # Binary string to numpy int16 data format
-			#memory_data = memory_data.tolist()
+			memory_data = target_frames
 			memgen.write_memory(memory_data, starting_time, ending_time)
 			target_frames = [] # Empty target frames
 
