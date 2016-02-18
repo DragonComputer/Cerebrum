@@ -180,7 +180,9 @@ def start(audio_input):
 			ending_time = datetime.datetime.now()
 
 			memory_data = target_frames
-			memops.write_memory(memory_data, starting_time, ending_time)
+			#memops.write_memory(memory_data, starting_time, ending_time)
+			process3 = multiprocessing.Process(target=memops.write_memory, args=(memory_data, starting_time, ending_time)) # Define draw waveform process
+			process3.start() # Start draw waveform process
 			target_frames = [] # Empty target frames
 
 	stream.stop_stream() # Stop the stream
