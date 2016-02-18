@@ -12,6 +12,7 @@ import imutils # A series of convenience functions to make basic image processin
 import pyqtgraph as pg # A pure-python graphics and GUI library built on PyQt4 / PySide and numpy
 from PyQt4 import QtCore, QtGui # A comprehensive set of Python bindings for Digia's Qt cross platform GUI toolkit.
 import time # Provides various time-related functions.
+import memgen # Memory generator package
 
 CHUNK = 1024 # Smallest unit of audio. 1024 bytes
 FORMAT = pyaudio.paInt16 # Data format
@@ -174,6 +175,7 @@ def start(audio_input):
 			for i in range(SILENCE_DETECTION-2): # SILENCE_DETECTION constant times
 				thresh_frames.append(EMPTY_CHUNK) # Append an EMPTY_CHUNK
 
+			memgen.save_memory(target_frames)
 			target_frames = [] # Empty target frames
 
 	stream.stop_stream() # Stop the stream

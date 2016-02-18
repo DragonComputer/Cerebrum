@@ -14,3 +14,7 @@
 # Ignore Python compiled code (byte code) #
 ###################
 *.pyc
+
+# Ignore Database files #
+###################
+*.json
