@@ -53,7 +53,7 @@ def find_frequency(data):
 	f = numpy.fft.fftfreq(N,T) # Return the Discrete Fourier Transform sample frequencies
 	Pxx = numpy.fft.fftshift(Pxx) # Shift the zero-frequency component to the center of the spectrum
 	f = numpy.fft.fftshift(f) # Shift the zero-frequency component to the center of the spectrum
-	return f.tolist(), (numpy.absolute(Pxx)).tolist() # Return the results
+	return f, Pxx # Return the results
 
 # A function that will draw a spectrum analyzer graphic to screen (PyQtGraph)
 def draw_spectrum_analyzer(all_frames, thresh_frames):
@@ -71,6 +71,8 @@ def draw_spectrum_analyzer(all_frames, thresh_frames):
 		pwAxis = pw.getAxis("bottom") # Get bottom axis
 		pwAxis.setLabel("Frequency [Hz]") # Set bottom axis label
 		f, Pxx = find_frequency(data) # Call find frequency function
+		f = f.tolist()
+		Pxx = (numpy.absolute(Pxx)).tolist()
 		try: # Try this block
 			if thresh_frames[-1:][0] == EMPTY_CHUNK: # If last thresh frame is equal to EMPTY CHUNK
 				pw.plot(x=f,y=Pxx, clear=True, pen=pg.mkPen('w', width=1.0, style=QtCore.Qt.SolidLine)) # Then plot with white pen
@@ -180,7 +182,7 @@ def start(audio_input):
 			memory_data = ''.join(target_frames) # Join last 20 frames of all frames
 			#memory_data = numpy.fromstring(memory_data, 'int16') # Binary string to numpy int16 data format
 			#memory_data = memory_data.tolist()
-			memgen.save_memory(memory_data, starting_time, ending_time)
+			memgen.write_memory(memory_data, starting_time, ending_time)
 			target_frames = [] # Empty target frames
 
 	stream.stop_stream() # Stop the stream
