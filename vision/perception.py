@@ -138,11 +138,11 @@ def start(video_input):
 				frameDeltaColored = numpy.zeros_like(frame)
 
 		# Draw the text and timestamp on the frame
-		cv2.putText(frame, "Diff    : {}".format(delta_value), (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 155), 1)
-		cv2.putText(frame, "Thresh : {}".format(MIN_AREA), (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 155), 1)
-		cv2.putText(frame, "Frame : {}".format(frame_counter), (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 155), 1)
-		cv2.putText(frame, "Status  : {}".format(status_text), (10, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 155), 2)
-		cv2.putText(frame, datetime.datetime.now().strftime("%A %d %B %Y %I:%M:%S%p"), (10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 155), 1)
+		cv2.putText(frame, "Diff    : {}".format(delta_value), (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1)
+		cv2.putText(frame, "Thresh : {}".format(MIN_AREA), (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1)
+		cv2.putText(frame, "Frame : {}".format(frame_counter), (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1)
+		cv2.putText(frame, "Status  : {}".format(status_text), (10, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+		cv2.putText(frame, datetime.datetime.now().strftime("%A %d %B %Y %I:%M:%S%p"), (10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1)
 
 		# Show the frames and record if the user presses ESC or q
 		cv2.imshow("Original Frame", frame)
