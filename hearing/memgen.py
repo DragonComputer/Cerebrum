@@ -15,7 +15,7 @@ def jdefault(o):
 
 def save_memory(data, starting_time, ending_time):
 	JSON_FILE_PATH = "hearing/memory/" +  str(datetime.date.today()) + ".json" # Path for json file
-	
+
 	memory = Memory(starting_time.strftime("%Y-%m-%d %H:%M:%S"), ending_time.strftime("%Y-%m-%d %H:%M:%S"), data.decode('ISO-8859-1'))
 	mode = 'a' if os.path.exists(JSON_FILE_PATH) else 'w'
 	with open(JSON_FILE_PATH, mode) as json_file:
