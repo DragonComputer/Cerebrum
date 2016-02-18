@@ -1,5 +1,6 @@
 import datetime # Supplies classes for manipulating dates and times in both simple and complex ways
 import os.path # The path module suitable for the operating system Python is running on, and therefore usable for local paths
+#import pyaudio
 
 class Memory(object):
 	def __init__(self, starting_time, ending_time, data):
@@ -26,10 +27,20 @@ def read_memory(date_day,nth_record):
 	if os.path.exists(MEM_FILE_PATH):
 		with open(MEM_FILE_PATH, 'r') as mem_file:
 			memory = eval(mem_file.readlines()[nth_record])
-			print memory['starting_time']
-			print memory['ending_time']
+			return memory
 	else:
 		raise ValueError('MEM file doesn\'t exist!')
 
 if __name__ == "__main__":
-	read_memory(str(datetime.date.today()),-1)
+	memory = read_memory(str(datetime.date.today()),-1)
+	print memory['starting_time']
+	print memory['ending_time']
+
+	#CHUNK = 1024
+	#WIDTH = 2
+	#CHANNELS = 2
+	#RATE = 44100
+	#p = pyaudio.PyAudio()
+	#stream = p.open(format=p.get_format_from_width(WIDTH), channels=CHANNELS, rate=RATE, output=True, frames_per_buffer=CHUNK)
+	#for data in memory['data']:
+		#stream.write(data)
