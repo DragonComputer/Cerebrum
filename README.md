@@ -31,7 +31,7 @@ Supported types of perception:
 > triggered by stimuli that coming from only one perception type.
 
 ### Version
-0.0.82
+0.0.83
 
 ### Dependencies
 

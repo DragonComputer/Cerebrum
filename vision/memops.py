@@ -4,10 +4,11 @@ import os.path # The path module suitable for the operating system Python is run
 
 # Memory class
 class Memory(object):
-	def __init__(self, starting_time, ending_time, data): # Initialize the object
+	def __init__(self, starting_time, ending_time, thresh_binary, frame_delta_colored): # Initialize the object
 		self.starting_time = starting_time # Starting time attribute
 		self.ending_time = ending_time # Ending time attribute
-		self.data = data # Data attribute
+		self.thresh_binary = thresh_binary # Thresh binary frame attribute
+		self.frame_delta_colored = frame_delta_colored # Frame delta colored frame attribute
 
 # Convert object to dictionary
 def makeit_dict(obj):
@@ -16,17 +17,18 @@ def makeit_dict(obj):
 	return obj.__dict__
 
 # Write a memory function
-def write_memory(data, starting_time, ending_time):
-	MEM_FILE_PATH = "hearing/memory/" +  str(datetime.date.today()) + ".mem" # Path for mem file
+def write_memory(thresh_binary, frame_delta_colored, starting_time, ending_time):
+	MEM_FILE_PATH = "vision/memory/" +  str(datetime.date.today()) + ".mem" # Path for mem file
 
-	memory = Memory(starting_time.strftime("%Y-%m-%d %H:%M:%S:%f"), ending_time.strftime("%Y-%m-%d %H:%M:%S:%f"), data) # Create an object from Memory class
+	memory = Memory(starting_time.strftime("%Y-%m-%d %H:%M:%S:%f"), ending_time.strftime("%Y-%m-%d %H:%M:%S:%f"), thresh_binary, frame_delta_colored) # Create an object from Memory class
 	mode = 'a' if os.path.exists(MEM_FILE_PATH) else 'w' # If memory file exist file open mode is append(a) else write(w)
 	with open(MEM_FILE_PATH, mode) as mem_file: # Open file
 		mem_file.write(str(makeit_dict(memory)) + '\n') # Write memory in only one line
+		print "WRITE"
 
 # Read a memory function
 def read_memory(date_day,nth_record):
-	MEM_FILE_PATH = "hearing/memory/" +  date_day + ".mem" # Path for mem file
+	MEM_FILE_PATH = "vision/memory/" +  date_day + ".mem" # Path for mem file
 
 	if os.path.exists(MEM_FILE_PATH): # If memory file exist
 		with open(MEM_FILE_PATH, 'r') as mem_file: # Open file
