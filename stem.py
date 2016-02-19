@@ -17,7 +17,8 @@ else:
 
 
 if args["video"] is None:
-	raise ValueError('Camera input is not yet available. Please type: python stem.py --help')
-
-vision_perception_process = multiprocessing.Process(target=vision.perception.start, args=(args["video"],)) # Define vision perception process
-vision_perception_process.start() # Start vision perception process
+	vision_perception_process = multiprocessing.Process(target=vision.perception.start_cam) # Define vision perception process
+	vision_perception_process.start() # Start vision perception process
+else:
+	vision_perception_process = multiprocessing.Process(target=vision.perception.start, args=(args["video"],)) # Define vision perception process
+	vision_perception_process.start() # Start vision perception process
