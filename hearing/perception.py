@@ -184,6 +184,8 @@ def start(audio_input):
 			process3.start() # Start write memory process
 			memory_data = [] # Empty memory data
 
+	process1.terminate() # Terminate draw waveform process
+	process2.terminate() # Terminate drar spectrum analyzer process
 	stream.stop_stream() # Stop the stream
 	stream.close() # Close the stream
 	p.terminate() # Terminate the session

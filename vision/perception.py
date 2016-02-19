@@ -9,6 +9,7 @@ import numpy # The fundamental package for scientific computing with Python.
 import os # Provides a portable way of using operating system dependent functionality.
 import multiprocessing # A package that supports spawning processes using an API similar to the threading module.
 import memops # Memory operations package
+import random # Pseudo-random number generators for various distributions.
 
 STABILIZATION_DETECTION = 5 # Number of frames to detect stabilization
 NON_STATIONARY_PERCENTAGE = 70 # Percentage of frame for detecting NON-STATIONARY CAMERA. Like: ( height * width * float(X) / float(100) )
@@ -127,9 +128,10 @@ def start(video_input):
 			if starting_time is None:
 				starting_time = datetime.datetime.now() # Starting time of the memory
 
-			#memory_data_thresh.append(thresh.tostring())
-			#memory_data_frameDeltaColored.append(frameDeltaColored.tostring())
-			#print type(memory_data_thresh[0])
+			if random.randint(1,int(camera.get(cv2.cv.CV_CAP_PROP_FPS))) == 1:
+				memory_data_thresh.append(thresh.tostring())
+				memory_data_frameDeltaColored.append(frameDeltaColored.tostring())
+				#print type(memory_data_thresh[0])
 
 			if not non_stationary_camera:
 				status_text = "MOTION DETECTED"
@@ -141,8 +143,8 @@ def start(video_input):
 				if min(delta_value_stack) > (numpy.mean(delta_value_stack) - MIN_AREA / 2) and max(delta_value_stack) < (numpy.mean(delta_value_stack) + MIN_AREA / 2):
 					ending_time = datetime.datetime.now() # Ending time of the memory
 
-					#process4 = multiprocessing.Process(target=memops.write_memory, args=(memory_data_thresh, memory_data_frameDeltaColored, starting_time, ending_time)) # Define write memory process
-					#process4.start() # Start write memory process
+					process4 = multiprocessing.Process(target=memops.write_memory, args=(memory_data_thresh, memory_data_frameDeltaColored, starting_time, ending_time)) # Define write memory process
+					process4.start() # Start write memory process
 					memory_data_thresh = []
 					memory_data_frameDeltaColored = []
 					starting_time = None

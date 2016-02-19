@@ -24,7 +24,6 @@ def write_memory(thresh_binary, frame_delta_colored, starting_time, ending_time)
 	mode = 'a' if os.path.exists(MEM_FILE_PATH) else 'w' # If memory file exist file open mode is append(a) else write(w)
 	with open(MEM_FILE_PATH, mode) as mem_file: # Open file
 		mem_file.write(str(makeit_dict(memory)) + '\n') # Write memory in only one line
-		print "WRITE"
 
 # Read a memory function
 def read_memory(date_day,nth_record):
