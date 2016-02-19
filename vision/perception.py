@@ -26,6 +26,10 @@ def start(video_input):
 
 	referenceFrame = None # Initialize the reference frame in the video stream
 
+	starting_time = None
+	memory_data_thresh = []
+	memory_data_frameDeltaColored = []
+
 	(grabbed, first_frame) = camera.read() # Grab the first frame
 
 	height, width = first_frame.shape[:2] # Get video height and width  from first frame(size)
@@ -118,6 +122,13 @@ def start(video_input):
 
 		if motion_detected: # If we are on delta situation
 
+			if starting_time is None:
+				starting_time = datetime.datetime.now() # Starting time of the memory
+
+			memory_data_thresh.append(thresh.tostring())
+			memory_data_frameDeltaColored.append(frameDeltaColored.tostring())
+			#print type(memory_data_thresh[0])
+
 			if not non_stationary_camera:
 				status_text = "MOTION DETECTED"
 			delta_value_stack.append(delta_value) # Append max contour area (delta value) to delta value stack
@@ -126,6 +137,9 @@ def start(video_input):
 				delta_value_stack.pop(0) # Pop first element of delta value stack
 				# If minimum delta value is greater than (mean of last 5 frame - minimum area / 2) and maximum delta value is less than (mean of last 5 frame + minimum area / 2)
 				if min(delta_value_stack) > (numpy.mean(delta_value_stack) - MIN_AREA / 2) and max(delta_value_stack) < (numpy.mean(delta_value_stack) + MIN_AREA / 2):
+					ending_time = datetime.datetime.now() # Ending time of the memory
+
+
 					motion_detected = 0 # Then video STABILIZED
 					delta_value_stack = [] # Empty delta value stack
 					referenceFrame = None  # Clear reference frame
