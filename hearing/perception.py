@@ -113,19 +113,11 @@ def start(audio_input):
 
 	p = pyaudio.PyAudio() # Create a PyAudio session
 
-	if audio_input is None:
-		stream = p.open(format=p.get_format_from_width(WIDTH),
-						channels=CHANNELS,
-						rate=RATE,
-						input=True,
-						output=True,
-						stream_callback=callback)
-	else:
-		# Create a stream
-		stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
-						channels=wf.getnchannels(),
-						rate=wf.getframerate(),
-						output=True)
+	# Create a stream
+	stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
+					channels=wf.getnchannels(),
+					rate=wf.getframerate(),
+					output=True)
 
 	manager = multiprocessing.Manager() # Shared memory space manager
 	memory_data = [] # Define memory data array
@@ -190,6 +182,78 @@ def start(audio_input):
 	stream.close() # Close the stream
 	p.terminate() # Terminate the session
 
+# MAIN CODE BLOCK
+def start_mic():
+
+	p = pyaudio.PyAudio() # Create a PyAudio session
+
+	stream = p.open(format=FORMAT,
+				channels=CHANNELS,
+				rate=RATE,
+				input=True,
+				frames_per_buffer=CHUNK)
+
+	manager = multiprocessing.Manager() # Shared memory space manager
+	memory_data = [] # Define memory data array
+	all_frames = manager.list() # Define all_frames array in shared memory
+	thresh_frames = manager.list() # Define thresh_frames array in shared memory
+
+	data = stream.read(CHUNK) # Get first data frame from .wav file
+	all_frames.append(data) # Append to all frames
+	thresh_frames.append(EMPTY_CHUNK) # Append an EMPTY CHUNK to thresh frames
+
+	process1 = multiprocessing.Process(target=draw_waveform, args=(all_frames, thresh_frames)) # Define draw waveform process
+	process1.start() # Start draw waveform process
+
+	process2 = multiprocessing.Process(target=draw_spectrum_analyzer, args=(all_frames, thresh_frames)) # Define draw spectrum analyzer process
+	process2.start() # Start drar spectrum analyzer process
+
+	# Loop over the frames of the audio / data chunks
+	while data != '':
+		previous_data = data # Get previous chunk that coming from end of the loop
+		data = stream.read(CHUNK) # Read a new chunk from the stream
+		all_frames.append(data) # Append this chunk to all frames
+		thresh_frames.append(EMPTY_CHUNK) # Append an EMPTY CHUNK to thresh frames
+
+		rms = audioop.rms(data, 2) # Calculate Root Mean Square of current chunk
+		if rms >= THRESHOLD: # If Root Mean Square value is greater than THRESHOLD constant
+			starting_time = datetime.datetime.now() # Starting time of the memory
+			thresh_frames.pop() # Pop out last frame of thresh frames
+			thresh_frames.pop() # Pop out last frame of thresh frames
+			memory_data.append(previous_data) # Append previous chunk to memory data
+			thresh_frames.append(previous_data) # APpend previos chunk to thresh frames
+			memory_data.append(data) # Append current chunk to memory data
+			thresh_frames.append(data) # Append current chunk to thresh frames
+			silence_counter = 0 # Define silence counter
+			while silence_counter < SILENCE_DETECTION: # While silence counter value less than SILENCE_DETECTION constant
+				data = stream.read(CHUNK) # Read a new chunk from the stream
+				all_frames.append(data) # Append this chunk to all frames
+				memory_data.append(data) # Append this chunk to memory data
+				thresh_frames.append(data) # Append this chunk to thresh frames
+				rms = audioop.rms(data, 2) # Calculate Root Mean Square of current chunk again
+
+				if rms < THRESHOLD: # If Root Mean Square value is less than THRESHOLD constant
+					silence_counter += 1 # Then increase silence counter
+				else: # Else
+					silence_counter = 0 # Assign zero value to silence counter
+
+			del memory_data[-(SILENCE_DETECTION-2):] # Delete last frames of memory data as much as SILENCE_DETECTION constant
+			del thresh_frames[-(SILENCE_DETECTION-2):] # Delete last frames of thresh frames as much as SILENCE_DETECTION constant
+			for i in range(SILENCE_DETECTION-2): # SILENCE_DETECTION constant times
+				thresh_frames.append(EMPTY_CHUNK) # Append an EMPTY_CHUNK
+			ending_time = datetime.datetime.now() # Ending time of the memory
+
+			#memops.write_memory(memory_data, starting_time, ending_time)
+			process3 = multiprocessing.Process(target=memops.write_memory, args=(memory_data, starting_time, ending_time)) # Define write memory process
+			process3.start() # Start write memory process
+			memory_data = [] # Empty memory data
+
+	process1.terminate() # Terminate draw waveform process
+	process2.terminate() # Terminate drar spectrum analyzer process
+	stream.stop_stream() # Stop the stream
+	stream.close() # Close the stream
+	p.terminate() # Terminate the session
+
 # Execute firstly the main program
 if __name__ == "__main__":
-	start() # Call start function. Actual MAIN CODE BLOCK
+	start_mic() # Call start function. Actual MAIN CODE BLOCK
