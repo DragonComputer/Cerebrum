@@ -71,8 +71,8 @@ def draw_spectrum_analyzer(all_frames, thresh_frames):
 		pwAxis = pw.getAxis("bottom") # Get bottom axis
 		pwAxis.setLabel("Frequency [Hz]") # Set bottom axis label
 		f, Pxx = find_frequency(data) # Call find frequency function
-		f = f.tolist()
-		Pxx = (numpy.absolute(Pxx)).tolist()
+		f = f.tolist() # Numpy array to list
+		Pxx = (numpy.absolute(Pxx)).tolist() # Numpy array to list
 		try: # Try this block
 			if thresh_frames[-1:][0] == EMPTY_CHUNK: # If last thresh frame is equal to EMPTY CHUNK
 				pw.plot(x=f,y=Pxx, clear=True, pen=pg.mkPen('w', width=1.0, style=QtCore.Qt.SolidLine)) # Then plot with white pen
@@ -128,7 +128,7 @@ def start(audio_input):
 						output=True)
 
 	manager = multiprocessing.Manager() # Shared memory space manager
-	target_frames = [] # Define target frames array
+	memory_data = [] # Define memory data array
 	all_frames = manager.list() # Define all_frames array in shared memory
 	thresh_frames = manager.list() # Define thresh_frames array in shared memory
 
@@ -152,19 +152,19 @@ def start(audio_input):
 
 		rms = audioop.rms(data, 2) # Calculate Root Mean Square of current chunk
 		if rms >= THRESHOLD: # If Root Mean Square value is greater than THRESHOLD constant
-			starting_time = datetime.datetime.now()
+			starting_time = datetime.datetime.now() # Starting time of the memory
 			thresh_frames.pop() # Pop out last frame of thresh frames
 			thresh_frames.pop() # Pop out last frame of thresh frames
-			target_frames.append(previous_data) # Append previous chunk to target frames
+			memory_data.append(previous_data) # Append previous chunk to memory data
 			thresh_frames.append(previous_data) # APpend previos chunk to thresh frames
-			target_frames.append(data) # Append current chunk to target frames
+			memory_data.append(data) # Append current chunk to memory data
 			thresh_frames.append(data) # Append current chunk to thresh frames
 			silence_counter = 0 # Define silence counter
 			while silence_counter < SILENCE_DETECTION: # While silence counter value less than SILENCE_DETECTION constant
 				stream.write(data) # Monitor current chunk
 				data = wf.readframes(CHUNK) # Read a new chunk from the stream
 				all_frames.append(data) # Append this chunk to all frames
-				target_frames.append(data) # Append this chunk to target frames
+				memory_data.append(data) # Append this chunk to memory data
 				thresh_frames.append(data) # Append this chunk to thresh frames
 				rms = audioop.rms(data, 2) # Calculate Root Mean Square of current chunk again
 
@@ -173,17 +173,16 @@ def start(audio_input):
 				else: # Else
 					silence_counter = 0 # Assign zero value to silence counter
 
-			del target_frames[-(SILENCE_DETECTION-2):] # Delete last frames of target frames as much as SILENCE_DETECTION constant
+			del memory_data[-(SILENCE_DETECTION-2):] # Delete last frames of memory data as much as SILENCE_DETECTION constant
 			del thresh_frames[-(SILENCE_DETECTION-2):] # Delete last frames of thresh frames as much as SILENCE_DETECTION constant
 			for i in range(SILENCE_DETECTION-2): # SILENCE_DETECTION constant times
 				thresh_frames.append(EMPTY_CHUNK) # Append an EMPTY_CHUNK
-			ending_time = datetime.datetime.now()
+			ending_time = datetime.datetime.now() # Ending time of the memory
 
-			memory_data = target_frames
 			#memops.write_memory(memory_data, starting_time, ending_time)
-			process3 = multiprocessing.Process(target=memops.write_memory, args=(memory_data, starting_time, ending_time)) # Define draw waveform process
-			process3.start() # Start draw waveform process
-			target_frames = [] # Empty target frames
+			process3 = multiprocessing.Process(target=memops.write_memory, args=(memory_data, starting_time, ending_time)) # Define write memory process
+			process3.start() # Start write memory process
+			memory_data = [] # Empty memory data
 
 	stream.stop_stream() # Stop the stream
 	stream.close() # Close the stream
