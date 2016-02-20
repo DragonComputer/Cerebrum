@@ -8,11 +8,14 @@ ap.add_argument("-v", "--video", help="path to the video file") # Add --video ar
 ap.add_argument("-a", "--audio", help="path to the audio file") # Add --audio argument
 args = vars(ap.parse_args()) # Parse the arguments
 
+stem_manager = multiprocessing.Manager() # Shared memory space manager
+hearing_perception_stimulated = stem_manager.Value('i', 0)
+
 if args["audio"] is None:
-	hearing_perception_process = multiprocessing.Process(target=hearing.perception.start_mic) # Define hearing perception process
+	hearing_perception_process = multiprocessing.Process(target=hearing.perception.start_mic, args=(hearing_perception_stimulated,)) # Define hearing perception process
 	hearing_perception_process.start() # Start hearing perception process
 else:
-	hearing_perception_process = multiprocessing.Process(target=hearing.perception.start, args=(args["audio"],)) # Define hearing perception process
+	hearing_perception_process = multiprocessing.Process(target=hearing.perception.start, args=(args["audio"],hearing_perception_stimulated)) # Define hearing perception process
 	hearing_perception_process.start() # Start hearing perception process
 
 

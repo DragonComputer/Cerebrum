@@ -107,7 +107,7 @@ def draw_waveform(all_frames, thresh_frames):
 		time.sleep(0.05) # Wait a few miliseconds
 
 # MAIN CODE BLOCK
-def start(audio_input):
+def start(audio_input, hearing_perception_stimulated):
 
 	wf = wave.open(audio_input, 'rb') # Open .wav file from given path as audio_input in arguments
 
@@ -119,10 +119,10 @@ def start(audio_input):
 					rate=wf.getframerate(),
 					output=True)
 
-	manager = multiprocessing.Manager() # Shared memory space manager
+	hearing_manager = multiprocessing.Manager() # Shared memory space manager
 	memory_data = [] # Define memory data array
-	all_frames = manager.list() # Define all_frames array in shared memory
-	thresh_frames = manager.list() # Define thresh_frames array in shared memory
+	all_frames = hearing_manager.list() # Define all_frames array in shared memory
+	thresh_frames = hearing_manager.list() # Define thresh_frames array in shared memory
 
 	data = wf.readframes(CHUNK) # Get first data frame from .wav file
 	all_frames.append(data) # Append to all frames
@@ -183,7 +183,7 @@ def start(audio_input):
 	p.terminate() # Terminate the session
 
 # MAIN CODE BLOCK
-def start_mic():
+def start_mic(hearing_perception_stimulated):
 
 	p = pyaudio.PyAudio() # Create a PyAudio session
 
@@ -193,10 +193,10 @@ def start_mic():
 				input=True,
 				frames_per_buffer=CHUNK)
 
-	manager = multiprocessing.Manager() # Shared memory space manager
+	hearing_manager = multiprocessing.Manager() # Shared memory space manager
 	memory_data = [] # Define memory data array
-	all_frames = manager.list() # Define all_frames array in shared memory
-	thresh_frames = manager.list() # Define thresh_frames array in shared memory
+	all_frames = hearing_manager.list() # Define all_frames array in shared memory
+	thresh_frames = hearing_manager.list() # Define thresh_frames array in shared memory
 
 	data = stream.read(CHUNK) # Get first data frame from .wav file
 	all_frames.append(data) # Append to all frames
