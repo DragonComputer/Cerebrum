@@ -18,7 +18,7 @@ TARGET_HEIGHT = 360 # Number of horizontal lines for target video and processing
 MIN_AREA = 500 # Minimum area in square pixels to detect a motion
 
 # MAIN CODE BLOCK
-def start(video_input):
+def start(video_input, vision_perception_stimulated):
 
 	if video_input is None: # If the video_input is None, then we are reading from webcam
 		camera = cv2.VideoCapture(0)
@@ -186,7 +186,7 @@ def start(video_input):
 	camera.release() # Release the capture device
 
 # MAIN CODE BLOCK
-def start_cam():
+def start_cam(vision_perception_stimulated):
 
 	camera = cv2.VideoCapture(0)
 	time.sleep(0.25)
