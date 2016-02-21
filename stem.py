@@ -27,3 +27,6 @@ if args["video"] is None:
 else:
 	vision_perception_process = multiprocessing.Process(target=vision.perception.start, args=(args["video"],vision_perception_stimulated)) # Define vision perception process
 	vision_perception_process.start() # Start vision perception process
+
+while True:
+	pass
