@@ -9,8 +9,8 @@ ap.add_argument("-a", "--audio", help="path to the audio file") # Add --audio ar
 args = vars(ap.parse_args()) # Parse the arguments
 
 stem_manager = multiprocessing.Manager() # Shared memory space manager
-hearing_perception_stimulated = stem_manager.Value('i', 0) # Define hearing perception stimualted variable in shared memory to get if it's stimulated or not
-vision_perception_stimulated = stem_manager.Value('i', 0) # Define vision perception stimualted variable in shared memory to get if it's stimulated or not
+hearing_perception_stimulated = stem_manager.Value('i', 0) # Define hearing perception stimualted variable in shared memory to get if it's stimulated or not (Integer)
+vision_perception_stimulated = stem_manager.Value('i', 0) # Define vision perception stimualted variable in shared memory to get if it's stimulated or not (Integer)
 
 
 if args["audio"] is None:

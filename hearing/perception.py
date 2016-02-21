@@ -145,6 +145,7 @@ def start(audio_input, hearing_perception_stimulated):
 		rms = audioop.rms(data, 2) # Calculate Root Mean Square of current chunk
 		if rms >= THRESHOLD: # If Root Mean Square value is greater than THRESHOLD constant
 			starting_time = datetime.datetime.now() # Starting time of the memory
+			hearing_perception_stimulated.value = 1 # Hearing perception stimulated
 			thresh_frames.pop() # Pop out last frame of thresh frames
 			thresh_frames.pop() # Pop out last frame of thresh frames
 			memory_data.append(previous_data) # Append previous chunk to memory data
@@ -170,6 +171,7 @@ def start(audio_input, hearing_perception_stimulated):
 			for i in range(SILENCE_DETECTION-2): # SILENCE_DETECTION constant times
 				thresh_frames.append(EMPTY_CHUNK) # Append an EMPTY_CHUNK
 			ending_time = datetime.datetime.now() # Ending time of the memory
+			hearing_perception_stimulated.value = 0 # Hearing perception NOT stimulated
 
 			#memops.write_memory(memory_data, starting_time, ending_time)
 			process3 = multiprocessing.Process(target=memops.write_memory, args=(memory_data, starting_time, ending_time)) # Define write memory process
@@ -218,6 +220,7 @@ def start_mic(hearing_perception_stimulated):
 		rms = audioop.rms(data, 2) # Calculate Root Mean Square of current chunk
 		if rms >= THRESHOLD: # If Root Mean Square value is greater than THRESHOLD constant
 			starting_time = datetime.datetime.now() # Starting time of the memory
+			hearing_perception_stimulated.value = 1 # Hearing perception stimulated
 			thresh_frames.pop() # Pop out last frame of thresh frames
 			thresh_frames.pop() # Pop out last frame of thresh frames
 			memory_data.append(previous_data) # Append previous chunk to memory data
@@ -242,6 +245,7 @@ def start_mic(hearing_perception_stimulated):
 			for i in range(SILENCE_DETECTION-2): # SILENCE_DETECTION constant times
 				thresh_frames.append(EMPTY_CHUNK) # Append an EMPTY_CHUNK
 			ending_time = datetime.datetime.now() # Ending time of the memory
+			hearing_perception_stimulated.value = 0 # Hearing perception NOT stimulated
 
 			#memops.write_memory(memory_data, starting_time, ending_time)
 			process3 = multiprocessing.Process(target=memops.write_memory, args=(memory_data, starting_time, ending_time)) # Define write memory process

@@ -127,6 +127,7 @@ def start(video_input, vision_perception_stimulated):
 
 			if starting_time is None:
 				starting_time = datetime.datetime.now() # Starting time of the memory
+				vision_perception_stimulated.value = 1 # Vision perception stimulated
 
 			if random.randint(1,int(camera.get(cv2.cv.CV_CAP_PROP_FPS))) == 1:
 				memory_data_thresh.append(thresh.tostring())
@@ -142,6 +143,7 @@ def start(video_input, vision_perception_stimulated):
 				# If minimum delta value is greater than (mean of last 5 frame - minimum area / 2) and maximum delta value is less than (mean of last 5 frame + minimum area / 2)
 				if min(delta_value_stack) > (numpy.mean(delta_value_stack) - MIN_AREA / 2) and max(delta_value_stack) < (numpy.mean(delta_value_stack) + MIN_AREA / 2):
 					ending_time = datetime.datetime.now() # Ending time of the memory
+					vision_perception_stimulated.value = 0 # Vision perception NOT stimulated
 
 					process4 = multiprocessing.Process(target=memops.write_memory, args=(memory_data_thresh, memory_data_frameDeltaColored, starting_time, ending_time)) # Define write memory process
 					process4.start() # Start write memory process
@@ -276,6 +278,7 @@ def start_cam(vision_perception_stimulated):
 
 			if starting_time is None:
 				starting_time = datetime.datetime.now() # Starting time of the memory
+				vision_perception_stimulated.value = 1 # Vision perception stimulated
 
 			if random.randint(1,25) == 1:
 				memory_data_thresh.append(thresh.tostring())
@@ -291,6 +294,7 @@ def start_cam(vision_perception_stimulated):
 				# If minimum delta value is greater than (mean of last 5 frame - minimum area / 2) and maximum delta value is less than (mean of last 5 frame + minimum area / 2)
 				if min(delta_value_stack) > (numpy.mean(delta_value_stack) - MIN_AREA / 2) and max(delta_value_stack) < (numpy.mean(delta_value_stack) + MIN_AREA / 2):
 					ending_time = datetime.datetime.now() # Ending time of the memory
+					vision_perception_stimulated.value = 0 # Vision perception NOT stimulated
 
 					process4 = multiprocessing.Process(target=memops.write_memory, args=(memory_data_thresh, memory_data_frameDeltaColored, starting_time, ending_time)) # Define write memory process
 					process4.start() # Start write memory process
