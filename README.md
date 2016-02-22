@@ -1,6 +1,6 @@
 # SpectrumEngine
 
-An implementation of "General Purpose Multisensorial Supervised (& Reinforcement) Learning Algorithm with Time Series Memory Recording & Neural Memory Networking"
+An implementation of "General Purpose Multisensorial Supervised (& Reinforcement) Learning Algorithm with Time Series Memory Recording & Memory Plexus Weaver"
 
 Supported types of perception:
 
@@ -31,7 +31,7 @@ Supported types of perception:
 > triggered by stimuli that coming from only one perception type.
 
 ### Version
-0.0.90
+0.0.91
 
 ### Dependencies
 
