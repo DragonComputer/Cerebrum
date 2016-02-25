@@ -18,3 +18,4 @@
 # Ignore Memory files #
 ###################
 *.mem
+*.tstp
