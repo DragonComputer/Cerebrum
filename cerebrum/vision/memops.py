@@ -37,32 +37,42 @@ def write_memory(thresh_binary, frame_delta_colored, starting_time, ending_time)
 		tstp_file.write(str(makeit_dict(timestamp)) + '\n') # Write timestamp in only one line
 
 # Read a memory function
-def read_memory(date_day,nth_record):
+def read_memory(date_day,starting_time):
 	MEM_FILE_PATH = "cerebrum/vision/memory/" +  date_day + ".mem" # Path for mem file
-
+	memory_list = []
 	if os.path.exists(MEM_FILE_PATH): # If memory file exist
 		with open(MEM_FILE_PATH, 'r') as mem_file: # Open file
-			memory = eval(mem_file.readlines()[nth_record]) # Evaluate the line, which will return dictionary
-			return memory # Return memory to call
+			for line in mem_file.readlines(): # Get whole lines
+				memory = eval(line) # Evaluate the line, which will return a dictionary
+				if memory['starting_time'] == starting_time: # If current memory's starting time is equal to function's parameter
+					return memory # Return current memory to call
+			return False # Else return False
 	else: # If memory file doesn't exist
 		raise ValueError('MEM file doesn\'t exist!') # Raise a ValueError
 
-# Read a timestamp function
-def read_timestamp(date_day,nth_record):
+# Read timestamps function
+def read_timestamps(date_day,from_line=0):
 	TSTP_FILE_PATH = "cerebrum/vision/memory/" +  date_day + ".tstp" # Path for tstp file
-
+	timestamp_list = []
 	if os.path.exists(TSTP_FILE_PATH): # If timestamp file exist
 		with open(TSTP_FILE_PATH, 'r') as tstp_file: # Open file
-			timestamp = eval(tstp_file.readlines()[nth_record]) # Evaluate the line, which will return a dictionary
-			return timestamp # Return timestamp to call
+			for line in tstp_file.readlines()[from_line:]: # Get whole lines starting from that line, default zero
+				timestamp = eval(line) # Evaluate the line, which will return a dictionary
+				timestamp_list.append(timestamp) # Append timestamp to list in order
+			return timestamp_list # Return timestamp list to call
 	else: # If timestamp file doesn't exist
 		raise ValueError('TSTP file doesn\'t exist!') # Raise a ValueError
 
 # Example USAGE block. NOT FUNCTIONAL
 if __name__ == "__main__":
-	memory = read_memory(str(datetime.date.today()),-1)
+	timestamp_list = read_timestamps(str(datetime.date.today()))
+	for timestamp in timestamp_list:
+		print "--------------------------"
+		print timestamp['starting_time']
+		print timestamp['ending_time']
+	print len(timestamp_list)
+	memory = read_memory(str(datetime.date.today()), timestamp['starting_time'])
 	print memory['starting_time']
-	print memory['ending_time']
 
 	#CHUNK = 1024
 	#WIDTH = 2
