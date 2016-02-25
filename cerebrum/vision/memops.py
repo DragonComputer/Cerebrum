@@ -23,8 +23,8 @@ def makeit_dict(obj):
 
 # Write a memory function
 def write_memory(thresh_binary, frame_delta_colored, starting_time, ending_time):
-	MEM_FILE_PATH = "vision/memory/" +  str(datetime.date.today()) + ".mem" # Path for mem file
-	TSTP_FILE_PATH = "vision/memory/" +  str(datetime.date.today()) + ".tstp" # Path for tstp file
+	MEM_FILE_PATH = "cerebrum/vision/memory/" +  str(datetime.date.today()) + ".mem" # Path for mem file
+	TSTP_FILE_PATH = "cerebrum/vision/memory/" +  str(datetime.date.today()) + ".tstp" # Path for tstp file
 
 	memory = Memory(starting_time.strftime("%Y-%m-%d %H:%M:%S:%f"), ending_time.strftime("%Y-%m-%d %H:%M:%S:%f"), thresh_binary, frame_delta_colored) # Create an object from Memory class
 	mode = 'a' if os.path.exists(MEM_FILE_PATH) else 'w' # If memory file exist file open mode is append(a) else write(w)
@@ -38,7 +38,7 @@ def write_memory(thresh_binary, frame_delta_colored, starting_time, ending_time)
 
 # Read a memory function
 def read_memory(date_day,nth_record):
-	MEM_FILE_PATH = "vision/memory/" +  date_day + ".mem" # Path for mem file
+	MEM_FILE_PATH = "cerebrum/vision/memory/" +  date_day + ".mem" # Path for mem file
 
 	if os.path.exists(MEM_FILE_PATH): # If memory file exist
 		with open(MEM_FILE_PATH, 'r') as mem_file: # Open file
@@ -49,7 +49,7 @@ def read_memory(date_day,nth_record):
 
 # Read a timestamp function
 def read_timestamp(date_day,nth_record):
-	TSTP_FILE_PATH = "vision/memory/" +  date_day + ".mem" # Path for tstp file
+	TSTP_FILE_PATH = "cerebrum/vision/memory/" +  date_day + ".tstp" # Path for tstp file
 
 	if os.path.exists(TSTP_FILE_PATH): # If timestamp file exist
 		with open(TSTP_FILE_PATH, 'r') as tstp_file: # Open file
