@@ -1,4 +1,4 @@
-# SpectrumEngine
+# Cerebrum
 
 An implementation of "Crossmodal Supervised Learning Algorithm with Time Series Memory Recording & Long Short-Term Memory Network"
 
@@ -25,17 +25,17 @@ Supported types of perception:
 
 *Touching, Tasting and Smelling is not yet available. Because of their absence there is a False Reward & Punishment Mechanism*
 
-> SpectrumEngine's purpose is getting continuous data inputs from different types of sensors as
+> Cerebrum's purpose is getting continuous data inputs from different types of sensors as
 > events, depending on the predefined threshold values and creating a complex time based relations
 > between these events in memory and we call that Neural Memory Networking. Lastly creating outputs
 > triggered by stimuli that coming from only one perception type.
 
 ### Version
-0.0.98
+0.0.99
 
 ### Dependencies
 
-SpectrumEngine uses a number of open source libraries to do the job:
+Cerebrum uses a number of open source libraries to do the job:
 
 * [Python 2.7] - a widely used general-purpose, high-level programming language.
 * [PyAudio] - provides Python bindings for PortAudio, the cross platform audio API.
