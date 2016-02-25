@@ -129,7 +129,7 @@ def start(video_input, vision_perception_stimulated):
 				starting_time = datetime.datetime.now() # Starting time of the memory
 				vision_perception_stimulated.value = 1 # Vision perception stimulated
 
-			if random.randint(1,int(camera.get(cv2.cv.CV_CAP_PROP_FPS))) == 1:
+			if random.randint(0,2) == 1:
 				memory_data_thresh.append(thresh.tostring())
 				memory_data_frameDeltaColored.append(frameDeltaColored.tostring())
 				#print type(memory_data_thresh[0])
@@ -145,8 +145,9 @@ def start(video_input, vision_perception_stimulated):
 					ending_time = datetime.datetime.now() # Ending time of the memory
 					vision_perception_stimulated.value = 0 # Vision perception NOT stimulated
 
-					process4 = multiprocessing.Process(target=memops.write_memory, args=(memory_data_thresh, memory_data_frameDeltaColored, starting_time, ending_time)) # Define write memory process
-					process4.start() # Start write memory process
+					if memory_data_thresh and memory_data_frameDeltaColored:
+						process4 = multiprocessing.Process(target=memops.write_memory, args=(memory_data_thresh, memory_data_frameDeltaColored, starting_time, ending_time)) # Define write memory process
+						process4.start() # Start write memory process
 					memory_data_thresh = []
 					memory_data_frameDeltaColored = []
 					starting_time = None
@@ -280,7 +281,7 @@ def start_cam(vision_perception_stimulated):
 				starting_time = datetime.datetime.now() # Starting time of the memory
 				vision_perception_stimulated.value = 1 # Vision perception stimulated
 
-			if random.randint(1,25) == 1:
+			if random.randint(0,2) == 1:
 				memory_data_thresh.append(thresh.tostring())
 				memory_data_frameDeltaColored.append(frameDeltaColored.tostring())
 				#print type(memory_data_thresh[0])
@@ -296,8 +297,9 @@ def start_cam(vision_perception_stimulated):
 					ending_time = datetime.datetime.now() # Ending time of the memory
 					vision_perception_stimulated.value = 0 # Vision perception NOT stimulated
 
-					process4 = multiprocessing.Process(target=memops.write_memory, args=(memory_data_thresh, memory_data_frameDeltaColored, starting_time, ending_time)) # Define write memory process
-					process4.start() # Start write memory process
+					if memory_data_thresh and memory_data_frameDeltaColored:
+						process4 = multiprocessing.Process(target=memops.write_memory, args=(memory_data_thresh, memory_data_frameDeltaColored, starting_time, ending_time)) # Define write memory process
+						process4.start() # Start write memory process
 					memory_data_thresh = []
 					memory_data_frameDeltaColored = []
 					starting_time = None

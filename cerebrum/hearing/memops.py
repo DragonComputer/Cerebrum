@@ -65,13 +65,13 @@ def read_timestamps(date_day,from_line=0):
 # Example USAGE block. NOT FUNCTIONAL
 if __name__ == "__main__":
 	timestamp_list = read_timestamps(str(datetime.date.today()))
-	for timestamp in timestamp_list:
-		print "--------------------------"
-		print timestamp['starting_time']
-		print timestamp['ending_time']
+	#for timestamp in timestamp_list:
+		#print "--------------------------"
+		#print timestamp['starting_time']
+		#print timestamp['ending_time']
 	print len(timestamp_list)
-	memory = read_memory(str(datetime.date.today()), timestamp['starting_time'])
-	print memory['starting_time']
+	memory = read_memory(str(datetime.date.today()), timestamp_list[-3]['starting_time'])
+	print len(memory['data'])
 
 	#CHUNK = 1024
 	#WIDTH = 2
