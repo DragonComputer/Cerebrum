@@ -27,12 +27,12 @@ def write_memory(thresh_binary, frame_delta_colored, starting_time, ending_time)
 	TSTP_FILE_PATH = "cerebrum/vision/memory/" +  str(datetime.date.today()) + ".tstp" # Path for tstp file
 
 	memory = Memory(starting_time.strftime("%Y-%m-%d %H:%M:%S:%f"), ending_time.strftime("%Y-%m-%d %H:%M:%S:%f"), thresh_binary, frame_delta_colored) # Create an object from Memory class
-	mode = 'a' if os.path.exists(MEM_FILE_PATH) else 'w' # If memory file exist file open mode is append(a) else write(w)
+	mode = 'a' if os.path.exists(MEM_FILE_PATH) else 'w' # If memory file exist, file open mode will be append(a) else write(w)
 	with open(MEM_FILE_PATH, mode) as mem_file: # Open file
 		mem_file.write(str(makeit_dict(memory)) + '\n') # Write memory in only one line
 
 	timestamp = Timestamp(starting_time.strftime("%Y-%m-%d %H:%M:%S:%f"), ending_time.strftime("%Y-%m-%d %H:%M:%S:%f")) # Create an object from Timestamp class
-	mode = 'a' if os.path.exists(TSTP_FILE_PATH) else 'w' # If timestamp file exist file open mode is append(a) else write(w)
+	mode = 'a' if os.path.exists(TSTP_FILE_PATH) else 'w' # If timestamp file exist, file open mode will be append(a) else write(w)
 	with open(TSTP_FILE_PATH, mode) as tstp_file: # Open file
 		tstp_file.write(str(makeit_dict(timestamp)) + '\n') # Write timestamp in only one line
 
