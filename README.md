@@ -35,7 +35,7 @@ Parts of The Cerebrum:
 > triggered by stimuli, using already trained Artificial Neural Networks.
 
 ### Version
-0.1.9
+0.1.10
 
 ### Dependencies
 

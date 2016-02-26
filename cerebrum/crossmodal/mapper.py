@@ -4,6 +4,7 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
 import hearing.memops
 import vision.memops
+import itertools
 
 def overlap(first_inter,second_inter):
 	for f,s in ((first_inter,second_inter), (second_inter,first_inter)):
@@ -18,14 +19,19 @@ hearing_timestamps = hearing.memops.read_timestamps(str(datetime.date.today()))
 vision_timestamps = vision.memops.read_timestamps(str(datetime.date.today()))
 
 print "Hearing Timestamps:"
-print hearing_timestamps[0]
+print hearing_timestamps[18]
 
 #print datetime.datetime.strptime(hearing_timestamps[0]['starting_time'], "%Y-%m-%d %H:%M:%S.%f")
 
 print "--------------------------"
 
 print "Vision Timestamps:"
-print vision_timestamps[0]
+print vision_timestamps[6]
 
-print overlap(hearing_timestamps[0], vision_timestamps[0])
-print overlap(hearing_timestamps[1], vision_timestamps[1])
+print overlap(hearing_timestamps[18], vision_timestamps[6])
+
+combos = {(i1,i2):overlap(int1,int2)
+			 for (i1,int1),(i2,int2)
+				in itertools.product(enumerate(hearing_timestamps),enumerate(vision_timestamps))}
+
+print combos.items()
