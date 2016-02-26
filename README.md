@@ -27,7 +27,7 @@ Parts of The Cerebrum:
 		- Smelling (Not Yet Available)
 			- Gas State Chemical Perception (in Future) (WARNING: Sensor Technology Not Available)
 
-*Multisensorial Part (Touching, Tasting and Smelling) is not yet available. Because of their absence there should be a False Reward & Punishment Mechanism*
+*Multisensorial Part (Touching, Tasting and Smelling) is not yet available. Because of their absence there should be a False Reward & Punishment Mechanism for Reinforcement Learning*
 
 > Cerebrum's purpose is getting continuous data inputs from different types of sensors as
 > events, depending on the predefined threshold values and creating a complex time based relations
@@ -35,7 +35,7 @@ Parts of The Cerebrum:
 > triggered by stimuli, using already trained Artificial Neural Networks.
 
 ### Version
-0.1.7
+0.1.8
 
 ### Dependencies
 
