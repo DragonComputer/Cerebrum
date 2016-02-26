@@ -14,6 +14,8 @@ vision_perception_stimulated = stem_manager.Value('i', 0) # Define vision percep
 
 
 if args["audio"] is None:
+	pass
+elif args["audio"] == "0":
 	hearing_perception_process = multiprocessing.Process(target=hearing.perception.start_mic, args=(hearing_perception_stimulated,)) # Define hearing perception process
 	hearing_perception_process.start() # Start hearing perception process
 else:
@@ -22,11 +24,14 @@ else:
 
 
 if args["video"] is None:
+	pass
+elif args["video"] == "0":
 	vision_perception_process = multiprocessing.Process(target=vision.perception.start_cam, args=(vision_perception_stimulated,)) # Define vision perception process
 	vision_perception_process.start() # Start vision perception process
 else:
 	vision_perception_process = multiprocessing.Process(target=vision.perception.start, args=(args["video"],vision_perception_stimulated)) # Define vision perception process
 	vision_perception_process.start() # Start vision perception process
+
 
 while True:
 	pass

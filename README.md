@@ -1,37 +1,41 @@
 # Cerebrum
 
-An implementation of "Crossmodal Supervised Learning Algorithm with Time Series Memory Recording & Long Short-Term Memory Network"
+An implementation of "Crossmodal Supervised Learning Algorithm with Time Series Memory Recording & Long Short-Term Memory Networks"
 
-Supported types of perception:
+Parts of The Cerebrum:
 
-	-  Vision
+	- Vision
 		- Amodal Perception
 		- Color Perception
 		- Depth Perception (in Future) (needs Stereoscopic Vision)
 		- Form Perception (in Future) (needs Stereoscopic Vision)
 		- Relative Velocity Perception (in Future) (needs Stereoscopic Vision)
-	-  Hearing
+	- Hearing
 		- Speech Perception
 		- Rhythmic Perception
 		- Harmonic Perception (in Future) (WARNING: High Complexity)
 		- Acceleration Perception (in Future) (needs 2 units of Triple Axis Accelerometer)
-	- Touching (Not Yet Available)
-		- Mechanic Perception (in Future) (needs lots of Pressure Sensors)
-		- Heat & Cooling Perception (in Future) (needs lots of Temperature Sensors)
-	- Tasting (Not Yet Available)
-		- Solid/Fluid State Chemical Perception (in Future) (WARNING: Sensor Technology Not Available)
-	- Smelling (Not Yet Available)
-		- Gas State Chemical Perception (in Future) (WARNING: Sensor Technology Not Available)
+	- Language
+		- Speech Analysis
+		- Speech Synthesis
+	- Multisensorial (Not Yet Available)
+		- Touching (Not Yet Available)
+			- Mechanic Perception (in Future) (needs lots of Pressure Sensors)
+			- Heat & Cooling Perception (in Future) (needs lots of Temperature Sensors)
+		- Tasting (Not Yet Available)
+			- Solid/Fluid State Chemical Perception (in Future) (WARNING: Sensor Technology Not Available)
+		- Smelling (Not Yet Available)
+			- Gas State Chemical Perception (in Future) (WARNING: Sensor Technology Not Available)
 
-*Touching, Tasting and Smelling is not yet available. Because of their absence there is a False Reward & Punishment Mechanism*
+*Multisensorial Part (Touching, Tasting and Smelling) is not yet available. Because of their absence there should be a False Reward & Punishment Mechanism*
 
 > Cerebrum's purpose is getting continuous data inputs from different types of sensors as
 > events, depending on the predefined threshold values and creating a complex time based relations
-> between these events in memory and we call that Neural Memory Networking. Lastly creating outputs
-> triggered by stimuli that coming from only one perception type.
+> between those events in memory by Long Short-Term Memory Networks. Lastly creating outputs
+> triggered by stimuli, using already trained Artificial Neural Networks.
 
 ### Version
-0.1.4
+0.1.5
 
 ### Dependencies
 
