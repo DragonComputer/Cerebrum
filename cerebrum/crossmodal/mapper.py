@@ -17,24 +17,26 @@ def overlap(first_inter,second_inter):
 				return True
 		return False
 
-# Loop over the timestamps coming from HEARING & VISION
-while True:
-	time.sleep(5) # Wait 5 seconds to prevent aggressive loop
-	hearing_timestamps = hearing.memops.read_timestamps(str(datetime.date.today()), 0) # Get hearing timestamps starting from 0th line
-	vision_timestamps = vision.memops.read_timestamps(str(datetime.date.today()), 0) # Get vision timestamps starting from 0th line
-	if cmops.read_pair(str(datetime.date.today()), -1): # If Pairs file exists
-		last_pair = cmops.read_pair(str(datetime.date.today()), -1) # Get latest pair from file
-	else: # If Pairs file doesn't exist
-		last_pair = {} # Create a fake one
-		last_pair['timestamp1'] = 0 # Assign lowest values to timestamps
-		last_pair['timestamp2'] = 0 # Assign lowest values to timestamps
+# MAIN CODE BLOCK
+def start():
+	# Loop over the timestamps coming from HEARING & VISION
+	while True:
+		time.sleep(5) # Wait 5 seconds to prevent aggressive loop
+		hearing_timestamps = hearing.memops.read_timestamps(str(datetime.date.today()), 0) # Get hearing timestamps starting from 0th line
+		vision_timestamps = vision.memops.read_timestamps(str(datetime.date.today()), 0) # Get vision timestamps starting from 0th line
+		if cmops.read_pair(str(datetime.date.today()), -1): # If Pairs file exists
+			last_pair = cmops.read_pair(str(datetime.date.today()), -1) # Get latest pair from file
+		else: # If Pairs file doesn't exist
+			last_pair = {} # Create a fake one
+			last_pair['timestamp1'] = 0 # Assign lowest values to timestamps
+			last_pair['timestamp2'] = 0 # Assign lowest values to timestamps
 
-	# Cheking all possible combinations for overlapping --- http://stackoverflow.com/questions/35644301/checking-two-time-intervals-are-overlapping-or-not
-	for (i1,int1),(i2,int2) in itertools.product(enumerate(hearing_timestamps),enumerate(vision_timestamps)): # Cartesian product of enumareted input iterables
-		if hearing_timestamps[i1]['starting_time'] < last_pair['timestamp1'] or hearing_timestamps[i1]['starting_time'] < last_pair['timestamp2']: # If current hearing timestamp is earlier than last pair
-			continue # Then continue
-		if vision_timestamps[i2]['starting_time'] < last_pair['timestamp1'] or vision_timestamps[i2]['starting_time'] < last_pair['timestamp2']: # If current vision timestamp is earlier than last pair
-			continue # Then continoue
-		if overlap(int1,int2): # If interval1 and interval2 is overlapping
-			cmops.write_pair(hearing_timestamps[i1]['starting_time'], vision_timestamps[i2]['starting_time'], "hearing to vision") # Write a hearing to vision pair
-			cmops.write_pair(vision_timestamps[i2]['starting_time'], hearing_timestamps[i1]['starting_time'], "vision to hearing") # Write a vision to hearing pair
+		# Cheking all possible combinations for overlapping --- http://stackoverflow.com/questions/35644301/checking-two-time-intervals-are-overlapping-or-not
+		for (i1,int1),(i2,int2) in itertools.product(enumerate(hearing_timestamps),enumerate(vision_timestamps)): # Cartesian product of enumareted input iterables
+			if hearing_timestamps[i1]['starting_time'] < last_pair['timestamp1'] or hearing_timestamps[i1]['starting_time'] < last_pair['timestamp2']: # If current hearing timestamp is earlier than last pair
+				continue # Then continue
+			if vision_timestamps[i2]['starting_time'] < last_pair['timestamp1'] or vision_timestamps[i2]['starting_time'] < last_pair['timestamp2']: # If current vision timestamp is earlier than last pair
+				continue # Then continoue
+			if overlap(int1,int2): # If interval1 and interval2 is overlapping
+				cmops.write_pair(hearing_timestamps[i1]['starting_time'], vision_timestamps[i2]['starting_time'], "hearing to vision") # Write a hearing to vision pair
+				cmops.write_pair(vision_timestamps[i2]['starting_time'], hearing_timestamps[i1]['starting_time'], "vision to hearing") # Write a vision to hearing pair
