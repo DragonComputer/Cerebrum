@@ -16,7 +16,7 @@ def makeit_dict(obj):
 
 # Write a pair function
 def write_pair(timestamp1, timestamp2, direction):
-	PR_FILE_PATH = "cerebrum/cossmodal/mappings/" +  str(datetime.date.today()) + ".pr" # Path for pairs file
+	PR_FILE_PATH = "cerebrum/crossmodal/mappings/" +  str(datetime.date.today()) + ".pr" # Path for pairs file
 
 	pair = Pair(timestamp1, timestamp2, direction) # Create an object from Pair class
 	mode = 'a' if os.path.exists(PR_FILE_PATH) else 'w' # If pairs file exist, file open mode will be append(a) else write(w)
@@ -32,4 +32,5 @@ def read_pair(date_day,nth_record):
 			pair = eval(pr_file.readlines()[nth_record]) # Evaluate the line, which will return a dictionary
 			return pair # Return pair to call
 	else: # If pairs file doesn't exist
-		raise ValueError('PR file doesn\'t exist!') # Raise a ValueError
+		#raise ValueError('PR file doesn\'t exist!') # Raise a ValueError
+		return False
