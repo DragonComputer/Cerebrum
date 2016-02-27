@@ -18,20 +18,17 @@ def overlap(first_inter,second_inter):
 hearing_timestamps = hearing.memops.read_timestamps(str(datetime.date.today()))
 vision_timestamps = vision.memops.read_timestamps(str(datetime.date.today()))
 
-print "Hearing Timestamps:"
-print hearing_timestamps[18]
-
 #print datetime.datetime.strptime(hearing_timestamps[0]['starting_time'], "%Y-%m-%d %H:%M:%S.%f")
+#combos = {(i1,i2):overlap(int1,int2)
+#			 for (i1,int1),(i2,int2)
+#				in itertools.product(enumerate(hearing_timestamps),enumerate(vision_timestamps))}
+#overlapped = set(com for com,was_overlapped in combos.items() if was_overlapped)
+#overlapped = sorted(overlapped) #this gives a list
+#print combos.items()
+#print overlapped
 
-print "--------------------------"
-
-print "Vision Timestamps:"
-print vision_timestamps[6]
-
-print overlap(hearing_timestamps[18], vision_timestamps[6])
-
-combos = {(i1,i2):overlap(int1,int2)
-			 for (i1,int1),(i2,int2)
-				in itertools.product(enumerate(hearing_timestamps),enumerate(vision_timestamps))}
-
-print combos.items()
+for (i1,int1),(i2,int2) in itertools.product(enumerate(hearing_timestamps),enumerate(vision_timestamps)):
+	if overlap(int1,int2):
+		print(i1,i2)
+		print hearing_timestamps[i1]
+		print vision_timestamps[i2]
