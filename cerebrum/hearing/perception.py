@@ -12,7 +12,7 @@ import imutils # A series of convenience functions to make basic image processin
 import pyqtgraph as pg # A pure-python graphics and GUI library built on PyQt4 / PySide and numpy
 from PyQt4 import QtCore, QtGui # A comprehensive set of Python bindings for Digia's Qt cross platform GUI toolkit.
 import time # Provides various time-related functions.
-import memops # Memory operations package
+import memops # BUILT-IN Memory operations package
 
 CHUNK = 1024 # Smallest unit of audio. 1024 bytes
 FORMAT = pyaudio.paInt16 # Data format

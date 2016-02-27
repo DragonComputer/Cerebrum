@@ -35,7 +35,7 @@ Parts of The Cerebrum:
 > triggered by stimuli, using already trained Artificial Neural Networks.
 
 ### Version
-0.1.12
+0.1.13
 
 ### Dependencies
 
@@ -59,6 +59,8 @@ Cerebrum uses a number of open source libraries to do the job:
 * [os Module] - provides a portable way of using operating system dependent functionality.
 * [subprocess Module] - allows you to spawn new processes, connect to their input/output/error pipes, and obtain their return codes.
 * [random Module] - pseudo-random number generators for various distributions.
+* [pysrt Module] - SubRip (.srt) subtitle parser and writer
+* [itertools Module] - implements a number of iterator building blocks inspired by constructs from APL, Haskell, and SML. Each has been recast in a form suitable for Python
 
 [Python 2.7]: <https://www.python.org/download/releases/2.7/>
 [PyAudio]: <https://people.csail.mit.edu/hubert/pyaudio/r>
@@ -78,3 +80,5 @@ Cerebrum uses a number of open source libraries to do the job:
 [os Module]: <https://docs.python.org/2/library/os.html>
 [subprocess Module]: <https://docs.python.org/2/library/subprocess.html>
 [random Module]: <https://docs.python.org/2/library/random.html>
+[pysrt Module]: <https://pypi.python.org/pypi/pysrt>
+[itertools Module]: <https://docs.python.org/2/library/itertools.html>

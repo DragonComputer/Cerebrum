@@ -8,7 +8,7 @@ import cv2 # (Open Source Computer Vision) is a library of programming functions
 import numpy # The fundamental package for scientific computing with Python.
 import os # Provides a portable way of using operating system dependent functionality.
 import multiprocessing # A package that supports spawning processes using an API similar to the threading module.
-import memops # Memory operations package
+import memops # BUILT-IN Memory operations package
 import random # Pseudo-random number generators for various distributions.
 
 STABILIZATION_DETECTION = 5 # Number of frames to detect stabilization
