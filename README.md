@@ -35,7 +35,26 @@ Parts of The Cerebrum:
 > triggered by stimuli, using already trained Artificial Neural Networks.
 
 ### Version
-0.1.22
+0.1.23
+
+### Installation
+
+		sudo apt-get install python-pyaudio python-opencv python-numpy python-qt4
+		sudo pip install cerebrum
+
+### Usage
+
+Train with files:
+
+		cerebrum --video PATH_TO_VIDEO_FILE --audio PATH_TO_AUDIO_FILE --captions PATH_TO_CAPTIONS_FILE
+
+Example:
+
+		cerebrum --video trainingData/Can\ You\ Make\ Someone\ Fall\ In\ Love\ With\ You-7_w_EA4u6oQ.mp4 --audio trainingData/Can\ You\ Make\ Someone\ Fall\ In\ Love\ With\ You-7_w_EA4u6oQ.wav --captions trainingData/Can\ You\ Make\ Someone\ Fall\ In\ Love\ With\ You-7_w_EA4u6oQ.en.vtt
+
+Train with your cam (Not recommended):
+
+		cerebrum --video 0 --audio 0
 
 ### Dependencies
 
