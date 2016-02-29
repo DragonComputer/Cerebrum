@@ -45,7 +45,7 @@ Punishment Mechanism for Reinforcement Learning*
 Version
 ~~~~~~~
 
-0.1.19
+0.1.21
 
 Dependencies
 ~~~~~~~~~~~~
