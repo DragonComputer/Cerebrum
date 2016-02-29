@@ -61,7 +61,7 @@ def read_timestamps(date_day,from_line=0):
 				timestamp_list.append(timestamp) # Append timestamp to list in order
 			return timestamp_list # Return timestamp list to call
 	else: # If timestamp file doesn't exist
-		raise ValueError('TSTP file doesn\'t exist!') # Raise a ValueError
+		return False
 
 # Example USAGE block. NOT FUNCTIONAL
 if __name__ == "__main__":

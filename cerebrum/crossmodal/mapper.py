@@ -23,7 +23,11 @@ def start():
 	while True:
 		time.sleep(5) # Wait 5 seconds to prevent aggressive loop
 		hearing_timestamps = hearing.memops.read_timestamps(str(datetime.date.today()), 0) # Get hearing timestamps starting from 0th line
+		if not hearing_timestamps:
+			continue
 		vision_timestamps = vision.memops.read_timestamps(str(datetime.date.today()), 0) # Get vision timestamps starting from 0th line
+		if not vision_timestamps:
+			continue
 		if cmops.read_pair(str(datetime.date.today()), -1): # If Pairs file exists
 			last_pair = cmops.read_pair(str(datetime.date.today()), -1) # Get latest pair from file
 		else: # If Pairs file doesn't exist

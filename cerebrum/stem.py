@@ -61,7 +61,7 @@ while True:
 		if not vision_perception_process.is_alive():
 			active_perceptions -= 1
 			args["video"] = None
-			print "WARNING: Hearing Perception process is terminated."
+			print "WARNING: Vision Perception process is terminated."
 	if args["captions"]:
 		if not language_analysis_process.is_alive():
 			active_perceptions -= 1

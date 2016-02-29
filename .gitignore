@@ -20,3 +20,7 @@
 *.mem
 *.tstp
 *.pr
+
+# Ignore pip directory #
+###################
+cerebrum.egg-info/
