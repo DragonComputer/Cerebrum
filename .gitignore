@@ -21,6 +21,8 @@
 *.tstp
 *.pr
 
-# Ignore pip directory #
+# Ignore directories related with packaging #
 ###################
 cerebrum.egg-info/
+dist/
+build/
