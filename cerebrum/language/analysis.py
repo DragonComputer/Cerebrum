@@ -7,7 +7,7 @@ import memops # BUILT-IN Memory operations package
 
 #MAIN CODE BLOCK
 def start(text_input,language_analysis_stimulated):
-	time.sleep(0.5) # Wait 0.5 seconds for other processes's start
+	time.sleep(0.3) # Wait 0.5 seconds for other processes's start
 	t0 = time.time() # Initiation time
 	if os.path.exists(text_input): # If captions file exist
 		subs = pysrt.open(text_input) # Get whole subtitles
