@@ -4,6 +4,8 @@ An implementation of "Crossmodal Supervised Learning Algorithm with Time Series 
 
 Parts of The Cerebrum:
 
+ - Cerebrum
+
 	- Vision
 		- Amodal Perception
 		- Color Perception
@@ -26,16 +28,24 @@ Parts of The Cerebrum:
 			- Solid/Fluid State Chemical Perception (in Future) (WARNING: Sensor Technology Not Available)
 		- Smelling (Not Yet Available)
 			- Gas State Chemical Perception (in Future) (WARNING: Sensor Technology Not Available)
+ - Crossmodal: Defines time based relations between the types of perceptions
+ - NeuralNet: Multiple Neural Network interconnects the parts of The Cerebrum
+	 - Current Speech Sequence to Current Visual Sequence
+	 - Current Speech Sequence to Next Speech Sequence
+	 - Current Visual Sequence to Current Speech Sequence
+	 - Current Vİsual Sequence to Next Visual Sequence
+	 - Current Speech Sequence to Text Sequence
 
-*Multisensorial Part (Touching, Tasting and Smelling) is not yet available. Because of their absence there should be a False Reward & Punishment Mechanism for Reinforcement Learning*
+*For Multisensorial Part technological advancements are insufficient, currently. Because of this deficiency, there should be a False Reward & Punishment Mechanism for Reinforcement Learning*
 
-> Cerebrum's purpose is getting continuous data inputs from different types of sensors as
-> events, depending on the predefined threshold values and creating a complex time based relations
-> between those events in memory by Long Short-Term Memory Networks. Lastly creating outputs
-> triggered by stimuli, using already trained Artificial Neural Networks.
+> Cerebrum's purpose is getting continuous data inputs from different types of perceptions as
+> memory sequences that triggered according to predefined threshold values and creating a complex time
+> based relations between those memories by Crossmodal logic  and training multiple Long Short-Term
+> Memory Networks with this extracted data. Lastly creating outputs triggered by a stimuli, using
+> pre-trained Artificial Neural Networks.
 
 ### Version
-0.1.26
+0.1.27
 
 ### Installation
 
