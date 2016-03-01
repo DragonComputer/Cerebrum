@@ -5,6 +5,8 @@ import vision.perception # Vision Package
 import language.analysis # Language Package
 import crossmodal.mapper # Crossmodal Package
 import time
+from distutils.dir_util import mkpath
+import os.path
 
 def initiate():
 	ap = argparse.ArgumentParser() # Define an Argument Parser
@@ -19,6 +21,22 @@ def initiate():
 	language_analysis_stimulated = stem_manager.Value('i', 0) # Define language analysis stimualted variable in shared memory to get if it's stimulated or not (Integer)
 
 	active_perceptions = 0
+
+	HEARING_MEM_DIR_PATH = "~/cerebrumData/hearing/memory/"
+	HEARING_TSTP_DIR_PATH = "~/cerebrumData/hearing/memory/"
+	VISION_MEM_DIR_PATH = "~/cerebrumData/vision/memory/"
+	VISION_TSTP_DIR_PATH = "~/cerebrumData/vision/memory/"
+	LANGUAGE_MEM_DIR_PATH = "~/cerebrumData/language/memory/"
+	LANGUAGE_TSTP_DIR_PATH = "~/cerebrumData/language/memory/"
+	PR_DIR_PATH = "~/cerebrumData/crossmodal/mappings/"
+
+	mkpath(os.path.expanduser(HEARING_MEM_DIR_PATH))
+	mkpath(os.path.expanduser(HEARING_TSTP_DIR_PATH))
+	mkpath(os.path.expanduser(VISION_MEM_DIR_PATH))
+	mkpath(os.path.expanduser(VISION_TSTP_DIR_PATH))
+	mkpath(os.path.expanduser(LANGUAGE_MEM_DIR_PATH))
+	mkpath(os.path.expanduser(LANGUAGE_TSTP_DIR_PATH))
+	mkpath(os.path.expanduser(PR_DIR_PATH))
 
 	if args["audio"] is None:
 		pass

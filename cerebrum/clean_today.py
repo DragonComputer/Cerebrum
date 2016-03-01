@@ -2,13 +2,13 @@ import datetime
 import os.path
 import os
 
-HEARING_MEM_FILE_PATH = "cerebrum/hearing/memory/" +  str(datetime.date.today()) + ".mem" # Path for mem file
-HEARING_TSTP_FILE_PATH = "cerebrum/hearing/memory/" +  str(datetime.date.today()) + ".tstp" # Path for tstp file
-VISION_MEM_FILE_PATH = "cerebrum/vision/memory/" +  str(datetime.date.today()) + ".mem" # Path for mem file
-VISION_TSTP_FILE_PATH = "cerebrum/vision/memory/" +  str(datetime.date.today()) + ".tstp" # Path for tstp file
-LANGUAGE_MEM_FILE_PATH = "cerebrum/language/memory/" +  str(datetime.date.today()) + ".mem" # Path for mem file
-LANGUAGE_TSTP_FILE_PATH = "cerebrum/language/memory/" +  str(datetime.date.today()) + ".tstp" # Path for tstp file
-PR_FILE_PATH = "cerebrum/crossmodal/mappings/" +  str(datetime.date.today()) + ".pr" # Path for pairs file
+HEARING_MEM_FILE_PATH = os.path.expanduser("~/cerebrumData/hearing/memory/" +  str(datetime.date.today()) + ".mem") # Path for mem file
+HEARING_TSTP_FILE_PATH = os.path.expanduser("~/cerebrumData/hearing/memory/" +  str(datetime.date.today()) + ".tstp") # Path for tstp file
+VISION_MEM_FILE_PATH = os.path.expanduser("~/cerebrumData/vision/memory/" +  str(datetime.date.today()) + ".mem") # Path for mem file
+VISION_TSTP_FILE_PATH = os.path.expanduser("~/cerebrumData/vision/memory/" +  str(datetime.date.today()) + ".tstp") # Path for tstp file
+LANGUAGE_MEM_FILE_PATH = os.path.expanduser("~/cerebrumData/language/memory/" +  str(datetime.date.today()) + ".mem") # Path for mem file
+LANGUAGE_TSTP_FILE_PATH = os.path.expanduser("~/cerebrumData/language/memory/" +  str(datetime.date.today()) + ".tstp") # Path for tstp file
+PR_FILE_PATH = os.path.expanduser("~/cerebrumData/crossmodal/mappings/" +  str(datetime.date.today()) + ".pr") # Path for pairs file
 
 if os.path.exists(HEARING_MEM_FILE_PATH):
 	os.remove(HEARING_MEM_FILE_PATH)
