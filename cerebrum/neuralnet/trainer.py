@@ -32,15 +32,24 @@ def start():
 
 	# Loop over the pairs coming from CROSSMODAL
 	for pair in pairs:
-		   time.sleep(0.5) # Wait 0.5 seconds to prevent aggressive loop
+		   #time.sleep(0.5) # Wait 0.5 seconds to prevent aggressive loop
 		   if pair['direction'] == "hearing to vision":
 				hearing_memory = hearing.memops.read_memory(str(datetime.date.today()),pair['timestamp1'])
+				vision_memory = vision.memops.read_memory(str(datetime.date.today()),pair['timestamp2'])
 				for chunky in hearing_memory['data']:
 					stream.write(chunky)
-				vision_memory = vision.memops.read_memory(str(datetime.date.today()),pair['timestamp2'])
-				print len(vision_memory['thresh_binary'])
+				if not vision_memory:
+					continue
+				#print len(vision_memory['thresh_binary'])
 				for frame in vision_memory['thresh_binary']:
-					frame = numpy.fromstring(frame, 'int16').reshape(640,360)
-					print frame.shape
-					#cv2.imshow("Frame Threshhold", frame)
-					#cv2.moveWindow("Frame Threshhold",50,550)
+					frame = numpy.fromstring(frame, numpy.uint8).reshape(360,640)
+					#print frame.shape
+					cv2.imshow("Frame Threshhold", frame)
+					cv2.moveWindow("Frame Threshhold",50,100)
+					key = cv2.waitKey(1) & 0xFF
+				for frame in vision_memory['frame_delta_colored']:
+					frame = numpy.fromstring(frame, numpy.uint8).reshape(360,640,3)
+					#print frame.shape
+					cv2.imshow("Frame Delta Colored", frame)
+					cv2.moveWindow("Frame Delta Colored",1200,100)
+					key = cv2.waitKey(1) & 0xFF

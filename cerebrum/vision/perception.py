@@ -285,7 +285,6 @@ def start_cam(vision_perception_stimulated):
 				memory_data_thresh.append(thresh.tostring())
 				memory_data_frameDeltaColored.append(frameDeltaColored.tostring())
 				#print type(memory_data_thresh[0])
-				print thresh.shape
 
 			if not non_stationary_camera:
 				status_text = "MOTION DETECTED"
