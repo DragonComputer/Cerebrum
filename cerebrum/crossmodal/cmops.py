@@ -34,3 +34,17 @@ def read_pair(date_day,nth_record):
 	else: # If pairs file doesn't exist
 		#raise ValueError('PR file doesn\'t exist!') # Raise a ValueError
 		return False
+
+# Get pairs function
+def get_pairs(date_day,from_line=0):
+	PR_FILE_PATH = os.path.expanduser("~/cerebrumData/crossmodal/mappings/" +  date_day + ".pr") # Path for pairs file
+	pairs = []
+	if os.path.exists(PR_FILE_PATH): # If pairs file exist
+		with open(PR_FILE_PATH, 'r') as pr_file: # Open file
+			for line in pr_file.readlines()[from_line:]: # Get whole lines starting from that line, default zero
+				pair = eval(line) # Evaluate the line, which will return a dictionary
+				pairs.append(pair) # Append pair to list in order
+			return pairs # Return pair list to call
+	else: # If pairs file doesn't exist
+		#raise ValueError('PR file doesn\'t exist!') # Raise a ValueError
+		return False
