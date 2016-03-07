@@ -3,7 +3,7 @@ import os.path # The path module suitable for the operating system Python is run
 import pysrt # SubRip (.srt) subtitle parser and writer
 import multiprocessing # A package that supports spawning processes using an API similar to the threading module.
 import time # Provides various time-related functions.
-import memops # BUILT-IN Memory operations package
+import cerebrum.language.memops # BUILT-IN Memory operations package
 
 #MAIN CODE BLOCK
 def start(text_input,language_analysis_stimulated):
@@ -20,7 +20,7 @@ def start(text_input,language_analysis_stimulated):
 				ending_time = starting_time + datetime.timedelta(seconds=(subs[i].end - subs[i].start).seconds) # Calculate the ending time by subtitle's delta
 				memory_data = subs[i].text.encode('ascii','ignore') # Encode subtitle's text by ascii and assign to memory data
 				print subs[i].text + "\n" # Print subtitle's text
-				process5 = multiprocessing.Process(target=memops.write_memory, args=(memory_data, starting_time, ending_time)) # Define write memory process
+				process5 = multiprocessing.Process(target=cerebrum.language.memops.write_memory, args=(memory_data, starting_time, ending_time)) # Define write memory process
 				process5.start() # Start write memory process
 				language_analysis_stimulated.value = 0 # Language analysis NOT stimulated
 				i  += 1 # Increase step counter
