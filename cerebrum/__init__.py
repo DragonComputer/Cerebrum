@@ -4,7 +4,7 @@ import hearing.perception # Hearing Package
 import vision.perception # Vision Package
 import language.analysis # Language Package
 import crossmodal.mapper # Crossmodal Package
-import neuralnet.trainer # NeuralNet Package
+import neuralnet.weaver # NeuralNet Package
 import time
 from distutils.dir_util import mkpath
 import os.path
@@ -90,10 +90,10 @@ def initiate():
 				args["captions"] = None
 				print "WARNING: Language Analysis process is terminated."
 		if active_perceptions == 0 and not training:
-				neuralnet_trainer_process = multiprocessing.Process(target=neuralnet.trainer.start) # Define neuralnet trainer process
-				neuralnet_trainer_process.start() # Start neuralnet trainer process
+				neuralnet_weaver_process = multiprocessing.Process(target=neuralnet.weaver.start) # Define neuralnet weaver process
+				neuralnet_weaver_process.start() # Start neuralnet weaver process
 				training = 1
-		if training and not neuralnet_trainer_process.is_alive():
+		if training and not neuralnet_weaver_process.is_alive():
 			crossmodal_mapper_process.terminate()
 			print "EXIT: Training is finished."
 			break

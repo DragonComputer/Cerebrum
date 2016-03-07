@@ -45,12 +45,12 @@ Parts of The Cerebrum:
 > pre-trained Artificial Neural Networks.
 
 ### Version
-0.1.36
+0.1.37
 
 ### Installation
 
 ```Shell
-sudo apt-get install python-pyaudio python-opencv python-numpy python-qt4
+sudo apt-get install python-pyaudio python-opencv python-scipy python-qt4
 sudo pip install cerebrum
 ```
 
