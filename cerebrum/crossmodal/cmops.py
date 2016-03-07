@@ -16,7 +16,7 @@ def makeit_dict(obj):
 
 # Write a pair function
 def write_pair(timestamp1, timestamp2, direction):
-	PR_FILE_PATH = os.path.expanduser("~/cerebrumData/crossmodal/mappings/" +  str(datetime.date.today()) + ".pr") # Path for pairs file
+	PR_FILE_PATH = os.path.expanduser("~/Hippocampus/crossmodal/mappings/" +  str(datetime.date.today()) + ".pr") # Path for pairs file
 
 	pair = Pair(timestamp1, timestamp2, direction) # Create an object from Pair class
 	mode = 'a' if os.path.exists(PR_FILE_PATH) else 'w' # If pairs file exist, file open mode will be append(a) else write(w)
@@ -25,7 +25,7 @@ def write_pair(timestamp1, timestamp2, direction):
 
 # Read a pair function
 def read_pair(date_day,nth_record):
-	PR_FILE_PATH = os.path.expanduser("~/cerebrumData/crossmodal/mappings/" +  date_day + ".pr") # Path for pairs file
+	PR_FILE_PATH = os.path.expanduser("~/Hippocampus/crossmodal/mappings/" +  date_day + ".pr") # Path for pairs file
 
 	if os.path.exists(PR_FILE_PATH): # If pairs file exist
 		with open(PR_FILE_PATH, 'r') as pr_file: # Open file
@@ -37,7 +37,7 @@ def read_pair(date_day,nth_record):
 
 # Get pairs function
 def get_pairs(date_day,from_line=0):
-	PR_FILE_PATH = os.path.expanduser("~/cerebrumData/crossmodal/mappings/" +  date_day + ".pr") # Path for pairs file
+	PR_FILE_PATH = os.path.expanduser("~/Hippocampus/crossmodal/mappings/" +  date_day + ".pr") # Path for pairs file
 	pairs = []
 	if os.path.exists(PR_FILE_PATH): # If pairs file exist
 		with open(PR_FILE_PATH, 'r') as pr_file: # Open file

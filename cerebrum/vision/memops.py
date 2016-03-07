@@ -23,8 +23,8 @@ def makeit_dict(obj):
 
 # Write a memory function
 def write_memory(thresh_binary, frame_delta_colored, starting_time, ending_time):
-	MEM_FILE_PATH = os.path.expanduser("~/cerebrumData/vision/memory/" +  str(datetime.date.today()) + ".mem") # Path for mem file
-	TSTP_FILE_PATH = os.path.expanduser("~/cerebrumData/vision/memory/" +  str(datetime.date.today()) + ".tstp") # Path for tstp file
+	MEM_FILE_PATH = os.path.expanduser("~/Hippocampus/vision/memory/" +  str(datetime.date.today()) + ".mem") # Path for mem file
+	TSTP_FILE_PATH = os.path.expanduser("~/Hippocampus/vision/memory/" +  str(datetime.date.today()) + ".tstp") # Path for tstp file
 
 	memory = Memory(starting_time.strftime("%Y-%m-%d %H:%M:%S.%f"), ending_time.strftime("%Y-%m-%d %H:%M:%S.%f"), thresh_binary, frame_delta_colored) # Create an object from Memory class
 	mode = 'a' if os.path.exists(MEM_FILE_PATH) else 'w' # If memory file exist, file open mode will be append(a) else write(w)
@@ -38,7 +38,7 @@ def write_memory(thresh_binary, frame_delta_colored, starting_time, ending_time)
 
 # Read a memory function
 def read_memory(date_day,starting_time):
-	MEM_FILE_PATH = os.path.expanduser("~/cerebrumData/vision/memory/" +  date_day + ".mem") # Path for mem file
+	MEM_FILE_PATH = os.path.expanduser("~/Hippocampus/vision/memory/" +  date_day + ".mem") # Path for mem file
 	memory_list = []
 	if os.path.exists(MEM_FILE_PATH): # If memory file exist
 		with open(MEM_FILE_PATH, 'r') as mem_file: # Open file
@@ -52,7 +52,7 @@ def read_memory(date_day,starting_time):
 
 # Read timestamps function
 def read_timestamps(date_day,from_line=0):
-	TSTP_FILE_PATH = os.path.expanduser("~/cerebrumData/vision/memory/" +  date_day + ".tstp") # Path for tstp file
+	TSTP_FILE_PATH = os.path.expanduser("~/Hippocampus/vision/memory/" +  date_day + ".tstp") # Path for tstp file
 	timestamp_list = []
 	if os.path.exists(TSTP_FILE_PATH): # If timestamp file exist
 		with open(TSTP_FILE_PATH, 'r') as tstp_file: # Open file

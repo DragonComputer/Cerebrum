@@ -23,13 +23,13 @@ def initiate():
 
 	active_perceptions = 0
 
-	HEARING_MEM_DIR_PATH = "~/cerebrumData/hearing/memory/"
-	HEARING_TSTP_DIR_PATH = "~/cerebrumData/hearing/memory/"
-	VISION_MEM_DIR_PATH = "~/cerebrumData/vision/memory/"
-	VISION_TSTP_DIR_PATH = "~/cerebrumData/vision/memory/"
-	LANGUAGE_MEM_DIR_PATH = "~/cerebrumData/language/memory/"
-	LANGUAGE_TSTP_DIR_PATH = "~/cerebrumData/language/memory/"
-	PR_DIR_PATH = "~/cerebrumData/crossmodal/mappings/"
+	HEARING_MEM_DIR_PATH = "~/Hippocampus/hearing/memory/"
+	HEARING_TSTP_DIR_PATH = "~/Hippocampus/hearing/memory/"
+	VISION_MEM_DIR_PATH = "~/Hippocampus/vision/memory/"
+	VISION_TSTP_DIR_PATH = "~/Hippocampus/vision/memory/"
+	LANGUAGE_MEM_DIR_PATH = "~/Hippocampus/language/memory/"
+	LANGUAGE_TSTP_DIR_PATH = "~/Hippocampus/language/memory/"
+	PR_DIR_PATH = "~/Hippocampus/crossmodal/mappings/"
 
 	mkpath(os.path.expanduser(HEARING_MEM_DIR_PATH))
 	mkpath(os.path.expanduser(HEARING_TSTP_DIR_PATH))
