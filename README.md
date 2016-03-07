@@ -45,7 +45,7 @@ Parts of The Cerebrum:
 > pre-trained Artificial Neural Networks.
 
 ### Version
-0.1.37
+0.1.38
 
 ### Installation
 
