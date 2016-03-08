@@ -11,7 +11,7 @@ import imutils # A series of convenience functions to make basic image processin
 import pyqtgraph as pg # A pure-python graphics and GUI library built on PyQt4 / PySide and numpy
 from PyQt4 import QtCore, QtGui # A comprehensive set of Python bindings for Digia's Qt cross platform GUI toolkit.
 import time # Provides various time-related functions.
-import cerebrum.hearing.memops # BUILT-IN Memory operations package
+from cerebrum.hearing.utilities import HearingMemoryUtil # BUILT-IN Memory operations package
 
 CHUNK = 1024 # Smallest unit of audio. 1024 bytes
 FORMAT = pyaudio.paInt16 # Data format
@@ -203,8 +203,8 @@ class HearingPerception():
 				ending_time = datetime.datetime.now() # Ending time of the memory
 				hearing_perception_stimulated.value = 0 # Hearing perception NOT stimulated
 
-				#cerebrum.hearing.memops.write_memory(memory_data, starting_time, ending_time)
-				process3 = multiprocessing.Process(target=cerebrum.hearing.memops.write_memory, args=(memory_data, starting_time, ending_time)) # Define write memory process
+				#HearingMemoryUtil.write_memory(memory_data, starting_time, ending_time)
+				process3 = multiprocessing.Process(target=HearingMemoryUtil.write_memory, args=(memory_data, starting_time, ending_time)) # Define write memory process
 				process3.start() # Start write memory process
 				memory_data = [] # Empty memory data
 

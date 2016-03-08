@@ -1,12 +1,12 @@
+from __future__ import print_function
+
 __author__ = 'Mehmet Mert Yildiran, mert.yildiran@bil.omu.edu.tr'
 
-from __future__ import print_function
 import datetime # Supplies classes for manipulating dates and times in both simple and complex ways
 import os.path # The path module suitable for the operating system Python is running on, and therefore usable for local paths
 import sys # Provides access to some variables used or maintained by the interpreter and to functions that interact strongly with the interpreter. It is always available.
 import cerebrum.crossmodal.cmops # BUILT-IN Crosmodal operations package
-import cerebrum.hearing.memops # BUILT-IN Hearing Memory operations package
-from cerebrum.hearing import HearingPerception # BUILT-IN Hearing Memory perception package
+from cerebrum.hearing import HearingPerception, HearingMemoryUtil # BUILT-IN Hearing Memory perception package
 import cerebrum.vision.memops # BUILT-IN Vision Memory operations package
 import time # Provides various time-related functions.
 import pyaudio
@@ -47,7 +47,7 @@ def start():
 		   #time.sleep(0.5) # Wait 0.5 seconds to prevent aggressive loop
 		   if pair['direction'] == "hearing to vision":
 				ds = SequentialDataSet(2048, 230400)
-				hearing_memory = cerebrum.hearing.memops.read_memory(str(datetime.date.today()),pair['timestamp1'])
+				hearing_memory = HearingMemoryUtil.read_memory(str(datetime.date.today()),pair['timestamp1'])
 				vision_memory = cerebrum.vision.memops.read_memory(str(datetime.date.today()),pair['timestamp2'])
 				if not vision_memory:
 					continue
