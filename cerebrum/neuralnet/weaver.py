@@ -5,7 +5,7 @@ __author__ = 'Mehmet Mert Yildiran, mert.yildiran@bil.omu.edu.tr'
 import datetime # Supplies classes for manipulating dates and times in both simple and complex ways
 import os.path # The path module suitable for the operating system Python is running on, and therefore usable for local paths
 import sys # Provides access to some variables used or maintained by the interpreter and to functions that interact strongly with the interpreter. It is always available.
-import cerebrum.crossmodal.cmops # BUILT-IN Crosmodal operations package
+from cerebrum.crossmodal import MapperUtil # BUILT-IN Crosmodal operations package
 from cerebrum.hearing import HearingPerception, HearingMemoryUtil # BUILT-IN Hearing Memory perception package
 from cerebrum.vision import VisionPerception, VisionMemoryUtil # BUILT-IN Vision Memory operations package
 import time # Provides various time-related functions.
@@ -27,7 +27,7 @@ RATE = 44100 # Bit Rate of audio stream / Frame Rate
 
 # MAIN CODE BLOCK
 def start():
-	pairs = cerebrum.crossmodal.cmops.get_pairs(str(datetime.date.today()), 0) # Get pairs starting from 0th line
+	pairs = MapperUtil.get_pairs(str(datetime.date.today()), 0) # Get pairs starting from 0th line
 	if not pairs:
 		print ("No pairs found.")
 		sys.exit()

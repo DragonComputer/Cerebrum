@@ -5,7 +5,7 @@ import multiprocessing # A package that supports spawning processes using an API
 from cerebrum.hearing import HearingPerception # Hearing Package
 from cerebrum.vision import VisionPerception # Vision Package
 import language.analysis # Language Package
-import crossmodal.mapper # Crossmodal Package
+from cerebrum.crossmodal import MapperMain # Crossmodal Package
 import neuralnet.weaver # NeuralNet Package
 import time
 from distutils.dir_util import mkpath
@@ -62,7 +62,7 @@ def initiate():
 		language_analysis_process.start() # Start language analysis process
 		active_perceptions += 1
 
-	crossmodal_mapper_process = multiprocessing.Process(target=crossmodal.mapper.start) # Define crossmodal mapper process
+	crossmodal_mapper_process = multiprocessing.Process(target=MapperMain.start) # Define crossmodal mapper process
 	crossmodal_mapper_process.start() # Start crossmodal mapper process
 
 	training = 0
