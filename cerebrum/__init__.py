@@ -1,7 +1,9 @@
+__author__ = 'Mehmet Mert Yildiran, mert.yildiran@bil.omu.edu.tr'
+
 import argparse # Makes it easy to write user-friendly command-line interfaces.
 import multiprocessing # A package that supports spawning processes using an API similar to the threading module.
 from cerebrum.hearing import HearingPerception # Hearing Package
-import vision.perception # Vision Package
+from cerebrum.vision import VisionPerception # Vision Package
 import language.analysis # Language Package
 import crossmodal.mapper # Crossmodal Package
 import neuralnet.weaver # NeuralNet Package
@@ -48,12 +50,8 @@ def initiate():
 
 	if args["video"] is None:
 		pass
-	elif args["video"] == "0":
-		vision_perception_process = multiprocessing.Process(target=vision.perception.start_cam, args=(vision_perception_stimulated,)) # Define vision perception process
-		vision_perception_process.start() # Start vision perception process
-		active_perceptions += 1
 	else:
-		vision_perception_process = multiprocessing.Process(target=vision.perception.start, args=(args["video"],vision_perception_stimulated)) # Define vision perception process
+		vision_perception_process = multiprocessing.Process(target=VisionPerception.start, args=(args["video"],vision_perception_stimulated)) # Define vision perception process
 		vision_perception_process.start() # Start vision perception process
 		active_perceptions += 1
 
