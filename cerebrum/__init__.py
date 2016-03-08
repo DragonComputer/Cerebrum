@@ -4,7 +4,7 @@ import argparse # Makes it easy to write user-friendly command-line interfaces.
 import multiprocessing # A package that supports spawning processes using an API similar to the threading module.
 from cerebrum.hearing import HearingPerception # Hearing Package
 from cerebrum.vision import VisionPerception # Vision Package
-import language.analysis # Language Package
+from cerebrum.language import LanguageAnalyzer # Language Package
 from cerebrum.crossmodal import MapperMain # Crossmodal Package
 import neuralnet.weaver # NeuralNet Package
 import time
@@ -58,7 +58,7 @@ def initiate():
 	if args["captions"] is None:
 		pass
 	else:
-		language_analysis_process = multiprocessing.Process(target=language.analysis.start, args=(args["captions"],language_analysis_stimulated)) # Define language analysis process
+		language_analysis_process = multiprocessing.Process(target=LanguageAnalyzer.start, args=(args["captions"],language_analysis_stimulated)) # Define language analysis process
 		language_analysis_process.start() # Start language analysis process
 		active_perceptions += 1
 

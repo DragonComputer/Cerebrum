@@ -44,6 +44,6 @@ class MapperMain():
 					continue # Then continue
 				if vision_timestamps[i2]['starting_time'] < last_pair['timestamp1'] or vision_timestamps[i2]['starting_time'] < last_pair['timestamp2']: # If current vision timestamp is earlier than last pair
 					continue # Then continoue
-				if MapperUtil.overlap(int1,int2): # If interval1 and interval2 is overlapping
+				if MapperMain.overlap(int1,int2): # If interval1 and interval2 is overlapping
 					MapperUtil.write_pair(hearing_timestamps[i1]['starting_time'], vision_timestamps[i2]['starting_time'], "hearing to vision") # Write a hearing to vision pair
 					MapperUtil.write_pair(vision_timestamps[i2]['starting_time'], hearing_timestamps[i1]['starting_time'], "vision to hearing") # Write a vision to hearing pair
