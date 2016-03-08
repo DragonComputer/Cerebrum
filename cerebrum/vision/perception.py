@@ -7,7 +7,7 @@ import cv2 # (Open Source Computer Vision) is a library of programming functions
 import numpy # The fundamental package for scientific computing with Python.
 import os # Provides a portable way of using operating system dependent functionality.
 import multiprocessing # A package that supports spawning processes using an API similar to the threading module.
-import cerebrum.vision.memops # BUILT-IN Memory operations package
+from cerebrum.vision.utilities import VisionMemoryUtil # BUILT-IN Memory operations package
 import random # Pseudo-random number generators for various distributions.
 
 STABILIZATION_DETECTION = 5 # Number of frames to detect stabilization
@@ -156,7 +156,7 @@ class VisionPerception():
 						vision_perception_stimulated.value = 0 # Vision perception NOT stimulated
 
 						if memory_data_thresh and memory_data_frameDeltaColored:
-							process4 = multiprocessing.Process(target=cerebrum.vision.memops.write_memory, args=(memory_data_thresh, memory_data_frameDeltaColored, starting_time, ending_time)) # Define write memory process
+							process4 = multiprocessing.Process(target=VisionMemoryUtil.write_memory, args=(memory_data_thresh, memory_data_frameDeltaColored, starting_time, ending_time)) # Define write memory process
 							process4.start() # Start write memory process
 						memory_data_thresh = []
 						memory_data_frameDeltaColored = []

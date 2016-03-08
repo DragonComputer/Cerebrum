@@ -2,7 +2,7 @@ import datetime # Supplies classes for manipulating dates and times in both simp
 import os.path # The path module suitable for the operating system Python is running on, and therefore usable for local paths
 import sys # Provides access to some variables used or maintained by the interpreter and to functions that interact strongly with the interpreter. It is always available.
 from cerebrum.hearing import HearingMemoryUtil # BUILT-IN Hearing Memory operations package
-import cerebrum.vision.memops # BUILT-IN Vision Memory operations package
+from cerebrum.vision import VisionMemoryUtil # BUILT-IN Vision Memory operations package
 import itertools # Implements a number of iterator building blocks inspired by constructs from APL, Haskell, and SML. Each has been recast in a form suitable for Python
 import cerebrum.crossmodal.cmops # BUILT-IN Crossmodal Memory operations package
 import time # Provides various time-related functions.
@@ -24,7 +24,7 @@ def start():
 		hearing_timestamps = HearingMemoryUtil.read_timestamps(str(datetime.date.today()), 0) # Get hearing timestamps starting from 0th line
 		if not hearing_timestamps:
 			continue
-		vision_timestamps = cerebrum.vision.memops.read_timestamps(str(datetime.date.today()), 0) # Get vision timestamps starting from 0th line
+		vision_timestamps = VisionMemoryUtil.read_timestamps(str(datetime.date.today()), 0) # Get vision timestamps starting from 0th line
 		if not vision_timestamps:
 			continue
 		if cerebrum.crossmodal.cmops.read_pair(str(datetime.date.today()), -1): # If Pairs file exists

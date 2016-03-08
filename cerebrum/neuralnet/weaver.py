@@ -7,7 +7,7 @@ import os.path # The path module suitable for the operating system Python is run
 import sys # Provides access to some variables used or maintained by the interpreter and to functions that interact strongly with the interpreter. It is always available.
 import cerebrum.crossmodal.cmops # BUILT-IN Crosmodal operations package
 from cerebrum.hearing import HearingPerception, HearingMemoryUtil # BUILT-IN Hearing Memory perception package
-import cerebrum.vision.memops # BUILT-IN Vision Memory operations package
+from cerebrum.vision import VisionPerception, VisionMemoryUtil # BUILT-IN Vision Memory operations package
 import time # Provides various time-related functions.
 import pyaudio
 import cv2 # (Open Source Computer Vision) is a library of programming functions mainly aimed at real-time computer vision.
