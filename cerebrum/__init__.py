@@ -41,10 +41,6 @@ def initiate():
 
 	if args["audio"] is None:
 		pass
-	elif args["audio"] == "0":
-		hearing_perception_process = multiprocessing.Process(target=hearing.perception.start_mic, args=(hearing_perception_stimulated,)) # Define hearing perception process
-		hearing_perception_process.start() # Start hearing perception process
-		active_perceptions += 1
 	else:
 		hearing_perception_process = multiprocessing.Process(target=hearing.perception.start, args=(args["audio"],hearing_perception_stimulated)) # Define hearing perception process
 		hearing_perception_process.start() # Start hearing perception process
