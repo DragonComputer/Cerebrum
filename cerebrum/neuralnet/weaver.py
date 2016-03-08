@@ -1,10 +1,12 @@
+__author__ = 'Mehmet Mert Yildiran, mert.yildiran@bil.omu.edu.tr'
+
 from __future__ import print_function
 import datetime # Supplies classes for manipulating dates and times in both simple and complex ways
 import os.path # The path module suitable for the operating system Python is running on, and therefore usable for local paths
 import sys # Provides access to some variables used or maintained by the interpreter and to functions that interact strongly with the interpreter. It is always available.
 import cerebrum.crossmodal.cmops # BUILT-IN Crosmodal operations package
 import cerebrum.hearing.memops # BUILT-IN Hearing Memory operations package
-import cerebrum.hearing.perception # BUILT-IN Hearing Memory perception package
+from cerebrum.hearing import HearingPerception # BUILT-IN Hearing Memory perception package
 import cerebrum.vision.memops # BUILT-IN Vision Memory operations package
 import time # Provides various time-related functions.
 import pyaudio

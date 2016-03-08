@@ -1,6 +1,6 @@
 import argparse # Makes it easy to write user-friendly command-line interfaces.
 import multiprocessing # A package that supports spawning processes using an API similar to the threading module.
-import hearing.perception # Hearing Package
+from cerebrum.hearing import HearingPerception # Hearing Package
 import vision.perception # Vision Package
 import language.analysis # Language Package
 import crossmodal.mapper # Crossmodal Package
@@ -42,7 +42,7 @@ def initiate():
 	if args["audio"] is None:
 		pass
 	else:
-		hearing_perception_process = multiprocessing.Process(target=hearing.perception.start, args=(args["audio"],hearing_perception_stimulated)) # Define hearing perception process
+		hearing_perception_process = multiprocessing.Process(target=HearingPerception.start, args=(args["audio"],hearing_perception_stimulated)) # Define hearing perception process
 		hearing_perception_process.start() # Start hearing perception process
 		active_perceptions += 1
 
