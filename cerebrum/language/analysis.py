@@ -1,3 +1,5 @@
+__author__ = 'Mehmet Mert Yildiran, mert.yildiran@bil.omu.edu.tr'
+
 import datetime # Supplies classes for manipulating dates and times in both simple and complex ways
 import os.path # The path module suitable for the operating system Python is running on, and therefore usable for local paths
 import pysrt # SubRip (.srt) subtitle parser and writer

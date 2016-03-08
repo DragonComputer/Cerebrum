@@ -1,3 +1,5 @@
+__author__ = 'Mehmet Mert Yildiran, mert.yildiran@bil.omu.edu.tr'
+
 import datetime
 import os.path
 import os

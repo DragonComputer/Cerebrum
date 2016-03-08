@@ -6,7 +6,7 @@ from cerebrum.hearing import HearingPerception # Hearing Package
 from cerebrum.vision import VisionPerception # Vision Package
 from cerebrum.language import LanguageAnalyzer # Language Package
 from cerebrum.crossmodal import MapperMain # Crossmodal Package
-import neuralnet.weaver # NeuralNet Package
+from cerebrum.neuralnet import NeuralWeaver # NeuralNet Package
 import time
 from distutils.dir_util import mkpath
 import os.path
@@ -84,7 +84,7 @@ def initiate():
 				args["captions"] = None
 				print "WARNING: Language Analysis process is terminated."
 		if active_perceptions == 0 and not training:
-				neuralnet_weaver_process = multiprocessing.Process(target=neuralnet.weaver.start) # Define neuralnet weaver process
+				neuralnet_weaver_process = multiprocessing.Process(target=NeuralWeaver.start) # Define neuralnet weaver process
 				neuralnet_weaver_process.start() # Start neuralnet weaver process
 				training = 1
 		if training and not neuralnet_weaver_process.is_alive():
