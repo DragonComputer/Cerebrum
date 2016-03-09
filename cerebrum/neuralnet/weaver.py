@@ -48,7 +48,7 @@ class NeuralWeaver():
 		# Loop over the pairs coming from CROSSMODAL
 		for pair in pairs:
 			   #time.sleep(0.5) # Wait 0.5 seconds to prevent aggressive loop
-			   if pair['direction'] == "hearing to vision":
+			   if pair['direction'] == "H2V":
 					ds = SequentialDataSet(2048, 230400)
 					hearing_memory = HearingMemoryUtil.read_memory(str(datetime.date.today()),pair['timestamp1'])
 					vision_memory = VisionMemoryUtil.read_memory(str(datetime.date.today()),pair['timestamp2'])

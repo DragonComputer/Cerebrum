@@ -8,7 +8,7 @@ class Pair(object):
 	def __init__(self, timestamp1, timestamp2, direction): # Initialize the object
 		self.timestamp1 = timestamp1 # Memory starting time of a sense
 		self.timestamp2 = timestamp2 # Memory starting time of another sense
-		self.direction = direction # Direction. For example hearing to vision, vision to hearing, hearing to hearing etc.
+		self.direction = direction # Direction. For example H2V, V2H, H2H etc.
 
 # Convert object to dictionary
 def makeit_dict(obj):
