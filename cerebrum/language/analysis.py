@@ -9,6 +9,14 @@ from cerebrum.language.utilities import LanguageMemoryUtil # BUILT-IN Memory ope
 
 class LanguageAnalyzer():
 
+	@staticmethod
+	def word_to_phones(word):
+		with open("cerebrum/language/dictionaries/en/cmudict-0.7b.txt") as infile:
+			for row in infile:
+				if row.split()[0] == word.upper():
+					return " ".join(row.split()[1:])
+			return ""
+
 	#MAIN CODE BLOCK
 	@staticmethod
 	def start(text_input,language_analysis_stimulated):
@@ -23,9 +31,17 @@ class LanguageAnalyzer():
 					starting_time = datetime.datetime.now() # Starting time of the memory
 					language_analysis_stimulated.value = 1 # Language analysis stimulated
 					ending_time = starting_time + datetime.timedelta(seconds=(subs[i].end - subs[i].start).seconds) # Calculate the ending time by subtitle's delta
-					memory_data = subs[i].text.encode('ascii','ignore') # Encode subtitle's text by ascii and assign to memory data
+					sub = subs[i].text.encode('ascii','ignore') # Encode subtitle's text by ascii and assign to sub variable
+					sub = sub.translate(None, '!@#$?,')
+					words = sub.split()
+					phone_groups = []
+					for word in words:
+						phone_groups.append(LanguageAnalyzer.word_to_phones(word))
+					phones = " ".join(phone_groups)
 					print subs[i].text + "\n" # Print subtitle's text
-					process5 = multiprocessing.Process(target=LanguageMemoryUtil.write_memory, args=(memory_data, starting_time, ending_time)) # Define write memory process
+					print phones + "\n"
+					print "-------------------------------------------------------------\n"
+					process5 = multiprocessing.Process(target=LanguageMemoryUtil.write_memory, args=(phones, starting_time, ending_time)) # Define write memory process
 					process5.start() # Start write memory process
 					language_analysis_stimulated.value = 0 # Language analysis NOT stimulated
 					i  += 1 # Increase step counter
