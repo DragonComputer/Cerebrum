@@ -12,6 +12,7 @@ import pyqtgraph as pg # A pure-python graphics and GUI library built on PyQt4 /
 from PyQt4 import QtCore, QtGui # A comprehensive set of Python bindings for Digia's Qt cross platform GUI toolkit.
 import time # Provides various time-related functions.
 from cerebrum.hearing.utilities import HearingMemoryUtil # BUILT-IN Memory operations package
+import Tkinter
 
 CHUNK = 1024 # Smallest unit of audio. 1024 bytes
 FORMAT = pyaudio.paInt16 # Data format
@@ -21,6 +22,9 @@ THRESHOLD = 1000 # Threshhold value for detecting stimulant
 SILENCE_DETECTION = 5 # Wait number of frames to decide whether it fell silent or not
 EMPTY_CHUNK = chr(int('000000', 2)) * CHUNK * 4 # Create an empty unit of audio for just once
 WAVE_OUTPUT_FILENAME = "hearing/memory/" +  str(datetime.date.today()) + ".wav" # Example path if saving needed
+root = Tkinter.Tk()
+SCREEN_WIDTH = root.winfo_screenwidth()
+SCREEN_HEIGHT = root.winfo_screenheight()
 
 class HearingPerception():
 
@@ -65,7 +69,7 @@ class HearingPerception():
 		pw = pg.plot(title="Spectrum Analyzer") # Window title
 		pg.setConfigOptions(antialias=True) # Enable antialias for better resolution
 		pw.win.resize(800, 300) # Define window size
-		pw.win.move(540, 500) # Define window position
+		pw.win.move(540 * SCREEN_WIDTH / 1920, 500 * SCREEN_HEIGHT / 1080) # Define window position
 		while True: # Loop over the frames of the audio / data chunks
 			data = ''.join(all_frames[-1:]) # Get only the last frame of all frames
 			data = numpy.fromstring(data, 'int16') # Binary string to numpy int16 data format
@@ -94,7 +98,7 @@ class HearingPerception():
 		pw = pg.plot(title="Waveform") # Window title
 		pg.setConfigOptions(antialias=True) # Enable antialias for better resolution
 		pw.win.resize(1300, 160) # Define window size
-		pw.win.move(300, 850) # Define window position
+		pw.win.move(300 * SCREEN_WIDTH / 1920, 850 * SCREEN_HEIGHT / 1080) # Define window position
 		pw.showAxis('bottom', False) # Hide bottom axis
 		while True: # Loop over the frames of the audio / data chunks
 			data = ''.join(all_frames[-20:]) # Join last 20 frames of all frames

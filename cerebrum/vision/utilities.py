@@ -5,11 +5,11 @@ import os.path # The path module suitable for the operating system Python is run
 
 # Memory class
 class Memory(object):
-	def __init__(self, starting_time, ending_time, thresh_binary, frame_delta_colored): # Initialize the object
+	def __init__(self, starting_time, ending_time, amodal, color): # Initialize the object
 		self.starting_time = starting_time # Starting time attribute
 		self.ending_time = ending_time # Ending time attribute
-		self.thresh_binary = thresh_binary # Thresh binary frame attribute
-		self.frame_delta_colored = frame_delta_colored # Frame delta colored frame attribute
+		self.amodal = amodal # Thresh binary frame attribute
+		self.color = color # Frame delta colored frame attribute
 
 # Timestamp class
 class Timestamp(object):
@@ -27,11 +27,11 @@ class VisionMemoryUtil():
 
 	# Write a memory function
 	@staticmethod
-	def write_memory(thresh_binary, frame_delta_colored, starting_time, ending_time):
+	def write_memory(amodal, color, starting_time, ending_time):
 		MEM_FILE_PATH = os.path.expanduser("~/Hippocampus/vision/memory/" +  str(datetime.date.today()) + ".mem") # Path for mem file
 		TSTP_FILE_PATH = os.path.expanduser("~/Hippocampus/vision/memory/" +  str(datetime.date.today()) + ".tstp") # Path for tstp file
 
-		memory = Memory(starting_time.strftime("%Y-%m-%d %H:%M:%S.%f"), ending_time.strftime("%Y-%m-%d %H:%M:%S.%f"), thresh_binary, frame_delta_colored) # Create an object from Memory class
+		memory = Memory(starting_time.strftime("%Y-%m-%d %H:%M:%S.%f"), ending_time.strftime("%Y-%m-%d %H:%M:%S.%f"), amodal, color) # Create an object from Memory class
 		mode = 'a' if os.path.exists(MEM_FILE_PATH) else 'w' # If memory file exist, file open mode will be append(a) else write(w)
 		with open(MEM_FILE_PATH, mode) as mem_file: # Open file
 			mem_file.write(str(makeit_dict(memory)) + '\n') # Write memory in only one line
@@ -79,8 +79,8 @@ if __name__ == "__main__":
 		#print timestamp['ending_time']
 	print len(timestamp_list)
 	memory = VisionMemoryUtil.read_memory(str(datetime.date.today()), timestamp_list[-3]['starting_time'])
-	print len(memory['thresh_binary'])
-	print len(memory['frame_delta_colored'])
+	print len(memory['amodal'])
+	print len(memory['color'])
 
 	#CHUNK = 1024
 	#WIDTH = 2

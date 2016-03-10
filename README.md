@@ -1,6 +1,6 @@
 # Cerebrum
 
-An implementation of "Crossmodal Supervised Learning Algorithm with Time Series Memory Recording & Long Short-Term Memory Networks"
+Crossmodal Supervised Learning Toolkit with Time Series Memory Recording & Long Short-Term Memory Networks
 
 Parts of The Cerebrum:
 
@@ -45,7 +45,7 @@ Parts of The Cerebrum:
 > pre-trained Artificial Neural Networks.
 
 ### Version
-0.1.47
+0.1.48
 
 ### Installation
 

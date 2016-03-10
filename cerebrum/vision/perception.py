@@ -9,12 +9,16 @@ import os # Provides a portable way of using operating system dependent function
 import multiprocessing # A package that supports spawning processes using an API similar to the threading module.
 from cerebrum.vision.utilities import VisionMemoryUtil # BUILT-IN Memory operations package
 import random # Pseudo-random number generators for various distributions.
+import Tkinter
 
 STABILIZATION_DETECTION = 5 # Number of frames to detect stabilization
 NON_STATIONARY_PERCENTAGE = 70 # Percentage of frame for detecting NON-STATIONARY CAMERA. Like: ( height * width * float(X) / float(100) )
 NON_ZERO_PERCENTAGE = 0 #  Percentage of frame(threshold) for detecting unnecessary movement
 TARGET_HEIGHT = 360 # Number of horizontal lines for target video and processing. Like 720p, 360p etc.
 MIN_AREA = 500 # Minimum area in square pixels to detect a motion
+root = Tkinter.Tk()
+SCREEN_WIDTH = root.winfo_screenwidth()
+SCREEN_HEIGHT = root.winfo_screenheight()
 
 class VisionPerception():
 
@@ -139,7 +143,7 @@ class VisionPerception():
 					starting_time = datetime.datetime.now() # Starting time of the memory
 					vision_perception_stimulated.value = 1 # Vision perception stimulated
 
-				if random.randint(0,2) == 1:
+				if random.randint(0,2) == 1: # IMPORTANT
 					memory_data_thresh.append(thresh.tostring())
 					memory_data_frameDeltaColored.append(frameDeltaColored.tostring())
 					#print type(memory_data_thresh[0])
@@ -181,13 +185,13 @@ class VisionPerception():
 
 			# Show the frames and record if the user presses ESC or q
 			cv2.imshow("Original Frame", frame)
-			cv2.moveWindow("Original Frame",50,100)
+			cv2.moveWindow("Original Frame",50 * SCREEN_WIDTH / 1920,100 * SCREEN_HEIGHT / 1080)
 			cv2.imshow("Frame Threshhold", thresh)
-			cv2.moveWindow("Frame Threshhold",50,550)
+			cv2.moveWindow("Frame Threshhold",50 * SCREEN_WIDTH / 1920,550 * SCREEN_HEIGHT / 1080)
 			cv2.imshow("Frame Delta", frameDelta)
-			cv2.moveWindow("Frame Delta",1200,550)
+			cv2.moveWindow("Frame Delta",1200 * SCREEN_WIDTH / 1920,550 * SCREEN_HEIGHT / 1080)
 			cv2.imshow("Frame Delta Colored", frameDeltaColored)
-			cv2.moveWindow("Frame Delta Colored",1200,100)
+			cv2.moveWindow("Frame Delta Colored",1200 * SCREEN_WIDTH / 1920,100 * SCREEN_HEIGHT / 1080)
 			key = cv2.waitKey(1) & 0xFF
 
 			# if the `ESC` or `q` key is pressed, break the loop

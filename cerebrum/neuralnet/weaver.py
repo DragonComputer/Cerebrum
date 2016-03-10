@@ -57,16 +57,16 @@ class NeuralWeaver():
 					for chunky in hearing_memory['data']:
 						chunky_array = numpy.fromstring(chunky, 'int16')
 						print (chunky_array)
-						ds.addSample(chunky_array, numpy.fromstring(vision_memory['thresh_binary'][0], numpy.uint8))
+						ds.addSample(chunky_array, numpy.fromstring(vision_memory['amodal'][0], numpy.uint8))
 						stream.write(chunky)
-					#print len(vision_memory['thresh_binary'])
-					for frame in vision_memory['thresh_binary']:
+					#print len(vision_memory['amodal'])
+					for frame in vision_memory['amodal']:
 						frame = numpy.fromstring(frame, numpy.uint8).reshape(360,640)
 						#print frame.shape
 						cv2.imshow("Frame Threshhold", frame)
 						cv2.moveWindow("Frame Threshhold",50,100)
 						key = cv2.waitKey(1) & 0xFF
-					for frame in vision_memory['frame_delta_colored']:
+					for frame in vision_memory['color']:
 						frame = numpy.fromstring(frame, numpy.uint8).reshape(360,640,3)
 						#print frame.shape
 						cv2.imshow("Frame Delta Colored", frame)
