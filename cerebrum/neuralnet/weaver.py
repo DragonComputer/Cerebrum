@@ -12,7 +12,7 @@ import time # Provides various time-related functions.
 import pyaudio
 import cv2 # (Open Source Computer Vision) is a library of programming functions mainly aimed at real-time computer vision.
 import numpy # The fundamental package for scientific computing with Python.
-from cerebrum.neuralnet.datasets.sequential import SequentialDataSet
+from cerebrum.neuralnet.datasets import SequentialDataSet
 from itertools import cycle
 from pybrain.tools.shortcuts import buildNetwork
 from pybrain.structure.modules import LSTMLayer

@@ -1,3 +1,7 @@
+
+# $Id$
+
+
 from scipy import ravel, r_
 from random import sample
 

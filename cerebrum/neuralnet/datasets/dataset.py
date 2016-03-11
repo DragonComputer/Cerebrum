@@ -1,3 +1,7 @@
+
+
+
+
 import random
 import pickle
 from itertools import chain
@@ -5,6 +9,7 @@ from scipy import zeros, resize, ravel, asarray
 import scipy
 
 from cerebrum.neuralnet.utilities import Serializable
+
 
 class OutOfSyncError(Exception): pass
 class VectorFormatError(Exception): pass

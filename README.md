@@ -4,6 +4,8 @@ Crossmodal Supervised Learning Toolkit with Time Series Memory Recording & Long 
 
 Parts of The Cerebrum:
 
+![Parts of The Human Brain (Psychology)](http://3.bp.blogspot.com/-IQIs51KP6B4/Uji1uX7AIRI/AAAAAAAABI8/NUrac1BCA2o/s1600/areas+of+memory.jpg)
+
  - Cerebrum
 
 	- Vision
@@ -38,6 +40,9 @@ Parts of The Cerebrum:
 
 *For Multisensorial Part technological advancements are insufficient, currently. Because of this deficiency, there should be a False Reward & Punishment Mechanism for Reinforcement Learning*
 
+![Mapping Morphometry and Connectedness of the Human Brain](http://www.neurobureau.org/wp-content/uploads/2013/03/9.png)
+
+
 > Cerebrum's purpose is getting continuous data inputs from different types of perceptions as
 > memory sequences that triggered according to predefined threshold values and creating a complex time
 > based relations between those memories by Crossmodal logic  and training multiple Long Short-Term
@@ -45,7 +50,7 @@ Parts of The Cerebrum:
 > pre-trained Artificial Neural Networks.
 
 ### Version
-0.1.52
+0.1.53
 
 ### Installation
 
