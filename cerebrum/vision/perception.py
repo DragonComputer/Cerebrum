@@ -26,7 +26,7 @@ class VisionPerception():
 	@staticmethod
 	def start(video_input, vision_perception_stimulated):
 
-		if video_input == 0: # If the video_input is None, then we are reading from webcam
+		if video_input == "0": # If the video_input is None, then we are reading from webcam
 			camera = cv2.VideoCapture(0)
 			time.sleep(0.25)
 		else: # Otherwise, we are reading from a video file
@@ -44,7 +44,7 @@ class VisionPerception():
 		height, width = first_frame.shape[:2] # Get video height and width  from first frame(size)
 		#if not height == 720 or not width == 1280:
 		if float(width) / float(height) != float(16) / float(9):
-			if video_input == 0:
+			if video_input == "0":
 				# There is a STUPIDTY in here
 				pass
 			else:
@@ -66,7 +66,7 @@ class VisionPerception():
 				break
 			frame_counter += 1 # Increase frame counter's value
 
-			if video_input == 0:
+			if video_input == "0":
 				# If we are capturing from camera fuck Time Correction, there is also a STUPIDTY in here
 				pass
 			else:

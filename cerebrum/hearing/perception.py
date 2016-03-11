@@ -119,7 +119,7 @@ class HearingPerception():
 	@staticmethod
 	def start(audio_input, hearing_perception_stimulated):
 
-		if audio_input == 0:
+		if audio_input == "0":
 			pass
 		else:
 			wf = wave.open(audio_input, 'rb') # Open .wav file from given path as audio_input in arguments
@@ -127,7 +127,7 @@ class HearingPerception():
 		p = pyaudio.PyAudio() # Create a PyAudio session
 
 		# Create a stream
-		if audio_input == 0:
+		if audio_input == "0":
 			stream = p.open(format=FORMAT,
 						channels=CHANNELS,
 						rate=RATE,
@@ -144,7 +144,7 @@ class HearingPerception():
 		all_frames = hearing_manager.list() # Define all_frames array in shared memory
 		thresh_frames = hearing_manager.list() # Define thresh_frames array in shared memory
 
-		if audio_input == 0:
+		if audio_input == "0":
 			data = stream.read(CHUNK) # Get first data frame from .wav file
 		else:
 			data = wf.readframes(CHUNK) # Get first data frame from .wav file
@@ -162,7 +162,7 @@ class HearingPerception():
 		while data != '':
 			previous_data = data # Get previous chunk that coming from end of the loop
 
-			if audio_input == 0:
+			if audio_input == "0":
 				data = stream.read(CHUNK) # Read a new chunk from the stream
 			else:
 				stream.write(data) # Monitor current chunk
@@ -183,14 +183,14 @@ class HearingPerception():
 				thresh_frames.append(data) # Append current chunk to thresh frames
 				silence_counter = 0 # Define silence counter
 				while silence_counter < SILENCE_DETECTION: # While silence counter value less than SILENCE_DETECTION constant
-					stream.write(data) # Monitor current chunk
 
-					if audio_input == 0:
+					if audio_input == "0":
 						data = stream.read(CHUNK) # Read a new chunk from the stream
 					else:
+						stream.write(data) # Monitor current chunk
 						data = wf.readframes(CHUNK) # Read a new chunk from the stream
-						all_frames.append(data) # Append this chunk to all frames
 
+					all_frames.append(data) # Append this chunk to all frames
 					memory_data.append(data) # Append this chunk to memory data
 					thresh_frames.append(data) # Append this chunk to thresh frames
 					rms = audioop.rms(data, 2) # Calculate Root Mean Square of current chunk again
