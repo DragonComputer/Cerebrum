@@ -28,9 +28,9 @@ class LanguageAnalyzer():
 			while i < len(subs): # While step counter less than amount of subtitles
 				time.sleep(0.5) # Wait 0.5 seconds to prevent aggressive loop
 				if (time.time() - t0) > subs[i].start.seconds: # If current time is greater than subtitle's start
-					starting_time = datetime.datetime.now() # Starting time of the memory
+					sub_starting_time = datetime.datetime.now() # Starting time of the memory
 					language_analysis_stimulated.value = 1 # Language analysis stimulated
-					ending_time = starting_time + datetime.timedelta(seconds=(subs[i].end - subs[i].start).seconds) # Calculate the ending time by subtitle's delta
+					sub_ending_time = sub_starting_time + datetime.timedelta(seconds=(subs[i].end - subs[i].start).seconds) # Calculate the ending time by subtitle's delta
 					sub = subs[i].text.encode('ascii','ignore') # Encode subtitle's text by ascii and assign to sub variable
 					sub = sub.translate(None, '!@#$?,')
 					words = sub.split()
@@ -38,11 +38,18 @@ class LanguageAnalyzer():
 					for word in words:
 						phone_groups.append(LanguageAnalyzer.word_to_phones(word))
 					phones = " ".join(phone_groups)
+					phone_duration = datetime.timedelta(seconds=(subs[i].end - subs[i].start).seconds) / len(phones)
+					starting_time = sub_starting_time
+					for word_inphones in phone_groups:
+						ending_time = starting_time + phone_duration * len(word_inphones.split())
+						if ending_time <= sub_ending_time and word_inphones != "":
+							process5 = multiprocessing.Process(target=LanguageMemoryUtil.write_memory, args=(word_inphones, starting_time, ending_time)) # Define write memory process
+							process5.start() # Start write memory process
+						starting_time = ending_time + datetime.timedelta(milliseconds=50)
 					print subs[i].text + "\n" # Print subtitle's text
 					print phones + "\n"
 					print "-------------------------------------------------------------\n"
-					process5 = multiprocessing.Process(target=LanguageMemoryUtil.write_memory, args=(phones, starting_time, ending_time)) # Define write memory process
-					process5.start() # Start write memory process
+
 					language_analysis_stimulated.value = 0 # Language analysis NOT stimulated
 					i  += 1 # Increase step counter
 		else: # If captions file doesn't exist
