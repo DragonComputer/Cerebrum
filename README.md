@@ -30,6 +30,11 @@ Parts of The Cerebrum:
 			- Solid/Fluid State Chemical Perception (in Future) (WARNING: Sensor Technology Not Available)
 		- Smelling (Not Yet Available)
 			- Gas State Chemical Perception (in Future) (WARNING: Sensor Technology Not Available)
+	- Emotion (Not Yet Available)
+		- Activation - Pleasant : Alerted, Excited, Elated, Happy
+		- Pleasant - Deactivation : Contented, Serene, Relaxed, Calm
+		- Deactivation - Unpleasant : Fatigued, Bored, Depressed, Sad
+		- Unpleasant - Activation : Upset, Stressed, Nervous, Tense
  - Crossmodal: Defines time based relations between the types of perceptions
  - NeuralNet: Multiple Neural Network interconnects the parts of The Cerebrum
 	 - Current Speech Sequence to Current Visual Sequence
@@ -50,7 +55,7 @@ Parts of The Cerebrum:
 > pre-trained Artificial Neural Networks.
 
 ### Version
-0.1.54
+0.1.55
 
 ### Installation
 
