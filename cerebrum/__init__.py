@@ -91,7 +91,7 @@ def initiate():
 				print "WARNING: Language Analysis process is terminated."
 		if active_perceptions == 0 and not training:
 				neuralnet_weaver_process = multiprocessing.Process(target=NeuralWeaver.start) # Define neuralnet weaver process
-				neuralnet_weaver_process.start() # Start neuralnet weaver process
+				#neuralnet_weaver_process.start() # Start neuralnet weaver process
 				training = 1
 		if training and not neuralnet_weaver_process.is_alive():
 			crossmodal_mapper_process.terminate()

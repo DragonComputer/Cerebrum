@@ -1,3 +1,0 @@
-from cerebrum.neuralnet.auxiliary.gradientdescent import GradientDescent
-from cerebrum.neuralnet.auxiliary.gaussprocess import GaussianProcess
-from cerebrum.neuralnet.auxiliary.importancemixing import importanceMixing
