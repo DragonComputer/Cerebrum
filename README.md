@@ -54,8 +54,10 @@ Parts of The Cerebrum:
 > Neural Networks Networks with this extracted data. Lastly creating outputs triggered by a stimuli, using
 > pre-trained Artificial Neural Networks.
 
+![Experience-dependent spine formation and elimination.](https://upload.wikimedia.org/wikipedia/commons/a/a0/Spine_Dynamics.jpg)
+
 ### Version
-0.1.56
+0.1.57
 
 ### Installation
 
