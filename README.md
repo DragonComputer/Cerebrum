@@ -55,24 +55,24 @@ Parts of The Cerebrum:
 > pre-trained Artificial Neural Networks.
 > - *Mehmet Mert Yıldıran*
 
-## Hebbian Theory
+### Hebbian Theory
 
 ![Experience-dependent spine formation and elimination.](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/hebbian.jpg)
 
-## Hopfield Network
+### Hopfield Network
 
-![A Hopfield net with four nodes.](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/hopfield-net.jpg)
+![A Hopfield net with four nodes.](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/hopfield-net.png)
 
-## Markov Random Field
+### Markov Random Field
 
 ![An example of a Markov random field.](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/markov-random-field.png)
 
-## Boltzmann Machine
+### Boltzmann Machine
 
-![A graphical representation of an example Boltzmann machine.](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/boltzmann-example.jpg)
+![A graphical representation of an example Boltzmann machine.](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/boltzman-example.png)
 
 ### Version
-0.1.60
+0.1.61
 
 ### Installation
 
@@ -146,3 +146,27 @@ Cerebrum uses a number of open source libraries to do the job:
 [random Module]: <https://docs.python.org/2/library/random.html>
 [pysrt Module]: <https://pypi.python.org/pypi/pysrt>
 [itertools Module]: <https://docs.python.org/2/library/itertools.html>
+
+### License
+
+The MIT License (MIT)
+
+Copyright (c) 2016 Mehmet Mert Yıldıran mert.yildiran@bil.omu.edu.tr
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
