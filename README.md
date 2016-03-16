@@ -4,7 +4,7 @@ Crossmodal Supervised Learning Toolkit with Time Series Memory Journals & Hebbia
 
 Parts of The Cerebrum:
 
-![Parts of The Human Brain (Psychology)](http://3.bp.blogspot.com/-IQIs51KP6B4/Uji1uX7AIRI/AAAAAAAABI8/NUrac1BCA2o/s1600/areas+of+memory.jpg)
+![Parts of The Human Brain (Psychology)](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/areas-of-memory.jpg)
 
  - Cerebrum
 
@@ -45,21 +45,34 @@ Parts of The Cerebrum:
 
 *For Multisensorial Part technological advancements are insufficient, currently. Because of this deficiency, there should be a False Reward & Punishment Mechanism for Reinforcement Learning*
 
-![Mapping Morphometry and Connectedness of the Human Brain](http://www.neurobureau.org/wp-content/uploads/2013/03/9.png)
+![Mapping Morphometry and Connectedness of the Human Brain](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/connectedness-of-brain.png)
 
 
-> Cerebrum's purpose is getting continuous data inputs from different types of perceptions as
-> memory sequences that triggered according to predefined threshold values and creating a complex time
-> based relations between those memories by Crossmodal logic  and training multiple Artificial
-> Neural Networks Networks with this extracted data. Lastly creating outputs triggered by a stimuli, using
+> Cerebrum's purpose is getting continuous data inputs from different types of perceptions in real time as
+> memory sequences that triggered according to predefined threshold values and creating complex time
+> based relations between those memories by Crossmodal logic and training multiple Artificial
+> Neural Networks with this extracted data. Lastly creating outputs triggered by a stimuli, using
 > pre-trained Artificial Neural Networks.
+> - *Mehmet Mert Yıldıran*
 
 ## Hebbian Theory
 
-![Experience-dependent spine formation and elimination.](https://upload.wikimedia.org/wikipedia/commons/a/a0/Spine_Dynamics.jpg)
+![Experience-dependent spine formation and elimination.](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/hebbian.jpg)
+
+## Hopfield Network
+
+![A Hopfield net with four nodes.](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/hopfield-net.jpg)
+
+## Markov Random Field
+
+![An example of a Markov random field.](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/markov-random-field.png)
+
+## Boltzmann Machine
+
+![A graphical representation of an example Boltzmann machine.](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/boltzmann-example.jpg)
 
 ### Version
-0.1.59
+0.1.60
 
 ### Installation
 
