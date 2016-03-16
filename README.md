@@ -59,7 +59,7 @@ Parts of The Cerebrum:
 ![Experience-dependent spine formation and elimination.](https://upload.wikimedia.org/wikipedia/commons/a/a0/Spine_Dynamics.jpg)
 
 ### Version
-0.1.58
+0.1.59
 
 ### Installation
 
