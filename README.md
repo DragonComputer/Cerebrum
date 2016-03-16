@@ -1,10 +1,10 @@
 # Cerebrum
 
-Crossmodal Supervised Learning Toolkit with Time Series Memory Journals & Hebbian Theory
-
-Parts of The Cerebrum:
+Crossmodal Supervised Learning Toolkit with Classification & Regression on Time Series Memory
 
 ![Parts of The Human Brain (Psychology)](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/areas-of-memory.jpg)
+
+Parts of The Cerebrum:
 
  - Cerebrum
 
@@ -58,20 +58,16 @@ Parts of The Cerebrum:
 
 ![Experience-dependent spine formation and elimination.](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/hebbian.jpg)
 
-### Hopfield Network
+### Classification
 
-![A Hopfield net with four nodes.](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/hopfield-net.png)
+![Image Captioning.](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/classification.jpg)
 
-### Markov Random Field
+### Regression
 
-![An example of a Markov random field.](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/markov-random-field.png)
-
-### Boltzmann Machine
-
-![A graphical representation of an example Boltzmann machine.](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/boltzman-example.png)
+![Activation Functions.](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/regression.png)
 
 ### Version
-0.1.62
+0.1.63
 
 ### Installation
 
