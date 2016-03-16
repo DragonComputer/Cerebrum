@@ -52,8 +52,7 @@ Parts of The Cerebrum:
 > memory sequences that triggered according to predefined threshold values and creating complex time
 > based relations between those memories by Crossmodal logic and training multiple Artificial
 > Neural Networks with this extracted data. Lastly creating outputs triggered by a stimuli, using
-> pre-trained Artificial Neural Networks.
-> - *Mehmet Mert Yıldıran*
+> pre-trained Artificial Neural Networks. - *Mehmet Mert Yıldıran*
 
 ### Hebbian Theory
 
@@ -72,7 +71,7 @@ Parts of The Cerebrum:
 ![A graphical representation of an example Boltzmann machine.](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/boltzman-example.png)
 
 ### Version
-0.1.61
+0.1.62
 
 ### Installation
 
