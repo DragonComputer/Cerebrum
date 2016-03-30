@@ -6,10 +6,12 @@ from cerebrum.hearing import HearingPerception # Hearing Package
 from cerebrum.vision import VisionPerception # Vision Package
 from cerebrum.language import LanguageAnalyzer # Language Package
 from cerebrum.crossmodal import MapperStarters # Crossmodal Package
-from cerebrum.neuralnet import NeuralWeaver # NeuralNet Package
+#from cerebrum.neuralnet import NeuralWeaver # NeuralNet Package
 import time
 from distutils.dir_util import mkpath
 import os.path
+import os
+import subprocess
 
 def initiate():
 	ap = argparse.ArgumentParser() # Define an Argument Parser
@@ -40,6 +42,11 @@ def initiate():
 	mkpath(os.path.expanduser(LANGUAGE_MEM_DIR_PATH))
 	mkpath(os.path.expanduser(LANGUAGE_TSTP_DIR_PATH))
 	mkpath(os.path.expanduser(PR_DIR_PATH))
+
+	#args = [os.path.expanduser("--directory ~/ComeOnRethink")]
+	#os.execvp("rethinkdb", args)
+	subprocess.Popen(['rethinkdb', '--directory', os.path.expanduser('~/ComeOnRethink')]) # RethinkDB directory to store data and metadata
+
 
 	if args["audio"] is None:
 		pass
@@ -90,7 +97,7 @@ def initiate():
 				args["captions"] = None
 				print "WARNING: Language Analysis process is terminated."
 		if active_perceptions == 0 and not training:
-				neuralnet_weaver_process = multiprocessing.Process(target=NeuralWeaver.start) # Define neuralnet weaver process
+				#neuralnet_weaver_process = multiprocessing.Process(target=NeuralWeaver.start) # Define neuralnet weaver process
 				#neuralnet_weaver_process.start() # Start neuralnet weaver process
 				training = 1
 		if training and not neuralnet_weaver_process.is_alive():

@@ -67,9 +67,22 @@ Parts of The Cerebrum:
 ![Activation Functions.](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/regression.png)
 
 ### Version
-0.1.63
+0.1.64
 
 ### Installation
+
+Install RethinkDB:
+
+```Shell
+source /etc/lsb-release && echo "deb http://download.rethinkdb.com/apt $DISTRIB_CODENAME main" | sudo tee /etc/apt/sources.list.d/rethinkdb.list
+wget -qO- https://download.rethinkdb.com/apt/pubkey.gpg | sudo apt-key add -
+sudo apt-get update
+sudo apt-get install rethinkdb
+```
+
+Watch data flow (optional) - <http://localhost:8080>
+
+Install Cerebrum:
 
 ```Shell
 sudo apt-get install python-pyaudio python-opencv python-scipy python-qt4
