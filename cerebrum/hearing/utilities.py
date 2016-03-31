@@ -2,6 +2,7 @@ __author__ = 'Mehmet Mert Yildiran, mert.yildiran@bil.omu.edu.tr'
 
 import datetime # Supplies classes for manipulating dates and times in both simple and complex ways
 import os.path # The path module suitable for the operating system Python is running on, and therefore usable for local paths
+import rethinkdb as r # Rethinkdb Python driver
 
 # Memory class
 class Memory(object):
@@ -27,18 +28,37 @@ class HearingMemoryUtil():
 	# Write a memory function
 	@staticmethod
 	def write_memory(data, starting_time, ending_time):
-		MEM_FILE_PATH = os.path.expanduser("~/Hippocampus/hearing/memory/" +  str(datetime.date.today()) + ".mem") # Path for mem file
-		TSTP_FILE_PATH = os.path.expanduser("~/Hippocampus/hearing/memory/" +  str(datetime.date.today()) + ".tstp") # Path for tstp file
 
-		memory = Memory(starting_time.strftime("%Y-%m-%d %H:%M:%S.%f"), ending_time.strftime("%Y-%m-%d %H:%M:%S.%f"), data) # Create an object from Memory class
-		mode = 'a' if os.path.exists(MEM_FILE_PATH) else 'w' # If memory file exist, file open mode will be append(a) else write(w)
-		with open(MEM_FILE_PATH, mode) as mem_file: # Open file
-			mem_file.write(str(makeit_dict(memory)) + '\n') # Write memory in only one line
+		conn = r.connect("localhost", 28015)
+		try:
+			r.db('test').table_create('hearing_memory').run(conn)
+		except:
+			pass
+		try:
+			r.db('test').table_create('hearing_timestamps').run(conn)
+		except:
+			pass
 
-		timestamp = Timestamp(starting_time.strftime("%Y-%m-%d %H:%M:%S.%f"), ending_time.strftime("%Y-%m-%d %H:%M:%S.%f")) # Create an object from Timestamp class
-		mode = 'a' if os.path.exists(TSTP_FILE_PATH) else 'w' # If timestamp file exist, file open mode will be append(a) else write(w)
-		with open(TSTP_FILE_PATH, mode) as tstp_file: # Open file
-			tstp_file.write(str(makeit_dict(timestamp)) + '\n') # Write timestamp in only one line
+		#memory = Memory(starting_time.strftime("%Y-%m-%d %H:%M:%S.%f"), ending_time.strftime("%Y-%m-%d %H:%M:%S.%f"), data) # Create an object from Memory class
+		#memory = makeit_dict(memory)
+
+		r.db('test').table("hearing_memory").insert([
+			{ "starting_time": starting_time.strftime("%Y-%m-%d %H:%M:%S.%f"),
+			  "ending_time": ending_time.strftime("%Y-%m-%d %H:%M:%S.%f"),
+			  "data": r.binary(data)
+			}
+		]).run(conn)
+
+		#timestamp = Timestamp(starting_time.strftime("%Y-%m-%d %H:%M:%S.%f"), ending_time.strftime("%Y-%m-%d %H:%M:%S.%f")) # Create an object from Timestamp class
+		#timestamp = makeit_dict(timestamp)
+
+		r.db('test').table("hearing_timestamps").insert([
+			{ "starting_time": starting_time.strftime("%Y-%m-%d %H:%M:%S.%f"),
+			  "ending_time": ending_time.strftime("%Y-%m-%d %H:%M:%S.%f")
+			}
+		]).run(conn)
+
+		conn.close()
 
 	# Read a memory function
 	@staticmethod

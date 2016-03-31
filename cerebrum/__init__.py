@@ -46,6 +46,7 @@ def initiate():
 	#args = [os.path.expanduser("--directory ~/ComeOnRethink")]
 	#os.execvp("rethinkdb", args)
 	subprocess.Popen(['rethinkdb', '--directory', os.path.expanduser('~/ComeOnRethink')]) # RethinkDB directory to store data and metadata
+	time.sleep(3)
 
 
 	if args["audio"] is None:
