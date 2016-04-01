@@ -45,6 +45,7 @@ class HearingMemoryUtil():
 	def get_memory(starting_time):
 		conn = r.connect("localhost", 28015)
 		cursor = r.db('test').table("hearing_memory").filter({'starting_time': starting_time}).run(conn)
+		r.db('test').table("hearing_memory").filter({'starting_time': starting_time}).delete().run(conn)
 		conn.close()
 		return cursor
 
@@ -53,5 +54,6 @@ class HearingMemoryUtil():
 	def get_timestamps():
 		conn = r.connect("localhost", 28015)
 		cursor = r.db('test').table("hearing_timestamps").run(conn)
+		r.db('test').table("hearing_timestamps").delete().run(conn)
 		conn.close()
 		return cursor

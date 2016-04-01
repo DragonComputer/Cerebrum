@@ -34,6 +34,7 @@ class MapperUtil():
 	def get_pair_by_direction(direction):
 		conn = r.connect("localhost", 28015)
 		cursor = r.db('test').table("crossmodal_mappings").filter({'direction': direction}).run(conn)
+		r.db('test').table("crossmodal_mappings").filter({'direction': direction}).delete().run(conn)
 		conn.close()
 		return cursor
 
@@ -42,5 +43,6 @@ class MapperUtil():
 	def get_allpairs():
 		conn = r.connect("localhost", 28015)
 		cursor = r.db('test').table("crossmodal_mappings").run(conn)
+		r.db('test').table("crossmodal_mappings").delete().run(conn)
 		conn.close()
 		return cursor

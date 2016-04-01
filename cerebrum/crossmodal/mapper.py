@@ -30,24 +30,9 @@ class MapperStarters():
 			vision_timestamps = VisionMemoryUtil.get_timestamps() # Get vision timestamps starting from 0th line
 			if not vision_timestamps:
 				continue
-			pairs =  MapperUtil.get_allpairs() # Get all pairs
-			pairs = list(pairs)
-			last_pair = None
-			if pairs: # Check if Pairs file exists or not
-				for pair in reversed(pairs): # Reverse pairs
-					if pair['direction'] == "H2V" or pair['direction'] == "V2H": # Is pair related with HV?
-						last_pair = pair # Get latest pair from file
-			if last_pair is None: # If last pair is None
-				last_pair = {} # Create a fake one
-				last_pair['timestamp1'] = 0 # Assign lowest values to timestamps
-				last_pair['timestamp2'] = 0 # Assign lowest values to timestamps
 
 			# Cheking all possible combinations for overlapping --- http://stackoverflow.com/questions/35644301/checking-two-time-intervals-are-overlapping-or-not
 			for (i1,interval1),(i2,interval2) in itertools.product(enumerate(hearing_timestamps),enumerate(vision_timestamps)): # Cartesian product of enumareted input iterables
-				if interval1['starting_time'] < last_pair['timestamp1'] or interval1['starting_time'] < last_pair['timestamp2']: # If current hearing timestamp is earlier than last pair
-					continue # Then continue
-				if interval2['starting_time'] < last_pair['timestamp1'] or interval2['starting_time'] < last_pair['timestamp2']: # If current vision timestamp is earlier than last pair
-					continue # Then continoue
 				if MapperStarters.overlap(interval1,interval2): # If interval1 and interval2 is overlapping
 					MapperUtil.add_pair(interval1['starting_time'], interval2['starting_time'], "H2V") # Write a H2V pair
 					MapperUtil.add_pair(interval2['starting_time'], interval1['starting_time'], "V2H") # Write a V2H pair
@@ -63,24 +48,9 @@ class MapperStarters():
 			language_timestamps = LanguageMemoryUtil.get_timestamps() # Get language timestamps starting from 0th line
 			if not language_timestamps:
 				continue
-			pairs =  MapperUtil.get_allpairs() # Get all pairs
-			last_pair = None
-			pairs = list(pairs)
-			if pairs: # Check if Pairs file exists or not
-				for pair in reversed(pairs): # Reverse pairs
-					if pair['direction'] == "H2L" or pair['direction'] == "L2H": # Is pair related with HL?
-						last_pair = pair # Get latest pair from file
-			if last_pair is None: # If last pair is None
-				last_pair = {} # Create a fake one
-				last_pair['timestamp1'] = 0 # Assign lowest values to timestamps
-				last_pair['timestamp2'] = 0 # Assign lowest values to timestamps
 
 			# Cheking all possible combinations for overlapping --- http://stackoverflow.com/questions/35644301/checking-two-time-intervals-are-overlapping-or-not
 			for (i1,interval1),(i2,interval2) in itertools.product(enumerate(hearing_timestamps),enumerate(language_timestamps)): # Cartesian product of enumareted input iterables
-				if interval1['starting_time'] < last_pair['timestamp1'] or interval1['starting_time'] < last_pair['timestamp2']: # If current hearing timestamp is earlier than last pair
-					continue # Then continue
-				if interval2['starting_time'] < last_pair['timestamp1'] or interval2['starting_time'] < last_pair['timestamp2']: # If current language timestamp is earlier than last pair
-					continue # Then continoue
 				if MapperStarters.overlap(interval1,interval2): # If interval1 and interval2 is overlapping
 					MapperUtil.add_pair(interval1['starting_time'], interval2['starting_time'], "H2L") # Write a H2L pair
 					MapperUtil.add_pair(interval2['starting_time'], interval1['starting_time'], "L2H") # Write a L2H pair
@@ -96,24 +66,9 @@ class MapperStarters():
 			language_timestamps = LanguageMemoryUtil.get_timestamps() # Get language timestamps starting from 0th line
 			if not language_timestamps:
 				continue
-			pairs =  MapperUtil.get_allpairs() # Get all pairs
-			last_pair = None
-			pairs = list(pairs)
-			if pairs: # Check if Pairs file exists or not
-				for pair in reversed(pairs): # Reverse pairs
-					if pair['direction'] == "V2L" or pair['direction'] == "L2V": # Is pair related with VL?
-						last_pair = pair # Get latest pair from file
-			if last_pair is None: # If last pair is None
-				last_pair = {} # Create a fake one
-				last_pair['timestamp1'] = 0 # Assign lowest values to timestamps
-				last_pair['timestamp2'] = 0 # Assign lowest values to timestamps
 
 			# Cheking all possible combinations for overlapping --- http://stackoverflow.com/questions/35644301/checking-two-time-intervals-are-overlapping-or-not
 			for (i1,interval1),(i2,interval2) in itertools.product(enumerate(vision_timestamps),enumerate(language_timestamps)): # Cartesian product of enumareted input iterables
-				if interval1['starting_time'] < last_pair['timestamp1'] or interval1['starting_time'] < last_pair['timestamp2']: # If current vision timestamp is earlier than last pair
-					continue # Then continue
-				if interval2['starting_time'] < last_pair['timestamp1'] or interval2['starting_time'] < last_pair['timestamp2']: # If current language timestamp is earlier than last pair
-					continue # Then continoue
 				if MapperStarters.overlap(interval1,interval2): # If interval1 and interval2 is overlapping
 					MapperUtil.add_pair(interval1['starting_time'], interval2['starting_time'], "V2L") # Write a V2L pair
 					MapperUtil.add_pair(interval2['starting_time'], interval1['starting_time'], "L2V") # Write a L2V pair

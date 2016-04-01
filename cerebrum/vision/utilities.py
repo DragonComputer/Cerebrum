@@ -47,6 +47,7 @@ class VisionMemoryUtil():
 	def get_memory(starting_time):
 		conn = r.connect("localhost", 28015)
 		cursor = r.db('test').table("vision_memory").filter({'starting_time': starting_time}).run(conn)
+		r.db('test').table("vision_memory").filter({'starting_time': starting_time}).delete().run(conn)
 		conn.close()
 		return cursor
 
@@ -55,5 +56,6 @@ class VisionMemoryUtil():
 	def get_timestamps():
 		conn = r.connect("localhost", 28015)
 		cursor = r.db('test').table("vision_timestamps").run(conn)
+		r.db('test').table("vision_timestamps").delete().run(conn)
 		conn.close()
 		return cursor

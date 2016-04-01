@@ -2,10 +2,10 @@ __author__ = 'Mehmet Mert Yildiran, mert.yildiran@bil.omu.edu.tr'
 
 import datetime
 import os.path
-import os
+import shutil
 
 HIPPOCAMPUS = os.path.expanduser("~/Hippocampus/")
 
 if os.path.exists(HIPPOCAMPUS):
-	os.remove(HIPPOCAMPUS)
+	shutil.rmtree(HIPPOCAMPUS)
 	print HIPPOCAMPUS + " is removed"
