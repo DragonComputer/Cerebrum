@@ -67,7 +67,7 @@ Parts of The Cerebrum:
 ![Activation Functions.](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/regression.png)
 
 ### Version
-0.1.69
+0.1.70
 
 ### Installation
 
@@ -111,11 +111,18 @@ cerebrum --video 0 --audio 0
 
 *On the first run Cerebrum will start with a few more seconds delay.*
 
+#### RethinkDB Web Interface
+
+<http://localhost:8080>
+
+<p align="center"><img src="https://www.rethinkdb.com/assets/images/docs/administration/webui.png" width="60%"></p>
+
 ### Dependencies
 
 Cerebrum uses a number of open source libraries to do the job:
 
 * [Python 2.7] - a widely used general-purpose, high-level programming language.
+* [RethinkDB] - is the open-source, scalable database that makes building realtime apps dramatically easier.
 * [PyAudio] - provides Python bindings for PortAudio, the cross platform audio API.
 * [OpenCV] - (Open Source Computer Vision) is a library of programming functions mainly aimed at real-time computer vision.
 * [wave Module] - provides a convenient interface to the WAV sound format.
@@ -137,6 +144,7 @@ Cerebrum uses a number of open source libraries to do the job:
 * [itertools Module] - implements a number of iterator building blocks inspired by constructs from APL, Haskell, and SML. Each has been recast in a form suitable for Python
 
 [Python 2.7]: <https://www.python.org/download/releases/2.7/>
+[RethinkDB]: <https://www.rethinkdb.com/>
 [PyAudio]: <https://people.csail.mit.edu/hubert/pyaudio/r>
 [OpenCV]: <http://opencv.org/r>
 [wave Module]: <https://docs.python.org/2/library/wave.html>

@@ -201,7 +201,3 @@ class VisionPerception():
 
 		cv2.destroyAllWindows() # Close any open windows
 		camera.release() # Release the capture device
-
-# Execute firstly the main program
-if __name__ == "__main__":
-	HearingPerception.start(0,0) # Call start function. Actual MAIN CODE BLOCK

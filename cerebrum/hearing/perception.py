@@ -218,7 +218,3 @@ class HearingPerception():
 		stream.stop_stream() # Stop the stream
 		stream.close() # Close the stream
 		p.terminate() # Terminate the session
-
-# Execute firstly the main program
-if __name__ == "__main__":
-	HearingPerception.start(0,0) # Call start function. Actual MAIN CODE BLOCK
