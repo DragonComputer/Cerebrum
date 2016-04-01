@@ -29,8 +29,6 @@ class VisionMemoryUtil():
 	# Add a memory function
 	@staticmethod
 	def add_memory(amodal, color, starting_time, ending_time):
-
-
 		conn = r.connect("localhost", 28015)
 		r.db('test').table("vision_memory").insert([
 			{ "starting_time": starting_time.strftime("%Y-%m-%d %H:%M:%S.%f"),
@@ -63,17 +61,10 @@ class VisionMemoryUtil():
 
 	# Get timestamps function
 	@staticmethod
-	def get_timestamps(date_day,from_line=0):
-		TSTP_FILE_PATH = os.path.expanduser("~/Hippocampus/vision/memory/" +  date_day + ".tstp") # Path for tstp file
-		timestamp_list = []
-		if os.path.exists(TSTP_FILE_PATH): # If timestamp file exist
-			with open(TSTP_FILE_PATH, 'r') as tstp_file: # Open file
-				for line in tstp_file.readlines()[from_line:]: # Get whole lines starting from that line, default zero
-					timestamp = eval(line) # Evaluate the line, which will return a dictionary
-					timestamp_list.append(timestamp) # Append timestamp to list in order
-				return timestamp_list # Return timestamp list to call
-		else: # If timestamp file doesn't exist
-			return False
+	def get_timestamps():
+		conn = r.connect("localhost", 28015)
+		cursor = r.db('test').table("vision_timestamps").run(conn)
+		return cursor
 
 # Example USAGE block. NOT FUNCTIONAL
 if __name__ == "__main__":

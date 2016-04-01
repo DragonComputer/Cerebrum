@@ -67,7 +67,7 @@ Parts of The Cerebrum:
 ![Activation Functions.](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/regression.png)
 
 ### Version
-0.1.67
+0.1.68
 
 ### Installation
 
@@ -108,6 +108,8 @@ Train with your cam (Not recommended):
 ```Shell
 cerebrum --video 0 --audio 0
 ```
+
+*On the first run Cerebrum will start with a few more seconds delay.*
 
 ### Dependencies
 

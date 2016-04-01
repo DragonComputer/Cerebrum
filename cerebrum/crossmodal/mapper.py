@@ -27,13 +27,14 @@ class MapperStarters():
 		# Loop over the timestamps coming from HEARING & VISION
 		while True:
 			time.sleep(5) # Wait 5 seconds to prevent aggressive loop
-			hearing_timestamps = HearingMemoryUtil.get_timestamps(str(datetime.date.today()), 0) # Get hearing timestamps starting from 0th line
+			hearing_timestamps = HearingMemoryUtil.get_timestamps() # Get hearing timestamps starting from 0th line
 			if not hearing_timestamps:
 				continue
-			vision_timestamps = VisionMemoryUtil.get_timestamps(str(datetime.date.today()), 0) # Get vision timestamps starting from 0th line
+			vision_timestamps = VisionMemoryUtil.get_timestamps() # Get vision timestamps starting from 0th line
 			if not vision_timestamps:
 				continue
-			pairs =  MapperUtil.get_allpairs(str(datetime.date.today())) # Get all pairs
+			pairs =  MapperUtil.get_allpairs() # Get all pairs
+			pairs = list(pairs)
 			last_pair = None
 			if pairs: # Check if Pairs file exists or not
 				for pair in reversed(pairs): # Reverse pairs
@@ -59,13 +60,13 @@ class MapperStarters():
 		# Loop over the timestamps coming from HEARING & LANGUAGE
 		while True:
 			time.sleep(5) # Wait 5 seconds to prevent aggressive loop
-			hearing_timestamps = HearingMemoryUtil.get_timestamps(str(datetime.date.today()), 0) # Get hearing timestamps starting from 0th line
+			hearing_timestamps = HearingMemoryUtil.get_timestamps() # Get hearing timestamps starting from 0th line
 			if not hearing_timestamps:
 				continue
-			language_timestamps = LanguageMemoryUtil.get_timestamps(str(datetime.date.today()), 0) # Get language timestamps starting from 0th line
+			language_timestamps = LanguageMemoryUtil.get_timestamps() # Get language timestamps starting from 0th line
 			if not language_timestamps:
 				continue
-			pairs =  MapperUtil.get_allpairs(str(datetime.date.today())) # Get all pairs
+			pairs =  MapperUtil.get_allpairs() # Get all pairs
 			last_pair = None
 			if pairs: # Check if Pairs file exists or not
 				for pair in reversed(pairs): # Reverse pairs
@@ -91,13 +92,13 @@ class MapperStarters():
 		# Loop over the timestamps coming from VISION & LANGUAGE
 		while True:
 			time.sleep(5) # Wait 5 seconds to prevent aggressive loop
-			vision_timestamps = VisionMemoryUtil.get_timestamps(str(datetime.date.today()), 0) # Get vision timestamps starting from 0th line
+			vision_timestamps = VisionMemoryUtil.get_timestamps() # Get vision timestamps starting from 0th line
 			if not vision_timestamps:
 				continue
-			language_timestamps = LanguageMemoryUtil.get_timestamps(str(datetime.date.today()), 0) # Get language timestamps starting from 0th line
+			language_timestamps = LanguageMemoryUtil.get_timestamps() # Get language timestamps starting from 0th line
 			if not language_timestamps:
 				continue
-			pairs =  MapperUtil.get_allpairs(str(datetime.date.today())) # Get all pairs
+			pairs =  MapperUtil.get_allpairs() # Get all pairs
 			last_pair = None
 			if pairs: # Check if Pairs file exists or not
 				for pair in reversed(pairs): # Reverse pairs

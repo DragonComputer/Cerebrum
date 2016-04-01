@@ -73,6 +73,10 @@ def initiate():
 		r.db('test').table_create('vision_timestamps').run(conn)
 	except:
 		pass
+	try:
+		r.db('test').table_create('crossmodal_mappings').run(conn)
+	except:
+		pass
 	conn.close()
 	time.sleep(3)
 
