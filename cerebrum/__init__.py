@@ -12,6 +12,7 @@ from distutils.dir_util import mkpath
 import os.path
 import os
 import subprocess
+import rethinkdb as r # Rethinkdb Python driver
 
 def initiate():
 	ap = argparse.ArgumentParser() # Define an Argument Parser
@@ -47,7 +48,25 @@ def initiate():
 	#os.execvp("rethinkdb", args)
 	subprocess.Popen(['rethinkdb', '--directory', os.path.expanduser('~/ComeOnRethink')]) # RethinkDB directory to store data and metadata
 	time.sleep(3)
-
+	conn = r.connect("localhost", 28015)
+	try:
+		r.db('test').table_create('hearing_memory').run(conn)
+	except:
+		pass
+	try:
+		r.db('test').table_create('hearing_timestamps').run(conn)
+	except:
+		pass
+	try:
+		r.db('test').table_create('language_memory').run(conn)
+	except:
+		pass
+	try:
+		r.db('test').table_create('language_timestamps').run(conn)
+	except:
+		pass
+	conn.close()
+	time.sleep(3)
 
 	if args["audio"] is None:
 		pass

@@ -30,17 +30,6 @@ class HearingMemoryUtil():
 	def write_memory(data, starting_time, ending_time):
 
 		conn = r.connect("localhost", 28015)
-		try:
-			r.db('test').table_create('hearing_memory').run(conn)
-		except:
-			pass
-		try:
-			r.db('test').table_create('hearing_timestamps').run(conn)
-		except:
-			pass
-
-		#memory = Memory(starting_time.strftime("%Y-%m-%d %H:%M:%S.%f"), ending_time.strftime("%Y-%m-%d %H:%M:%S.%f"), data) # Create an object from Memory class
-		#memory = makeit_dict(memory)
 
 		r.db('test').table("hearing_memory").insert([
 			{ "starting_time": starting_time.strftime("%Y-%m-%d %H:%M:%S.%f"),
@@ -48,9 +37,6 @@ class HearingMemoryUtil():
 			  "data": r.binary(data)
 			}
 		]).run(conn)
-
-		#timestamp = Timestamp(starting_time.strftime("%Y-%m-%d %H:%M:%S.%f"), ending_time.strftime("%Y-%m-%d %H:%M:%S.%f")) # Create an object from Timestamp class
-		#timestamp = makeit_dict(timestamp)
 
 		r.db('test').table("hearing_timestamps").insert([
 			{ "starting_time": starting_time.strftime("%Y-%m-%d %H:%M:%S.%f"),
