@@ -20,14 +20,14 @@ class LanguageAnalyzer():
 	#MAIN CODE BLOCK
 	@staticmethod
 	def start(text_input,language_analysis_stimulated):
-		time.sleep(0.3) # Wait 0.5 seconds for other processes's start
+		#time.sleep(0.3) # Wait 0.5 seconds for other processes's start
 		t0 = time.time() # Initiation time
 		if os.path.exists(text_input): # If captions file exist
 			subs = pysrt.open(text_input) # Get whole subtitles
 			i = 0 # Step counter
 			while i < len(subs): # While step counter less than amount of subtitles
-				time.sleep(0.5) # Wait 0.5 seconds to prevent aggressive loop
-				if (time.time() - t0) > subs[i].start.seconds: # If current time is greater than subtitle's start
+				time.sleep(0.1) # Wait 0.5 seconds to prevent aggressive loop
+				if (time.time() - t0 + 0.8) > subs[i].start.seconds: # If current time is greater than subtitle's start
 					sub_starting_time = datetime.datetime.now() # Starting time of the memory
 					language_analysis_stimulated.value = 1 # Language analysis stimulated
 					sub_ending_time = sub_starting_time + datetime.timedelta(seconds=(subs[i].end - subs[i].start).seconds) # Calculate the ending time by subtitle's delta
@@ -48,7 +48,7 @@ class LanguageAnalyzer():
 						starting_time = ending_time + datetime.timedelta(milliseconds=50)
 					print subs[i].text + "\n" # Print subtitle's text
 					print phones + "\n"
-					print "-------------------------------------------------------------\n"
+					print "_____________________________________________________________________________________\n"
 
 					language_analysis_stimulated.value = 0 # Language analysis NOT stimulated
 					i  += 1 # Increase step counter

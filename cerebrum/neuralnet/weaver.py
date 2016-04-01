@@ -1,22 +1,22 @@
-from __future__ import print_function
-
 __author__ = 'Mehmet Mert Yildiran, mert.yildiran@bil.omu.edu.tr'
 
 import sys # Provides access to some variables used or maintained by the interpreter and to functions that interact strongly with the interpreter. It is always available.
 from cerebrum.crossmodal import MapperUtil # BUILT-IN Crosmodal operations package
 from cerebrum.hearing import HearingPerception, HearingMemoryUtil # BUILT-IN Hearing Memory perception package
 from cerebrum.vision import VisionPerception, VisionMemoryUtil # BUILT-IN Vision Memory operations package
+from cerebrum.language import LanguageAnalyzer, LanguageMemoryUtil # BUILT-IN Language Memory operations package
 import time # Provides various time-related functions.
 import pyaudio
 import cv2 # (Open Source Computer Vision) is a library of programming functions mainly aimed at real-time computer vision.
 import numpy # The fundamental package for scientific computing with Python.
-from cerebrum.neuralnet.datasets import SequentialDataSet
+from pybrain.datasets import SequentialDataSet
 from itertools import cycle
 from pybrain.tools.shortcuts import buildNetwork
 from pybrain.structure.modules import LSTMLayer
 from pybrain.supervised import RPropMinusTrainer
 from sys import stdout
 import matplotlib.pyplot as plt
+import rethinkdb as r # Rethinkdb Python driver
 
 CHUNK = 1024 # Smallest unit of audio. 1024 bytes
 FORMAT = pyaudio.paInt16 # Data format
@@ -41,21 +41,52 @@ class NeuralWeaver():
 						rate=RATE,
 						output=True)
 
-		h2v_net = buildNetwork(2048, 5, 230400, hiddenclass=LSTMLayer, outputbias=False, recurrent=True)
-		data = [1] * 3 + [2] * 3
+		#h2v_net = buildNetwork(2048, 5, 230400, hiddenclass=LSTMLayer, outputbias=False, recurrent=True)
+		#data = [1] * 3 + [2] * 3
 		# Loop over the pairs coming from CROSSMODAL
 		for pair in pairs:
 			   #time.sleep(0.5) # Wait 0.5 seconds to prevent aggressive loop
+			   print pair
+
 			   if pair['direction'] == "H2V":
-					ds = SequentialDataSet(2048, 230400)
+				   print "yes"
+				   print pair['timestamp1']
+
+				   hearing_memory = HearingMemoryUtil.get_memory(pair['timestamp1'])
+				   #print hearing_memory.next()['data']
+				   #chunky_array = numpy.fromstring(hearing_memory.next()['data'], 'int16')
+				   #print chunky_array
+				   stream.write(hearing_memory.next()['data'])
+
+
+				   vision_memory = VisionMemoryUtil.get_memory(pair['timestamp2'])
+				   vision_memory = vision_memory.next()
+
+				   frame_amodal = numpy.fromstring(vision_memory['amodal'], numpy.uint8).reshape(360,640)
+				   cv2.imshow("Frame Threshhold", frame_amodal)
+				   cv2.moveWindow("Frame Threshhold",50,100)
+
+				   frame_color = numpy.fromstring(vision_memory['color'], numpy.uint8).reshape(360,640,3)
+				   cv2.imshow("Frame Delta Colored", frame_color)
+				   cv2.moveWindow("Frame Delta Colored",1200,100)
+				   key = cv2.waitKey(500) & 0xFF
+				   #time.sleep(2.0)
+
+				   '''
+					#ds = SequentialDataSet(2048, 230400)
 					hearing_memory = HearingMemoryUtil.get_memory(pair['timestamp1'])
 					vision_memory = VisionMemoryUtil.get_memory(pair['timestamp2'])
 					if not vision_memory:
 						continue
-					for chunky in hearing_memory['data']:
+					#for mem in hearing_memory:
+					#	print mem
+
+
+					hearing_data = numpy.fromstring((dict(hearing_memory))['data'], 'int16')
+					for chunky in hearing_data:
 						chunky_array = numpy.fromstring(chunky, 'int16')
 						print (chunky_array)
-						ds.addSample(chunky_array, numpy.fromstring(vision_memory['amodal'][0], numpy.uint8))
+						#ds.addSample(chunky_array, numpy.fromstring(vision_memory['amodal'][0], numpy.uint8))
 						stream.write(chunky)
 					#print len(vision_memory['amodal'])
 					for frame in vision_memory['amodal']:
@@ -70,6 +101,7 @@ class NeuralWeaver():
 						cv2.imshow("Frame Delta Colored", frame)
 						cv2.moveWindow("Frame Delta Colored",1200,100)
 						key = cv2.waitKey(1) & 0xFF
+
 
 					trainer = RPropMinusTrainer(h2v_net, dataset=ds)
 					train_errors = [] # save errors for plotting later
@@ -87,3 +119,4 @@ class NeuralWeaver():
 
 					print()
 					print("final error =", train_errors[-1])
+					'''

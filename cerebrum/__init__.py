@@ -6,13 +6,14 @@ from cerebrum.hearing import HearingPerception # Hearing Package
 from cerebrum.vision import VisionPerception # Vision Package
 from cerebrum.language import LanguageAnalyzer # Language Package
 from cerebrum.crossmodal import MapperStarters # Crossmodal Package
-#from cerebrum.neuralnet import NeuralWeaver # NeuralNet Package
+from cerebrum.neuralnet import NeuralWeaver # NeuralNet Package
 import time
 from distutils.dir_util import mkpath
 import os.path
 import os
 import subprocess
 import rethinkdb as r # Rethinkdb Python driver
+import signal
 
 def initiate():
 	ap = argparse.ArgumentParser() # Define an Argument Parser
@@ -30,7 +31,7 @@ def initiate():
 
 	#args = [os.path.expanduser("--directory ~/ComeOnRethink")]
 	#os.execvp("rethinkdb", args)
-	subprocess.Popen(['rethinkdb', '--directory', os.path.expanduser('~/Hippocampus')]) # RethinkDB directory to store data and metadata
+	rethinkdb_process = subprocess.Popen(['rethinkdb', '--directory', os.path.expanduser('~/Hippocampus')]) # RethinkDB directory to store data and metadata
 	time.sleep(3)
 	conn = r.connect("localhost", 28015)
 	try:
@@ -113,10 +114,18 @@ def initiate():
 				args["captions"] = None
 				print "WARNING: Language Analysis process is terminated."
 		if active_perceptions == 0 and not training:
-				#neuralnet_weaver_process = multiprocessing.Process(target=NeuralWeaver.start) # Define neuralnet weaver process
-				#neuralnet_weaver_process.start() # Start neuralnet weaver process
+				neuralnet_weaver_process = multiprocessing.Process(target=NeuralWeaver.start) # Define neuralnet weaver process
+				neuralnet_weaver_process.start() # Start neuralnet weaver process
 				training = 1
 		if training and not neuralnet_weaver_process.is_alive():
-			crossmodal_mapper_process.terminate()
-			print "EXIT: Training is finished."
+			if crossmodal_mapperHV_process.is_alive():
+				crossmodal_mapperHV_process.terminate()
+			if crossmodal_mapperHL_process.is_alive():
+				crossmodal_mapperHL_process.terminate()
+			if crossmodal_mapperVL_process.is_alive():
+				crossmodal_mapperVL_process.terminate()
+			print "Training is finished."
 			break
+
+	os.killpg(os.getpgid(rethinkdb_process.pid), signal.SIGTERM)
+	print "Cerebrum exiting."

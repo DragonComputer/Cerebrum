@@ -27,12 +27,13 @@ class VisionMemoryUtil():
 	# Add a memory function
 	@staticmethod
 	def add_memory(amodal, color, starting_time, ending_time):
+
 		conn = r.connect("localhost", 28015)
 		r.db('test').table("vision_memory").insert([
 			{ "starting_time": starting_time.strftime("%Y-%m-%d %H:%M:%S.%f"),
 			  "ending_time": ending_time.strftime("%Y-%m-%d %H:%M:%S.%f"),
-			  "amodal": r.binary(''.join(amodal)),
-			  "color": r.binary(''.join(color))
+			  "amodal": r.binary(amodal[0]),
+			  "color": r.binary(color[0])
 			}
 		]).run(conn)
 		r.db('test').table("vision_timestamps").insert([
@@ -47,7 +48,7 @@ class VisionMemoryUtil():
 	def get_memory(starting_time):
 		conn = r.connect("localhost", 28015)
 		cursor = r.db('test').table("vision_memory").filter({'starting_time': starting_time}).run(conn)
-		r.db('test').table("vision_memory").filter({'starting_time': starting_time}).delete().run(conn)
+		#r.db('test').table("vision_memory").filter({'starting_time': starting_time}).delete().run(conn)
 		conn.close()
 		return cursor
 
