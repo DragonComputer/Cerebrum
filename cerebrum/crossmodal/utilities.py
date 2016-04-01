@@ -18,9 +18,9 @@ def makeit_dict(obj):
 
 class MapperUtil():
 
-	# Write a pair function
+	# Add a pair function
 	@staticmethod
-	def write_pair(timestamp1, timestamp2, direction):
+	def add_pair(timestamp1, timestamp2, direction):
 		PR_FILE_PATH = os.path.expanduser("~/Hippocampus/crossmodal/mappings/" +  str(datetime.date.today()) + ".pr") # Path for pairs file
 
 		pair = Pair(timestamp1, timestamp2, direction) # Create an object from Pair class
@@ -28,9 +28,9 @@ class MapperUtil():
 		with open(PR_FILE_PATH, mode) as pr_file: # Open file
 			pr_file.write(str(makeit_dict(pair)) + '\n') # Write pair with only one line
 
-	# Read a pair function
+	# Get a pair function
 	@staticmethod
-	def read_pair(date_day,nth_record):
+	def get_pair(date_day,nth_record):
 		PR_FILE_PATH = os.path.expanduser("~/Hippocampus/crossmodal/mappings/" +  date_day + ".pr") # Path for pairs file
 
 		if os.path.exists(PR_FILE_PATH): # If pairs file exist
@@ -41,9 +41,9 @@ class MapperUtil():
 			#raise ValueError('PR file doesn\'t exist!') # Raise a ValueError
 			return False
 
-	# Get pairs function
+	# Get all pairs function
 	@staticmethod
-	def get_pairs(date_day,from_line=0):
+	def get_allpairs(date_day,from_line=0):
 		PR_FILE_PATH = os.path.expanduser("~/Hippocampus/crossmodal/mappings/" +  date_day + ".pr") # Path for pairs file
 		pairs = []
 		if os.path.exists(PR_FILE_PATH): # If pairs file exist

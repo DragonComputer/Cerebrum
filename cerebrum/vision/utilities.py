@@ -2,6 +2,7 @@ __author__ = 'Mehmet Mert Yildiran, mert.yildiran@bil.omu.edu.tr'
 
 import datetime # Supplies classes for manipulating dates and times in both simple and complex ways
 import os.path # The path module suitable for the operating system Python is running on, and therefore usable for local paths
+import rethinkdb as r # Rethinkdb Python driver
 
 # Memory class
 class Memory(object):
@@ -25,25 +26,29 @@ def makeit_dict(obj):
 
 class VisionMemoryUtil():
 
-	# Write a memory function
+	# Add a memory function
 	@staticmethod
-	def write_memory(amodal, color, starting_time, ending_time):
-		MEM_FILE_PATH = os.path.expanduser("~/Hippocampus/vision/memory/" +  str(datetime.date.today()) + ".mem") # Path for mem file
-		TSTP_FILE_PATH = os.path.expanduser("~/Hippocampus/vision/memory/" +  str(datetime.date.today()) + ".tstp") # Path for tstp file
+	def add_memory(amodal, color, starting_time, ending_time):
 
-		memory = Memory(starting_time.strftime("%Y-%m-%d %H:%M:%S.%f"), ending_time.strftime("%Y-%m-%d %H:%M:%S.%f"), amodal, color) # Create an object from Memory class
-		mode = 'a' if os.path.exists(MEM_FILE_PATH) else 'w' # If memory file exist, file open mode will be append(a) else write(w)
-		with open(MEM_FILE_PATH, mode) as mem_file: # Open file
-			mem_file.write(str(makeit_dict(memory)) + '\n') # Write memory in only one line
 
-		timestamp = Timestamp(starting_time.strftime("%Y-%m-%d %H:%M:%S.%f"), ending_time.strftime("%Y-%m-%d %H:%M:%S.%f")) # Create an object from Timestamp class
-		mode = 'a' if os.path.exists(TSTP_FILE_PATH) else 'w' # If timestamp file exist, file open mode will be append(a) else write(w)
-		with open(TSTP_FILE_PATH, mode) as tstp_file: # Open file
-			tstp_file.write(str(makeit_dict(timestamp)) + '\n') # Write timestamp in only one line
+		conn = r.connect("localhost", 28015)
+		r.db('test').table("vision_memory").insert([
+			{ "starting_time": starting_time.strftime("%Y-%m-%d %H:%M:%S.%f"),
+			  "ending_time": ending_time.strftime("%Y-%m-%d %H:%M:%S.%f"),
+			  "amodal": r.binary(''.join(amodal)),
+			  "color": r.binary(''.join(color))
+			}
+		]).run(conn)
+		r.db('test').table("vision_timestamps").insert([
+			{ "starting_time": starting_time.strftime("%Y-%m-%d %H:%M:%S.%f"),
+			  "ending_time": ending_time.strftime("%Y-%m-%d %H:%M:%S.%f")
+			}
+		]).run(conn)
+		conn.close()
 
-	# Read a memory function
+	# Get a memory function
 	@staticmethod
-	def read_memory(date_day,starting_time):
+	def get_memory(date_day,starting_time):
 		MEM_FILE_PATH = os.path.expanduser("~/Hippocampus/vision/memory/" +  date_day + ".mem") # Path for mem file
 		memory_list = []
 		if os.path.exists(MEM_FILE_PATH): # If memory file exist
@@ -56,9 +61,9 @@ class VisionMemoryUtil():
 		else: # If memory file doesn't exist
 			raise ValueError('MEM file doesn\'t exist!') # Raise a ValueError
 
-	# Read timestamps function
+	# Get timestamps function
 	@staticmethod
-	def read_timestamps(date_day,from_line=0):
+	def get_timestamps(date_day,from_line=0):
 		TSTP_FILE_PATH = os.path.expanduser("~/Hippocampus/vision/memory/" +  date_day + ".tstp") # Path for tstp file
 		timestamp_list = []
 		if os.path.exists(TSTP_FILE_PATH): # If timestamp file exist
@@ -72,13 +77,13 @@ class VisionMemoryUtil():
 
 # Example USAGE block. NOT FUNCTIONAL
 if __name__ == "__main__":
-	timestamp_list = VisionMemoryUtil.read_timestamps(str(datetime.date.today()))
+	timestamp_list = VisionMemoryUtil.get_timestamps(str(datetime.date.today()))
 	#for timestamp in timestamp_list:
 		#print "--------------------------"
 		#print timestamp['starting_time']
 		#print timestamp['ending_time']
 	print len(timestamp_list)
-	memory = VisionMemoryUtil.read_memory(str(datetime.date.today()), timestamp_list[-3]['starting_time'])
+	memory = VisionMemoryUtil.get_memory(str(datetime.date.today()), timestamp_list[-3]['starting_time'])
 	print len(memory['amodal'])
 	print len(memory['color'])
 

@@ -208,8 +208,8 @@ class HearingPerception():
 				hearing_perception_stimulated.value = 0 # Hearing perception NOT stimulated
 
 				memory_data = ''.join(memory_data)
-				#HearingMemoryUtil.write_memory(memory_data, starting_time, ending_time)
-				process3 = multiprocessing.Process(target=HearingMemoryUtil.write_memory, args=(memory_data, starting_time, ending_time)) # Define write memory process
+				#HearingMemoryUtil.add_memory(memory_data, starting_time, ending_time)
+				process3 = multiprocessing.Process(target=HearingMemoryUtil.add_memory, args=(memory_data, starting_time, ending_time)) # Define write memory process
 				process3.start() # Start write memory process
 				memory_data = [] # Empty memory data
 

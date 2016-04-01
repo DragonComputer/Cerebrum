@@ -27,13 +27,13 @@ class MapperStarters():
 		# Loop over the timestamps coming from HEARING & VISION
 		while True:
 			time.sleep(5) # Wait 5 seconds to prevent aggressive loop
-			hearing_timestamps = HearingMemoryUtil.read_timestamps(str(datetime.date.today()), 0) # Get hearing timestamps starting from 0th line
+			hearing_timestamps = HearingMemoryUtil.get_timestamps(str(datetime.date.today()), 0) # Get hearing timestamps starting from 0th line
 			if not hearing_timestamps:
 				continue
-			vision_timestamps = VisionMemoryUtil.read_timestamps(str(datetime.date.today()), 0) # Get vision timestamps starting from 0th line
+			vision_timestamps = VisionMemoryUtil.get_timestamps(str(datetime.date.today()), 0) # Get vision timestamps starting from 0th line
 			if not vision_timestamps:
 				continue
-			pairs =  MapperUtil.get_pairs(str(datetime.date.today())) # Get all pairs
+			pairs =  MapperUtil.get_allpairs(str(datetime.date.today())) # Get all pairs
 			last_pair = None
 			if pairs: # Check if Pairs file exists or not
 				for pair in reversed(pairs): # Reverse pairs
@@ -51,21 +51,21 @@ class MapperStarters():
 				if interval2['starting_time'] < last_pair['timestamp1'] or interval2['starting_time'] < last_pair['timestamp2']: # If current vision timestamp is earlier than last pair
 					continue # Then continoue
 				if MapperStarters.overlap(interval1,interval2): # If interval1 and interval2 is overlapping
-					MapperUtil.write_pair(interval1['starting_time'], interval2['starting_time'], "H2V") # Write a H2V pair
-					MapperUtil.write_pair(interval2['starting_time'], interval1['starting_time'], "V2H") # Write a V2H pair
+					MapperUtil.add_pair(interval1['starting_time'], interval2['starting_time'], "H2V") # Write a H2V pair
+					MapperUtil.add_pair(interval2['starting_time'], interval1['starting_time'], "V2H") # Write a V2H pair
 
 	@staticmethod
 	def startHL():
 		# Loop over the timestamps coming from HEARING & LANGUAGE
 		while True:
 			time.sleep(5) # Wait 5 seconds to prevent aggressive loop
-			hearing_timestamps = HearingMemoryUtil.read_timestamps(str(datetime.date.today()), 0) # Get hearing timestamps starting from 0th line
+			hearing_timestamps = HearingMemoryUtil.get_timestamps(str(datetime.date.today()), 0) # Get hearing timestamps starting from 0th line
 			if not hearing_timestamps:
 				continue
-			language_timestamps = LanguageMemoryUtil.read_timestamps(str(datetime.date.today()), 0) # Get language timestamps starting from 0th line
+			language_timestamps = LanguageMemoryUtil.get_timestamps(str(datetime.date.today()), 0) # Get language timestamps starting from 0th line
 			if not language_timestamps:
 				continue
-			pairs =  MapperUtil.get_pairs(str(datetime.date.today())) # Get all pairs
+			pairs =  MapperUtil.get_allpairs(str(datetime.date.today())) # Get all pairs
 			last_pair = None
 			if pairs: # Check if Pairs file exists or not
 				for pair in reversed(pairs): # Reverse pairs
@@ -83,21 +83,21 @@ class MapperStarters():
 				if interval2['starting_time'] < last_pair['timestamp1'] or interval2['starting_time'] < last_pair['timestamp2']: # If current language timestamp is earlier than last pair
 					continue # Then continoue
 				if MapperStarters.overlap(interval1,interval2): # If interval1 and interval2 is overlapping
-					MapperUtil.write_pair(interval1['starting_time'], interval2['starting_time'], "H2L") # Write a H2L pair
-					MapperUtil.write_pair(interval2['starting_time'], interval1['starting_time'], "L2H") # Write a L2H pair
+					MapperUtil.add_pair(interval1['starting_time'], interval2['starting_time'], "H2L") # Write a H2L pair
+					MapperUtil.add_pair(interval2['starting_time'], interval1['starting_time'], "L2H") # Write a L2H pair
 
 	@staticmethod
 	def startVL():
 		# Loop over the timestamps coming from VISION & LANGUAGE
 		while True:
 			time.sleep(5) # Wait 5 seconds to prevent aggressive loop
-			vision_timestamps = VisionMemoryUtil.read_timestamps(str(datetime.date.today()), 0) # Get vision timestamps starting from 0th line
+			vision_timestamps = VisionMemoryUtil.get_timestamps(str(datetime.date.today()), 0) # Get vision timestamps starting from 0th line
 			if not vision_timestamps:
 				continue
-			language_timestamps = LanguageMemoryUtil.read_timestamps(str(datetime.date.today()), 0) # Get language timestamps starting from 0th line
+			language_timestamps = LanguageMemoryUtil.get_timestamps(str(datetime.date.today()), 0) # Get language timestamps starting from 0th line
 			if not language_timestamps:
 				continue
-			pairs =  MapperUtil.get_pairs(str(datetime.date.today())) # Get all pairs
+			pairs =  MapperUtil.get_allpairs(str(datetime.date.today())) # Get all pairs
 			last_pair = None
 			if pairs: # Check if Pairs file exists or not
 				for pair in reversed(pairs): # Reverse pairs
@@ -115,5 +115,5 @@ class MapperStarters():
 				if interval2['starting_time'] < last_pair['timestamp1'] or interval2['starting_time'] < last_pair['timestamp2']: # If current language timestamp is earlier than last pair
 					continue # Then continoue
 				if MapperStarters.overlap(interval1,interval2): # If interval1 and interval2 is overlapping
-					MapperUtil.write_pair(interval1['starting_time'], interval2['starting_time'], "V2L") # Write a V2L pair
-					MapperUtil.write_pair(interval2['starting_time'], interval1['starting_time'], "L2V") # Write a L2V pair
+					MapperUtil.add_pair(interval1['starting_time'], interval2['starting_time'], "V2L") # Write a V2L pair
+					MapperUtil.add_pair(interval2['starting_time'], interval1['starting_time'], "L2V") # Write a L2V pair

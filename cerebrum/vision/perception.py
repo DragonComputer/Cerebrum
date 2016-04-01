@@ -160,7 +160,7 @@ class VisionPerception():
 						vision_perception_stimulated.value = 0 # Vision perception NOT stimulated
 
 						if memory_data_thresh and memory_data_frameDeltaColored:
-							process4 = multiprocessing.Process(target=VisionMemoryUtil.write_memory, args=(memory_data_thresh, memory_data_frameDeltaColored, starting_time, ending_time)) # Define write memory process
+							process4 = multiprocessing.Process(target=VisionMemoryUtil.add_memory, args=(memory_data_thresh, memory_data_frameDeltaColored, starting_time, ending_time)) # Define write memory process
 							process4.start() # Start write memory process
 						memory_data_thresh = []
 						memory_data_frameDeltaColored = []

@@ -25,30 +25,26 @@ def makeit_dict(obj):
 
 class HearingMemoryUtil():
 
-	# Write a memory function
+	# Add a memory function
 	@staticmethod
-	def write_memory(data, starting_time, ending_time):
-
+	def add_memory(data, starting_time, ending_time):
 		conn = r.connect("localhost", 28015)
-
 		r.db('test').table("hearing_memory").insert([
 			{ "starting_time": starting_time.strftime("%Y-%m-%d %H:%M:%S.%f"),
 			  "ending_time": ending_time.strftime("%Y-%m-%d %H:%M:%S.%f"),
 			  "data": r.binary(data)
 			}
 		]).run(conn)
-
 		r.db('test').table("hearing_timestamps").insert([
 			{ "starting_time": starting_time.strftime("%Y-%m-%d %H:%M:%S.%f"),
 			  "ending_time": ending_time.strftime("%Y-%m-%d %H:%M:%S.%f")
 			}
 		]).run(conn)
-
 		conn.close()
 
-	# Read a memory function
+	# Get a memory function
 	@staticmethod
-	def read_memory(date_day,starting_time):
+	def get_memory(date_day,starting_time):
 		MEM_FILE_PATH = os.path.expanduser("~/Hippocampus/hearing/memory/" +  date_day + ".mem") # Path for mem file
 		memory_list = []
 		if os.path.exists(MEM_FILE_PATH): # If memory file exist
@@ -61,9 +57,9 @@ class HearingMemoryUtil():
 		else: # If memory file doesn't exist
 			raise ValueError('MEM file doesn\'t exist!') # Raise a ValueError
 
-	# Read timestamps function
+	# Get timestamps function
 	@staticmethod
-	def read_timestamps(date_day,from_line=0):
+	def get_timestamps(date_day,from_line=0):
 		TSTP_FILE_PATH = os.path.expanduser("~/Hippocampus/hearing/memory/" +  date_day + ".tstp") # Path for tstp file
 		timestamp_list = []
 		if os.path.exists(TSTP_FILE_PATH): # If timestamp file exist
@@ -77,13 +73,13 @@ class HearingMemoryUtil():
 
 # Example USAGE block. NOT FUNCTIONAL
 if __name__ == "__main__":
-	timestamp_list = HearingMemoryUtil().read_timestamps(str(datetime.date.today()))
+	timestamp_list = HearingMemoryUtil().get_timestamps(str(datetime.date.today()))
 	#for timestamp in timestamp_list:
 		#print "--------------------------"
 		#print timestamp['starting_time']
 		#print timestamp['ending_time']
 	print len(timestamp_list)
-	memory = HearingMemoryUtil().read_memory(str(datetime.date.today()), timestamp_list[-3]['starting_time'])
+	memory = HearingMemoryUtil().get_memory(str(datetime.date.today()), timestamp_list[-3]['starting_time'])
 	print len(memory['data'])
 
 	#CHUNK = 1024

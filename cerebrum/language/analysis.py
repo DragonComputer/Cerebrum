@@ -43,7 +43,7 @@ class LanguageAnalyzer():
 					for word_inphones in phone_groups:
 						ending_time = starting_time + phone_duration * len(word_inphones.split())
 						if ending_time <= sub_ending_time and word_inphones != "":
-							process5 = multiprocessing.Process(target=LanguageMemoryUtil.write_memory, args=(word_inphones, starting_time, ending_time)) # Define write memory process
+							process5 = multiprocessing.Process(target=LanguageMemoryUtil.add_memory, args=(word_inphones, starting_time, ending_time)) # Define write memory process
 							process5.start() # Start write memory process
 						starting_time = ending_time + datetime.timedelta(milliseconds=50)
 					print subs[i].text + "\n" # Print subtitle's text

@@ -30,7 +30,7 @@ class NeuralWeaver():
 	# MAIN CODE BLOCK
 	@staticmethod
 	def start():
-		pairs = MapperUtil.get_pairs(str(datetime.date.today()), 0) # Get pairs starting from 0th line
+		pairs = MapperUtil.get_allpairs(str(datetime.date.today()), 0) # Get pairs starting from 0th line
 		if not pairs:
 			print ("No pairs found.")
 			sys.exit()
@@ -50,8 +50,8 @@ class NeuralWeaver():
 			   #time.sleep(0.5) # Wait 0.5 seconds to prevent aggressive loop
 			   if pair['direction'] == "H2V":
 					ds = SequentialDataSet(2048, 230400)
-					hearing_memory = HearingMemoryUtil.read_memory(str(datetime.date.today()),pair['timestamp1'])
-					vision_memory = VisionMemoryUtil.read_memory(str(datetime.date.today()),pair['timestamp2'])
+					hearing_memory = HearingMemoryUtil.get_memory(str(datetime.date.today()),pair['timestamp1'])
+					vision_memory = VisionMemoryUtil.get_memory(str(datetime.date.today()),pair['timestamp2'])
 					if not vision_memory:
 						continue
 					for chunky in hearing_memory['data']:
