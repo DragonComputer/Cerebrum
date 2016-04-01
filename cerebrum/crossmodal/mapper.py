@@ -1,8 +1,5 @@
 __author__ = 'Mehmet Mert Yildiran, mert.yildiran@bil.omu.edu.tr'
 
-import datetime # Supplies classes for manipulating dates and times in both simple and complex ways
-import os.path # The path module suitable for the operating system Python is running on, and therefore usable for local paths
-import sys # Provides access to some variables used or maintained by the interpreter and to functions that interact strongly with the interpreter. It is always available.
 from cerebrum.hearing import HearingMemoryUtil # BUILT-IN Hearing Memory operations package
 from cerebrum.vision import VisionMemoryUtil # BUILT-IN Vision Memory operations package
 from cerebrum.language import LanguageMemoryUtil
@@ -68,6 +65,7 @@ class MapperStarters():
 				continue
 			pairs =  MapperUtil.get_allpairs() # Get all pairs
 			last_pair = None
+			pairs = list(pairs)
 			if pairs: # Check if Pairs file exists or not
 				for pair in reversed(pairs): # Reverse pairs
 					if pair['direction'] == "H2L" or pair['direction'] == "L2H": # Is pair related with HL?
@@ -100,6 +98,7 @@ class MapperStarters():
 				continue
 			pairs =  MapperUtil.get_allpairs() # Get all pairs
 			last_pair = None
+			pairs = list(pairs)
 			if pairs: # Check if Pairs file exists or not
 				for pair in reversed(pairs): # Reverse pairs
 					if pair['direction'] == "V2L" or pair['direction'] == "L2V": # Is pair related with VL?

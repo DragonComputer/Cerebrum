@@ -2,8 +2,6 @@ from __future__ import print_function
 
 __author__ = 'Mehmet Mert Yildiran, mert.yildiran@bil.omu.edu.tr'
 
-import datetime # Supplies classes for manipulating dates and times in both simple and complex ways
-import os.path # The path module suitable for the operating system Python is running on, and therefore usable for local paths
 import sys # Provides access to some variables used or maintained by the interpreter and to functions that interact strongly with the interpreter. It is always available.
 from cerebrum.crossmodal import MapperUtil # BUILT-IN Crosmodal operations package
 from cerebrum.hearing import HearingPerception, HearingMemoryUtil # BUILT-IN Hearing Memory perception package
@@ -30,7 +28,7 @@ class NeuralWeaver():
 	# MAIN CODE BLOCK
 	@staticmethod
 	def start():
-		pairs = MapperUtil.get_allpairs(str(datetime.date.today()), 0) # Get pairs starting from 0th line
+		pairs = MapperUtil.get_allpairs() # Get pairs starting from 0th line
 		if not pairs:
 			print ("No pairs found.")
 			sys.exit()
@@ -50,8 +48,8 @@ class NeuralWeaver():
 			   #time.sleep(0.5) # Wait 0.5 seconds to prevent aggressive loop
 			   if pair['direction'] == "H2V":
 					ds = SequentialDataSet(2048, 230400)
-					hearing_memory = HearingMemoryUtil.get_memory(str(datetime.date.today()),pair['timestamp1'])
-					vision_memory = VisionMemoryUtil.get_memory(str(datetime.date.today()),pair['timestamp2'])
+					hearing_memory = HearingMemoryUtil.get_memory(pair['timestamp1'])
+					vision_memory = VisionMemoryUtil.get_memory(pair['timestamp2'])
 					if not vision_memory:
 						continue
 					for chunky in hearing_memory['data']:

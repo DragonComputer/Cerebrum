@@ -1,7 +1,5 @@
 __author__ = 'Mehmet Mert Yildiran, mert.yildiran@bil.omu.edu.tr'
 
-import datetime # Supplies classes for manipulating dates and times in both simple and complex ways
-import os.path # The path module suitable for the operating system Python is running on, and therefore usable for local paths
 import rethinkdb as r # Rethinkdb Python driver
 
 # Pair class
@@ -33,20 +31,16 @@ class MapperUtil():
 
 	# Get a pair function
 	@staticmethod
-	def get_pair(date_day,nth_record):
-		PR_FILE_PATH = os.path.expanduser("~/Hippocampus/crossmodal/mappings/" +  date_day + ".pr") # Path for pairs file
-
-		if os.path.exists(PR_FILE_PATH): # If pairs file exist
-			with open(PR_FILE_PATH, 'r') as pr_file: # Open file
-				pair = eval(pr_file.readlines()[nth_record]) # Evaluate the line, which will return a dictionary
-				return pair # Return pair to call
-		else: # If pairs file doesn't exist
-			#raise ValueError('PR file doesn\'t exist!') # Raise a ValueError
-			return False
+	def get_pair_by_direction(direction):
+		conn = r.connect("localhost", 28015)
+		cursor = r.db('test').table("crossmodal_mappings").filter({'direction': direction}).run(conn)
+		conn.close()
+		return cursor
 
 	# Get all pairs function
 	@staticmethod
 	def get_allpairs():
 		conn = r.connect("localhost", 28015)
 		cursor = r.db('test').table("crossmodal_mappings").run(conn)
+		conn.close()
 		return cursor

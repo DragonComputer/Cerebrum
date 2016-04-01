@@ -1,7 +1,5 @@
 __author__ = 'Mehmet Mert Yildiran, mert.yildiran@bil.omu.edu.tr'
 
-import datetime # Supplies classes for manipulating dates and times in both simple and complex ways
-import os.path # The path module suitable for the operating system Python is running on, and therefore usable for local paths
 import rethinkdb as r # Rethinkdb Python driver
 
 # Memory class
@@ -46,24 +44,18 @@ class VisionMemoryUtil():
 
 	# Get a memory function
 	@staticmethod
-	def get_memory(date_day,starting_time):
-		MEM_FILE_PATH = os.path.expanduser("~/Hippocampus/vision/memory/" +  date_day + ".mem") # Path for mem file
-		memory_list = []
-		if os.path.exists(MEM_FILE_PATH): # If memory file exist
-			with open(MEM_FILE_PATH, 'r') as mem_file: # Open file
-				for line in mem_file.readlines(): # Get whole lines
-					memory = eval(line) # Evaluate the line, which will return a dictionary
-					if memory['starting_time'] == starting_time: # If current memory's starting time is equal to function's parameter
-						return memory # Return current memory to call
-				return False # Else return False
-		else: # If memory file doesn't exist
-			raise ValueError('MEM file doesn\'t exist!') # Raise a ValueError
+	def get_memory(starting_time):
+		conn = r.connect("localhost", 28015)
+		cursor = r.db('test').table("vision_memory").filter({'starting_time': starting_time}).run(conn)
+		conn.close()
+		return cursor
 
 	# Get timestamps function
 	@staticmethod
 	def get_timestamps():
 		conn = r.connect("localhost", 28015)
 		cursor = r.db('test').table("vision_timestamps").run(conn)
+		conn.close()
 		return cursor
 
 # Example USAGE block. NOT FUNCTIONAL
@@ -74,7 +66,7 @@ if __name__ == "__main__":
 		#print timestamp['starting_time']
 		#print timestamp['ending_time']
 	print len(timestamp_list)
-	memory = VisionMemoryUtil.get_memory(str(datetime.date.today()), timestamp_list[-3]['starting_time'])
+	memory = VisionMemoryUtil.get_memory(timestamp_list[-3]['starting_time'])
 	print len(memory['amodal'])
 	print len(memory['color'])
 

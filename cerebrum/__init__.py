@@ -28,25 +28,9 @@ def initiate():
 
 	active_perceptions = 0
 
-	HEARING_MEM_DIR_PATH = "~/Hippocampus/hearing/memory/"
-	HEARING_TSTP_DIR_PATH = "~/Hippocampus/hearing/memory/"
-	VISION_MEM_DIR_PATH = "~/Hippocampus/vision/memory/"
-	VISION_TSTP_DIR_PATH = "~/Hippocampus/vision/memory/"
-	LANGUAGE_MEM_DIR_PATH = "~/Hippocampus/language/memory/"
-	LANGUAGE_TSTP_DIR_PATH = "~/Hippocampus/language/memory/"
-	PR_DIR_PATH = "~/Hippocampus/crossmodal/mappings/"
-
-	mkpath(os.path.expanduser(HEARING_MEM_DIR_PATH))
-	mkpath(os.path.expanduser(HEARING_TSTP_DIR_PATH))
-	mkpath(os.path.expanduser(VISION_MEM_DIR_PATH))
-	mkpath(os.path.expanduser(VISION_TSTP_DIR_PATH))
-	mkpath(os.path.expanduser(LANGUAGE_MEM_DIR_PATH))
-	mkpath(os.path.expanduser(LANGUAGE_TSTP_DIR_PATH))
-	mkpath(os.path.expanduser(PR_DIR_PATH))
-
 	#args = [os.path.expanduser("--directory ~/ComeOnRethink")]
 	#os.execvp("rethinkdb", args)
-	subprocess.Popen(['rethinkdb', '--directory', os.path.expanduser('~/ComeOnRethink')]) # RethinkDB directory to store data and metadata
+	subprocess.Popen(['rethinkdb', '--directory', os.path.expanduser('~/Hippocampus')]) # RethinkDB directory to store data and metadata
 	time.sleep(3)
 	conn = r.connect("localhost", 28015)
 	try:
