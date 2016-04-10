@@ -17,6 +17,7 @@ from pybrain.supervised import RPropMinusTrainer
 from sys import stdout
 import matplotlib.pyplot as plt
 import rethinkdb as r # Rethinkdb Python driver
+from sklearn import datasets, linear_model
 
 CHUNK = 1024 # Smallest unit of audio. 1024 bytes
 FORMAT = pyaudio.paInt16 # Data format
@@ -49,28 +50,38 @@ class NeuralWeaver():
 			   print pair
 
 			   if pair['direction'] == "H2V":
-				   print "yes"
+				   print "____________________________________________________________\n"
 				   print pair['timestamp1']
 
 				   hearing_memory = HearingMemoryUtil.get_memory(pair['timestamp1'])
+				   hearing_memory = hearing_memory.next()['data']
 				   #print hearing_memory.next()['data']
 				   #chunky_array = numpy.fromstring(hearing_memory.next()['data'], 'int16')
 				   #print chunky_array
-				   stream.write(hearing_memory.next()['data'])
+				   stream.write(hearing_memory)
+
+				   numpy_audio = numpy.fromstring(hearing_memory, numpy.uint8)
+				   print numpy_audio
+				   print "Audio: ",numpy_audio.shape
 
 
 				   vision_memory = VisionMemoryUtil.get_memory(pair['timestamp2'])
 				   vision_memory = vision_memory.next()
 
-				   frame_amodal = numpy.fromstring(vision_memory['amodal'], numpy.uint8).reshape(360,640)
-				   cv2.imshow("Frame Threshhold", frame_amodal)
+				   frame_amodal = numpy.fromstring(vision_memory['amodal'], numpy.uint8)
+				   print "Frame Threshold: ",frame_amodal.shape
+				   cv2.imshow("Frame Threshhold", frame_amodal.reshape(360,640))
 				   cv2.moveWindow("Frame Threshhold",50,100)
 
-				   frame_color = numpy.fromstring(vision_memory['color'], numpy.uint8).reshape(360,640,3)
-				   cv2.imshow("Frame Delta Colored", frame_color)
+				   frame_color = numpy.fromstring(vision_memory['color'], numpy.uint8)
+				   print "Frame Delta Colored: ",frame_color.shape
+				   cv2.imshow("Frame Delta Colored", frame_color.reshape(360,640,3))
 				   cv2.moveWindow("Frame Delta Colored",1200,100)
 				   key = cv2.waitKey(500) & 0xFF
 				   #time.sleep(2.0)
+
+				   regr = linear_model.LinearRegression()
+				   regr.fit(numpy_audio, frame_amodal)
 
 				   '''
 					#ds = SequentialDataSet(2048, 230400)

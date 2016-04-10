@@ -67,7 +67,7 @@ Parts of The Cerebrum:
 ![Activation Functions.](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/regression.png)
 
 ### Version
-0.1.73
+0.1.74
 
 ### Installation
 
