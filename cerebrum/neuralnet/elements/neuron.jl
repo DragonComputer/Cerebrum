@@ -1,36 +1,36 @@
 global neurons = []
 
 type Neuron
-	dendritic_spines::Dict
-	axon_terminals::Dict
+	connections::Array
 	potential::Int
-	create_dendritic_spines::Function
+	error::Int
 
 	function Neuron(arg1,arg2,arg3)
-		obj = new(arg1,arg2,arg3)
-		push!(neurons, obj)
+		self = new(arg1,arg2,arg3)
+		push!(neurons, self)
 	end
 
+end
 
-	function create_dendritic_spines(obj::Neuron)
-		for neuron in neurons[length(obj::Neuron.dendritic_spines)]
-			if object_id(neuron) != object_id(obj::Neuron)
-				obj::Neuron.dendritic_spines[object_id(neuron)] = 1
-			end
-		end
-	end
-
-	function create_axon_terminals(obj::Neuron)
-		for neuron in neurons[length(obj::Neuron.axon_terminals)]
-			if object_id(neuron) != object_id(obj::Neuron)
-				obj::Neuron.dendritic_spines[object_id(neuron)] = 1
-			end
-		end
-	end
-
-	function activate(obj::Neuron)
-		while true
-			sleep(2)
+function fully_connect(self)
+	for neuron in neurons
+		if object_id(neuron) != object_id(self)
+			push!(self.connections, rand(1:100)/100)
 		end
 	end
 end
+
+function Build()
+	for i = 1:10000
+		Neuron([],0,0)
+	end
+	println(length(neurons), " neuron created.")
+	n = 0
+	for neuron in neurons
+		n += 1
+		fully_connect(neuron)
+		println(n)
+	end
+end
+
+Build()

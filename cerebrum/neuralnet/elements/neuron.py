@@ -14,29 +14,24 @@ class Neuron():
 	neurons = []
 
 	def __init__(self):
-		self.dendritic_spines = {}
-		self.axon_terminals = {}
+		self.connections = []
 		self.potential = 0
-		#self.create_dendritic_spines()
+		self.error = 0
+		#self.create_connections()
 		#self.create_axon_terminals()
 		Neuron.neurons.append(self)
-		self.thread = Thread(target = self.activate)
-		self.thread.start()
+		#self.thread = Thread(target = self.activate)
+		#self.thread.start()
 
-	def create_dendritic_spines(self):
-		for neuron in Neuron.neurons[len(self.dendritic_spines):]:
+	def fully_connect(self):
+		for neuron in Neuron.neurons[len(self.connections):]:
 			if id(neuron) != id(self):
-				self.dendritic_spines[id(neuron)] = random.uniform(0.0, 1.0)
-
-	def create_axon_terminals(self):
-		for neuron in Neuron.neurons[len(self.axon_terminals):]:
-			if id(neuron) != id(self):
-				self.axon_terminals[id(neuron)] = random.uniform(0.0, 1.0)
+				self.connections.append(round(random.uniform(0.1, 1.0), 10))
 
 	def activate(self):
 		while True:
 			'''
-			for dendritic_spine in self.dendritic_spines:
+			for dendritic_spine in self.connections:
 				if dendritic_spine.axon_terminal is not None:
 					dendritic_spine.potential = dendritic_spine.axon_terminal.potential
 					print dendritic_spine.potential
@@ -49,8 +44,8 @@ class Neuron():
 			pass
 
 			'''
-			if abs(len(Neuron.neurons) - len(self.dendritic_spines) + 1) > 0:
-				self.create_dendritic_spines()
+			if abs(len(Neuron.neurons) - len(self.connections) + 1) > 0:
+				self.create_connections()
 
 			if abs(len(Neuron.neurons) - len(self.axon_terminals) + 1) > 0:
 				self.create_axon_terminals()
@@ -59,7 +54,15 @@ class Neuron():
 class Build():
 
 	def __init__(self):
-		for i in range(1000):
+		for i in range(10000):
 			Neuron()
-		map(lambda x: x.create_dendritic_spines(),Neuron.neurons)
-		map(lambda x: x.create_axon_terminals(),Neuron.neurons)
+		print "10000 neurons created."
+		n = 0
+		for neuron in Neuron.neurons:
+			n += 1
+			neuron.fully_connect()
+			print n
+		#map(lambda x: x.create_connections(),Neuron.neurons)
+		#map(lambda x: x.create_axon_terminals(),Neuron.neurons)
+
+Build()
