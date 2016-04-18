@@ -43,6 +43,8 @@ class NeuralWeaver():
 						rate=RATE,
 						output=True)
 
+		elm = None
+
 		#h2v_net = buildNetwork(2048, 5, 230400, hiddenclass=LSTMLayer, outputbias=False, recurrent=True)
 		#data = [1] * 3 + [2] * 3
 		# Loop over the pairs coming from CROSSMODAL
@@ -62,8 +64,9 @@ class NeuralWeaver():
 				   stream.write(hearing_memory)
 
 				   numpy_audio = numpy.fromstring(hearing_memory, numpy.uint8)
-				   print numpy_audio
+				   #print numpy_audio
 				   print "Audio: ",numpy_audio.shape
+				   #print numpy.transpose(numpy_audio.reshape((numpy_audio.shape[0],1))).shape
 
 
 				   vision_memory = VisionMemoryUtil.get_memory(pair['timestamp2'])
@@ -81,13 +84,21 @@ class NeuralWeaver():
 				   key = cv2.waitKey(500) & 0xFF
 				   #time.sleep(2.0)
 
-				   for chunk in numpy.split(numpy_audio, int(numpy_audio.shape[0] / 1024)):
-					   elm = ELM(1,1)
-					   elm.add_neurons(20, "sigm")
-					   elm.add_neurons(10, "rbf_l2")
-					   elm.train(numpy_audio, frame_amodal, "LOO")
-					   print elm.predict(numpy_audio)
-
+				   #for chunk in numpy.split(numpy_audio, int(numpy_audio.shape[0] / 1024)):
+				   X = numpy.transpose(numpy_audio.reshape((numpy_audio.shape[0],1)))
+				   T = numpy.transpose(frame_amodal.reshape((frame_amodal.shape[0],1)))
+				   X = X.astype(numpy.float32, copy=False)
+				   T = T.astype(numpy.float32, copy=False)
+				   X[0] = X[0] / X[0].max()
+				   T[0] = T[0] / T[0].max()
+				   print X.shape
+				   print T.shape
+				   elm = ELM(X.shape[1],T.shape[1])
+				   elm.add_neurons(20, "sigm")
+				   elm.train(X, T, "LOO")
+				   print elm.predict(X).shape
+				   cv2.imshow("Result", numpy.transpose(elm.predict(X)).reshape(360,640))
+				   cv2.moveWindow("Result",50,500)
 
 				   #regr = linear_model.LinearRegression()
 				   #regr.fit(numpy_audio, frame_amodal)

@@ -1,9 +1,9 @@
 global neurons = []
 
 type Neuron
-	connections::Array
-	potential::Int
-	error::Int
+	connections::Dict{UInt64,Float16}
+	potential::Float16
+	error::Float16
 
 	function Neuron(arg1,arg2,arg3)
 		self = new(arg1,arg2,arg3)
@@ -15,21 +15,40 @@ end
 function fully_connect(self)
 	for neuron in neurons
 		if object_id(neuron) != object_id(self)
-			push!(self.connections, rand(1:100)/100)
+			self.connections[object_id(neuron)] = rand(1:100)/100
+			#push!(self.connections, rand(1:100)/100)
 		end
+	end
+end
+
+function partially_connect(self)
+	if isempty(self.connections)
+		neuron_count = length(neurons)
+		for neuron in neurons
+			if object_id(neuron) != object_id(self)
+				if rand(1:neuron_count/100) == 1
+					self.connections[object_id(neuron)] = rand(1:100)/100
+					#push!(self.connections, rand(1:100)/100)
+				end
+			end
+		end
+		println("Neuron ID: ",object_id(self))
+		println("    Potential: ",self.potential)
+		println("    Error: ",self.error)
+		println("    Connections: ",length(self.connections))
 	end
 end
 
 function Build()
 	for i = 1:10000
-		Neuron([],0,0)
+		Neuron(Dict(),0.0,0.0)
 	end
-	println(length(neurons), " neuron created.")
+	println(length(neurons), " neurons created.")
 	n = 0
-	for neuron in neurons
+	@parallel for neuron in neurons
 		n += 1
-		fully_connect(neuron)
-		println(n)
+		partially_connect(neuron)
+		println("Counter: ",n)
 	end
 end
 

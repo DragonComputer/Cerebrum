@@ -1,7 +1,10 @@
 import random
 import itertools
 import time
+import signal
 from threading import Thread
+from multiprocessing import Pool
+import multiprocessing
 
 POTENTIAL_RANGE = 110000 # Resting potential: -70 mV Membrane potential range: +40 mV to -70 mV --- Difference: 110 mV = 110000 microVolt --- https://en.wikipedia.org/wiki/Membrane_potential
 ACTION_POTENTIAL = 15000 # Resting potential: -70 mV Action potential: -55 mV --- Difference: 15mV = 15000 microVolt --- https://faculty.washington.edu/chudler/ap.html
@@ -20,8 +23,9 @@ class Neuron():
 		#self.create_connections()
 		#self.create_axon_terminals()
 		Neuron.neurons.append(self)
-		#self.thread = Thread(target = self.activate)
+		self.thread = Thread(target = self.activate)
 		#self.thread.start()
+		#self.process = multiprocessing.Process(target=self.activate)
 
 	def fully_connect(self):
 		for neuron in Neuron.neurons[len(self.connections):]:
@@ -29,15 +33,16 @@ class Neuron():
 				self.connections[id(neuron)] = round(random.uniform(0.1, 1.0), 2)
 
 	def partially_connect(self):
-		neuron_count = len(Neuron.neurons)
-		for neuron in Neuron.neurons[len(self.connections):]:
-			if id(neuron) != id(self):
-				if random.randint(1,neuron_count/100) == 1:
-					self.connections[id(neuron)] = round(random.uniform(0.1, 1.0), 2)
-		print "Neuron ID: " + str(id(self))
-		print "    Potential: " + str(self.potential)
-		print "    Error: " + str(self.error)
-		print "    Connections: " + str(len(self.connections))
+		if len(self.connections) == 0:
+			neuron_count = len(Neuron.neurons)
+			for neuron in Neuron.neurons[len(self.connections):]:
+				if id(neuron) != id(self):
+					if random.randint(1,neuron_count/100) == 1:
+						self.connections[id(neuron)] = round(random.uniform(0.1, 1.0), 2)
+			print "Neuron ID: " + str(id(self))
+			print "    Potential: " + str(self.potential)
+			print "    Error: " + str(self.error)
+			print "    Connections: " + str(len(self.connections))
 
 	def activate(self):
 		while True:
@@ -51,7 +56,10 @@ class Neuron():
 			for axon_terminal in self.axon_terminals:
 				axon_terminal.potential = terminal_potential
 			'''
-			time.sleep(2)
+			#if len(self.connections) == 0:
+			#	self.partially_connect()
+			#else:
+			self.partially_connect()
 			pass
 
 			'''
@@ -68,12 +76,19 @@ class Supercluster():
 		for i in range(size):
 			Neuron()
 		print str(size) + " neurons created."
-		n = 0
-		for neuron in Neuron.neurons:
-			n += 1
-			neuron.partially_connect()
-			print "Counter: " + str(n)
+		self.n = 0
+		self.build_connections()
+		#pool = Pool(4, self.init_worker)
+		#pool.apply_async(self.build_connections(), arguments)
+		#map(lambda x: x.partially_connect(),Neuron.neurons)
 		#map(lambda x: x.create_connections(),Neuron.neurons)
 		#map(lambda x: x.create_axon_terminals(),Neuron.neurons)
+
+	def build_connections(self):
+		for neuron in Neuron.neurons:
+			self.n += 1
+			#neuron.thread.start()
+			neuron.partially_connect()
+			print "Counter: " + str(self.n)
 
 Supercluster(10000)

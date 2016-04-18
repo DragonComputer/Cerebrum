@@ -23,7 +23,7 @@ setup(
 	# Versions should comply with PEP440.  For a discussion on single-sourcing
 	# the version across setup.py and the project code, see
 	# https://packaging.python.org/en/latest/single_source_version.html
-	version='0.1.76',
+	version='0.1.77',
 
 	description='Crossmodal Supervised Learning Toolkit with Classification & Regression on Time Series Memory',
 	long_description=long_description,
