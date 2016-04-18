@@ -24,12 +24,14 @@ end
 function partially_connect(self)
 	if isempty(self.connections)
 		neuron_count = length(neurons)
-		for neuron in neurons
+		#for neuron in neurons
+		elected = rand(neurons,100)
+		for neuron in elected
 			if object_id(neuron) != object_id(self)
-				if rand(1:neuron_count/100) == 1
-					self.connections[object_id(neuron)] = rand(1:100)/100
+				#if rand(1:neuron_count/100) == 1
+				self.connections[object_id(neuron)] = rand(1:100)/100
 					#push!(self.connections, rand(1:100)/100)
-				end
+				#end
 			end
 		end
 		println("Neuron ID: ",object_id(self))
@@ -40,7 +42,7 @@ function partially_connect(self)
 end
 
 function Build()
-	for i = 1:10000
+	for i = 1:1000000
 		Neuron(Dict(),0.0,0.0)
 	end
 	println(length(neurons), " neurons created.")

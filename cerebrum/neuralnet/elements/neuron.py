@@ -35,10 +35,12 @@ class Neuron():
 	def partially_connect(self):
 		if len(self.connections) == 0:
 			neuron_count = len(Neuron.neurons)
-			for neuron in Neuron.neurons[len(self.connections):]:
+			#for neuron in Neuron.neurons:
+			elected = random.sample(Neuron.neurons,100)
+			for neuron in elected:
 				if id(neuron) != id(self):
-					if random.randint(1,neuron_count/100) == 1:
-						self.connections[id(neuron)] = round(random.uniform(0.1, 1.0), 2)
+					#if random.randint(1,neuron_count/100) == 1:
+					self.connections[id(neuron)] = round(random.uniform(0.1, 1.0), 2)
 			print "Neuron ID: " + str(id(self))
 			print "    Potential: " + str(self.potential)
 			print "    Error: " + str(self.error)
@@ -91,4 +93,4 @@ class Supercluster():
 			neuron.partially_connect()
 			print "Counter: " + str(self.n)
 
-Supercluster(10000)
+Supercluster(100000)
