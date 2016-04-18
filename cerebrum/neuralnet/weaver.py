@@ -18,6 +18,7 @@ from sys import stdout
 import matplotlib.pyplot as plt
 import rethinkdb as r # Rethinkdb Python driver
 from sklearn import datasets, linear_model
+from hpelm import ELM
 
 CHUNK = 1024 # Smallest unit of audio. 1024 bytes
 FORMAT = pyaudio.paInt16 # Data format
@@ -80,8 +81,16 @@ class NeuralWeaver():
 				   key = cv2.waitKey(500) & 0xFF
 				   #time.sleep(2.0)
 
-				   regr = linear_model.LinearRegression()
-				   regr.fit(numpy_audio, frame_amodal)
+				   for chunk in numpy.split(numpy_audio, int(numpy_audio.shape[0] / 1024)):
+					   elm = ELM(1,1)
+					   elm.add_neurons(20, "sigm")
+					   elm.add_neurons(10, "rbf_l2")
+					   elm.train(numpy_audio, frame_amodal, "LOO")
+					   print elm.predict(numpy_audio)
+
+
+				   #regr = linear_model.LinearRegression()
+				   #regr.fit(numpy_audio, frame_amodal)
 
 				   '''
 					#ds = SequentialDataSet(2048, 230400)

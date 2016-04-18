@@ -14,9 +14,9 @@ class Neuron():
 	neurons = []
 
 	def __init__(self):
-		self.connections = []
-		self.potential = 0
-		self.error = 0
+		self.connections = {}
+		self.potential = 0.0
+		self.error = 0.0
 		#self.create_connections()
 		#self.create_axon_terminals()
 		Neuron.neurons.append(self)
@@ -26,7 +26,18 @@ class Neuron():
 	def fully_connect(self):
 		for neuron in Neuron.neurons[len(self.connections):]:
 			if id(neuron) != id(self):
-				self.connections.append(round(random.uniform(0.1, 1.0), 10))
+				self.connections[id(neuron)] = round(random.uniform(0.1, 1.0), 2)
+
+	def partially_connect(self):
+		neuron_count = len(Neuron.neurons)
+		for neuron in Neuron.neurons[len(self.connections):]:
+			if id(neuron) != id(self):
+				if random.randint(1,neuron_count/100) == 1:
+					self.connections[id(neuron)] = round(random.uniform(0.1, 1.0), 2)
+		print "Neuron ID: " + str(id(self))
+		print "    Potential: " + str(self.potential)
+		print "    Error: " + str(self.error)
+		print "    Connections: " + str(len(self.connections))
 
 	def activate(self):
 		while True:
@@ -51,18 +62,18 @@ class Neuron():
 				self.create_axon_terminals()
 			'''
 
-class Build():
+class Supercluster():
 
-	def __init__(self):
-		for i in range(10000):
+	def __init__(self,size):
+		for i in range(size):
 			Neuron()
-		print "10000 neurons created."
+		print str(size) + " neurons created."
 		n = 0
 		for neuron in Neuron.neurons:
 			n += 1
-			neuron.fully_connect()
-			print n
+			neuron.partially_connect()
+			print "Counter: " + str(n)
 		#map(lambda x: x.create_connections(),Neuron.neurons)
 		#map(lambda x: x.create_axon_terminals(),Neuron.neurons)
 
-Build()
+Supercluster(10000)
