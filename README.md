@@ -1,6 +1,6 @@
 # Cerebrum
 
-Crossmodal Supervised Learning Toolkit with Classification & Regression on Time Series Memory
+Crossmodal Supervised Learning Toolkit using High-Performance Extreme Learning Machines over the audio-visual-textual data
 
 ![Parts of The Human Brain (Psychology)](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/areas-of-memory.jpg)
 
@@ -58,12 +58,12 @@ Parts of The Cerebrum:
 
 ![Experience-dependent spine formation and elimination.](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/hebbian.jpg)
 
-### High-Performance Extreme Learning Machine
+### High-Performance Extreme Learning Machines
 
 <p align="center"><img src="https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/elm.jpg" width="60%"></p>
 
 ### Version
-0.1.80
+0.1.81
 
 ### Installation
 

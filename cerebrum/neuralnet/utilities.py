@@ -15,3 +15,10 @@ class NeuralNetUtil():
 		}
 		], conflict="update").run(conn)
 		conn.close()
+
+	@staticmethod
+	def get_neurons(direction):
+		conn = r.connect("localhost", 28015)
+		cursor = r.db('test').table("neuralnet").filter({'direction': direction}).run(conn)
+		conn.close()
+		return cursor

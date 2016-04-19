@@ -62,10 +62,10 @@ def initiate():
 		r.db('test').table_create('crossmodal_mappings').run(conn)
 	except:
 		pass
-	try:
-		r.db('test').table_create('neuralnet').run(conn)
-	except:
-		pass
+	#try:
+	#	r.db('test').table_create('neuralnet').run(conn)
+	#except:
+	#	pass
 	conn.close()
 	time.sleep(3)
 

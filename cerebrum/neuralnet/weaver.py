@@ -5,12 +5,13 @@ from cerebrum.crossmodal import MapperUtil # BUILT-IN Crosmodal operations packa
 from cerebrum.hearing import HearingPerception, HearingMemoryUtil # BUILT-IN Hearing Memory perception package
 from cerebrum.vision import VisionPerception, VisionMemoryUtil # BUILT-IN Vision Memory operations package
 from cerebrum.language import LanguageAnalyzer, LanguageMemoryUtil # BUILT-IN Language Memory operations package
-from cerebrum.neuralnet.utilities import NeuralNetUtil
+#from cerebrum.neuralnet.utilities import NeuralNetUtil
 import time # Provides various time-related functions.
 import pyaudio
 import cv2 # (Open Source Computer Vision) is a library of programming functions mainly aimed at real-time computer vision.
 import numpy # The fundamental package for scientific computing with Python.
 from hpelm import HPELM
+import os.path
 
 CHUNK = 1024 # Smallest unit of audio. 1024 bytes
 FORMAT = pyaudio.paInt16 # Data format
@@ -35,6 +36,7 @@ class NeuralWeaver():
 						rate=RATE,
 						output=True)
 
+		#H2V_cursor = NeuralNetUtil.get_neurons("H2V")
 		elmH2V = None
 
 		# Loop over the pairs coming from CROSSMODAL
@@ -87,11 +89,16 @@ class NeuralWeaver():
 					   print T.shape
 					   if elmH2V is None:
 						   elmH2V = HPELM(X.shape[1],T.shape[1])
-						   elmH2V.add_neurons(100, "sigm")
+						   if os.path.exists(os.path.expanduser("~/CerebralCortexH2V.pkl")):
+							   #elmH2V.nnet.neurons = H2V_cursor.next()['neurons']
+							   elmH2V.load(os.path.expanduser("~/CerebralCortexH2V.pkl"))
+						   else:
+							   elmH2V.add_neurons(100, "sigm")
 					   elmH2V.train(X, T, "LOO")
 					   print elmH2V.predict(X)
-					   cv2.imshow("Result", numpy.transpose(elmH2V.predict(X)).reshape(360,640))
-					   cv2.moveWindow("Result",50,500)
+					   cv2.imshow(">>>PREDICTION<<<", numpy.transpose(elmH2V.predict(X)).reshape(360,640))
+					   cv2.moveWindow(">>>PREDICTION<<<",50,550)
 
 		print elmH2V.nnet.neurons
-		NeuralNetUtil.write_neurons(elmH2V.nnet.neurons, "H2V")
+		elmH2V.save(os.path.expanduser("~/CerebralCortexH2V.pkl"))
+		#NeuralNetUtil.write_neurons(elmH2V.nnet.neurons, "H2V")
