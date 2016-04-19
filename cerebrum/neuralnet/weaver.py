@@ -5,6 +5,7 @@ from cerebrum.crossmodal import MapperUtil # BUILT-IN Crosmodal operations packa
 from cerebrum.hearing import HearingPerception, HearingMemoryUtil # BUILT-IN Hearing Memory perception package
 from cerebrum.vision import VisionPerception, VisionMemoryUtil # BUILT-IN Vision Memory operations package
 from cerebrum.language import LanguageAnalyzer, LanguageMemoryUtil # BUILT-IN Language Memory operations package
+from cerebrum.neuralnet.utilities import NeuralNetUtil
 import time # Provides various time-related functions.
 import pyaudio
 import cv2 # (Open Source Computer Vision) is a library of programming functions mainly aimed at real-time computer vision.
@@ -34,7 +35,7 @@ class NeuralWeaver():
 						rate=RATE,
 						output=True)
 
-		elm = None
+		elmH2V = None
 
 		# Loop over the pairs coming from CROSSMODAL
 		for pair in pairs:
@@ -84,10 +85,13 @@ class NeuralWeaver():
 					   T[0] = T[0] / T[0].max()
 					   print X.shape
 					   print T.shape
-					   if elm is None:
-						   elm = HPELM(X.shape[1],T.shape[1])
-						   elm.add_neurons(100, "sigm")
-					   elm.train(X, T, "LOO")
-					   print elm.predict(X)
-					   cv2.imshow("Result", numpy.transpose(elm.predict(X)).reshape(360,640))
+					   if elmH2V is None:
+						   elmH2V = HPELM(X.shape[1],T.shape[1])
+						   elmH2V.add_neurons(100, "sigm")
+					   elmH2V.train(X, T, "LOO")
+					   print elmH2V.predict(X)
+					   cv2.imshow("Result", numpy.transpose(elmH2V.predict(X)).reshape(360,640))
 					   cv2.moveWindow("Result",50,500)
+
+		print elmH2V.nnet.neurons
+		NeuralNetUtil.write_neurons(elmH2V.nnet.neurons, "H2V")

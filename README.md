@@ -60,10 +60,10 @@ Parts of The Cerebrum:
 
 ### High-Performance Extreme Learning Machine
 
-<p align="center"><img src="https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/elm.jpg"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/elm.jpg" width="60%"></p>
 
 ### Version
-0.1.79
+0.1.80
 
 ### Installation
 
@@ -111,7 +111,7 @@ cerebrum --video 0 --audio 0
 
 <http://localhost:8080>
 
-<p align="center"><img src="https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/webui.png" width="60%"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/rethinkdb.png"></p>
 
 ### Dependencies
 
