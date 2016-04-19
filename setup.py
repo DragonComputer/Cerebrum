@@ -23,9 +23,9 @@ setup(
 	# Versions should comply with PEP440.  For a discussion on single-sourcing
 	# the version across setup.py and the project code, see
 	# https://packaging.python.org/en/latest/single_source_version.html
-	version='0.1.78',
+	version='0.1.79',
 
-	description='Crossmodal Supervised Learning Toolkit with Classification & Regression on Time Series Memory',
+	description='Crossmodal Supervised Learning Toolkit using High-Performance Extreme Learning Machine over the audio-visual-textual data',
 	long_description=long_description,
 
 	# The project's main homepage.
@@ -73,7 +73,7 @@ setup(
 	# your project is installed. For an analysis of "install_requires" vs pip's
 	# requirements files see:
 	# https://packaging.python.org/en/latest/requirements.html
-	install_requires=['imutils','pyqtgraph','pysrt','rethinkdb'],
+	install_requires=['imutils','pyqtgraph','pysrt','rethinkdb', 'hpelm'],
 
 	# List additional groups of dependencies here (e.g. development
 	# dependencies). You can install these using the following syntax,

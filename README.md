@@ -58,16 +58,12 @@ Parts of The Cerebrum:
 
 ![Experience-dependent spine formation and elimination.](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/hebbian.jpg)
 
-### Classification
+### High-Performance Extreme Learning Machine
 
-![Image Captioning.](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/classification.jpg)
-
-### Regression
-
-![Activation Functions.](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/regression.png)
+<p align="center"><img src="https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/elm.jpg"></p>
 
 ### Version
-0.1.78
+0.1.79
 
 ### Installation
 
@@ -115,7 +111,7 @@ cerebrum --video 0 --audio 0
 
 <http://localhost:8080>
 
-<p align="center"><img src="https://www.rethinkdb.com/assets/images/docs/administration/webui.png" width="60%"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/webui.png" width="60%"></p>
 
 ### Dependencies
 
