@@ -81,7 +81,7 @@ Watch data flow (optional) - <http://localhost:8080>
 Install Cerebrum:
 
 ```Shell
-sudo apt-get install python-pyaudio python-opencv python-scipy python-qt4
+sudo apt-get install python-pyaudio python-opencv python-scipy python-qt4 python-tk
 sudo pip install cerebrum
 ```
 
@@ -106,6 +106,10 @@ cerebrum --video 0 --audio 0
 ```
 
 *On the first run Cerebrum will start with a few more seconds delay.*
+
+#### Screenshot
+
+![Screenshot](https://raw.githubusercontent.com/mertyildiran/Cerebrum/master/docs/img/screenshot.png)
 
 #### RethinkDB Web Interface
 

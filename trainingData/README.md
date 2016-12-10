@@ -22,14 +22,18 @@ Following YouTube videos are the suggested examples for observing stimulant dete
 
 #### Tips
 
+Install youtube-dl:
+
+	sudo pip install --upgrade youtube_dl
+
 For downloading video:
 
-	-  youtube-dl https://youtu.be/7_w_EA4u6oQ
+	youtube-dl -f 22 https://youtu.be/7_w_EA4u6oQ
 
 For downloading Subtitles/CC(Closed Captions):
 
-	-  youtube-dl --all-subs --skip-download https://youtu.be/7_w_EA4u6oQ
+	youtube-dl --all-subs --skip-download https://youtu.be/7_w_EA4u6oQ
 
 For generating .wav file:
 
-	-  ffmpeg -i video.mp4 audio.wav
+	ffmpeg -i video.mp4 audio.wav
